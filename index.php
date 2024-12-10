@@ -74,7 +74,12 @@ class Charakter {
     }
 
     private function Attack ($Enemy){
-        $Enemy->setHealth($Enemy->getHealth() - $this->getStrength());
+        $Enemy->Defend($this->dexterity, $this->getStrength());
+    }
+    
+    private function Defend ($EnemyDex, $Damage){
+        $DamageTaken = $EnemyDex/$this->dexterity *$Damage;
+        $this->setHealth($this->getHealth() - $DamageTaken);
     }
 }
 
