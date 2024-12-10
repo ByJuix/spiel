@@ -82,6 +82,7 @@ echo "Lebenspunkte: " . $charakter->getLebenspunkte() . "<br>";
 echo "Staerke: " . $charakter->getStaerke() . "<br>";
 echo "Geschick: " . $charakter->getGeschick() . "<br>";
 echo "Intelligenz: " . $charakter->getIntelligenz() . "<br>";
+echo "Farbe: " . $charakter->getFarbe() . "<br>";
 
 // Zerstoerung des Objekts
 unset($charakter);
