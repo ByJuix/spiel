@@ -8,7 +8,6 @@ class Charakter {
     private $intelligence;
     private $color;
 
-
     // Konstruktor
     public function __construct($name, $health, $strength, $dexterity, $intelligence) {
         $this->color = rand(1,100);
@@ -72,6 +71,10 @@ class Charakter {
 
     public function setColor($color) {
         $this->color = $color;
+    }
+
+    private function Attack ($Gegner){
+        $Gegner->setLebenspunkte() = $Gegner->getLebenspunkte() - $this->getStaerke();
     }
 }
 
