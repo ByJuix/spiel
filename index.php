@@ -2,21 +2,21 @@
 class Charakter {
     // Attribute
     private $name;
-    private $lebenspunkte;
-    private $staerke;
-    private $geschick;
-    private $intelligenz;
-    private $farbe;
+    private $health;
+    private $strength;
+    private $dexterity;
+    private $intelligence;
+    private $color;
 
 
     // Konstruktor
-    public function __construct($name, $lebenspunkte, $staerke, $geschick, $intelligenz) {
-        $this->farbe = rand(1,100);
+    public function __construct($name, $health, $strength, $dexterity, $intelligence) {
+        $this->color = rand(1,100);
         $this->name = $name;
-        $this->lebenspunkte = $lebenspunkte * ((100+ $this->farbe)/100);
-        $this->staerke = $staerke * ((100+ $this->farbe)/100);
-        $this->geschick = $geschick * ((100+ $this->farbe)/100);
-        $this->intelligenz = $intelligenz * ((100+ $this->farbe)/100);
+        $this->health = $health * ((100+ $this->color)/100);
+        $this->strength = $strength * ((100+ $this->color)/100);
+        $this->dexterity = $dexterity * ((100+ $this->color)/100);
+        $this->intelligence = $intelligence * ((100+ $this->color)/100);
     }
 
     // Destruktor
@@ -29,24 +29,24 @@ class Charakter {
         return $this->name;
     }
 
-    public function getLebenspunkte() {
-        return $this->lebenspunkte;
+    public function getHealth() {
+        return $this->health;
     }
 
-    public function getStaerke() {
-        return $this->staerke;
+    public function getStrength() {
+        return $this->strength;
     }
 
-    public function getGeschick() {
-        return $this->geschick;
+    public function getDexterity() {
+        return $this->dexterity;
     }
 
-    public function getIntelligenz() {
-        return $this->intelligenz;
+    public function getIntelligence() {
+        return $this->intelligence;
     }
 
-    public function getFarbe() {
-        return $this->farbe;
+    public function getColor() {
+        return $this->color;
     }
 
     // Setter-Methoden
@@ -54,35 +54,35 @@ class Charakter {
         $this->name = $name;
     }
 
-    public function setLebenspunkte($lebenspunkte) {
-        $this->lebenspunkte = $lebenspunkte;
+    public function setHealth($health) {
+        $this->health = $health;
     }
 
-    public function setStaerke($staerke) {
-        $this->staerke = $staerke;
+    public function setStrength($strength) {
+        $this->strength = $strength;
     }
 
-    public function setGeschick($geschick) {
-        $this->geschick = $geschick;
+    public function setDexterity($dexterity) {
+        $this->dexterity = $dexterity;
     }
 
-    public function setIntelligenz($intelligenz) {
-        $this->intelligenz = $intelligenz;
+    public function setIntelligence($intelligence) {
+        $this->intelligence = $intelligence;
     }
 
-    public function setFarbe($farbe) {
-        $this->farbe = $farbe;
+    public function setColor($color) {
+        $this->color = $color;
     }
 }
 
 // Beispiel zur Nutzung der Klasse
 $charakter = new Charakter("Held", 100, 100, 20, 15);
 echo "Name: " . $charakter->getName() . "<br>";
-echo "Lebenspunkte: " . $charakter->getLebenspunkte() . "<br>";
-echo "Staerke: " . $charakter->getStaerke() . "<br>";
-echo "Geschick: " . $charakter->getGeschick() . "<br>";
-echo "Intelligenz: " . $charakter->getIntelligenz() . "<br>";
-echo "Farbe: " . $charakter->getFarbe() . "<br>";
+echo "health: " . $charakter->getHealth() . "<br>";
+echo "strength: " . $charakter->getStrength() . "<br>";
+echo "dexterity: " . $charakter->getDexterity() . "<br>";
+echo "intelligence: " . $charakter->getIntelligence() . "<br>";
+echo "color: " . $charakter->getColor() . "<br>";
 
 // Zerstoerung des Objekts
 unset($charakter);
