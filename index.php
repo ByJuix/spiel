@@ -6,18 +6,17 @@ class Charakter {
     private $staerke;
     private $geschick;
     private $intelligenz;
-
     private $farbe;
 
 
     // Konstruktor
-    public function __construct($name, $lebenspunkte, $staerke, $geschick, $intelligenz, $farbe) {
+    public function __construct($name, $lebenspunkte, $staerke, $geschick, $intelligenz) {
+        $this->farbe = rand(1,100);
         $this->name = $name;
-        $this->lebenspunkte = $lebenspunkte;
-        $this->staerke = $staerke;
-        $this->geschick = $geschick;
-        $this->intelligenz = $intelligenz;
-        $this->farbe = $farbe;
+        $this->lebenspunkte = $lebenspunkte * ((100+ $this->farbe)/100);
+        $this->staerke = $staerke * ((100+ $this->farbe)/100);
+        $this->geschick = $geschick * ((100+ $this->farbe)/100);
+        $this->intelligenz = $intelligenz * ((100+ $this->farbe)/100);
     }
 
     // Destruktor
@@ -77,7 +76,7 @@ class Charakter {
 }
 
 // Beispiel zur Nutzung der Klasse
-$charakter = new Charakter("Held", 100, 20, 15, 10);
+$charakter = new Charakter("Held", 100, 100, 20, 15);
 echo "Name: " . $charakter->getName() . "<br>";
 echo "Lebenspunkte: " . $charakter->getLebenspunkte() . "<br>";
 echo "Staerke: " . $charakter->getStaerke() . "<br>";
