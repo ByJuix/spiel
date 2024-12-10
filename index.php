@@ -73,19 +73,19 @@ class Charakter {
         $this->color = $color;
     }
 
-    private function Attack ($Gegner){
-        $Gegner->setLebenspunkte() = $Gegner->getLebenspunkte() - $this->getStaerke();
+    private function Attack ($Enemy){
+        $Enemy->setHealth() = $Enemy->getHealth() - $this->getStrength();
     }
 }
 
 // Beispiel zur Nutzung der Klasse
 $charakter = new Charakter("Held", 100, 100, 20, 15);
 echo "Name: " . $charakter->getName() . "<br>";
-echo "health: " . $charakter->getHealth() . "<br>";
-echo "strength: " . $charakter->getStrength() . "<br>";
-echo "dexterity: " . $charakter->getDexterity() . "<br>";
-echo "intelligence: " . $charakter->getIntelligence() . "<br>";
-echo "color: " . $charakter->getColor() . "<br>";
+echo "Health: " . $charakter->getHealth() . "<br>";
+echo "Strength: " . $charakter->getStrength() . "<br>";
+echo "Dexterity: " . $charakter->getDexterity() . "<br>";
+echo "Intelligence: " . $charakter->getIntelligence() . "<br>";
+echo "Color: " . $charakter->getColor() . "<br>";
 
 // Zerstoerung des Objekts
 unset($charakter);
