@@ -7,13 +7,17 @@ class Charakter {
     private $geschick;
     private $intelligenz;
 
+    private $farbe;
+
+
     // Konstruktor
-    public function __construct($name, $lebenspunkte, $staerke, $geschick, $intelligenz) {
+    public function __construct($name, $lebenspunkte, $staerke, $geschick, $intelligenz, $farbe) {
         $this->name = $name;
         $this->lebenspunkte = $lebenspunkte;
         $this->staerke = $staerke;
         $this->geschick = $geschick;
         $this->intelligenz = $intelligenz;
+        $this->farbe = $farbe;
     }
 
     // Destruktor
@@ -42,6 +46,10 @@ class Charakter {
         return $this->intelligenz;
     }
 
+    public function getFarbe() {
+        return $this->farbe;
+    }
+
     // Setter-Methoden
     public function setName($name) {
         $this->name = $name;
@@ -61,6 +69,10 @@ class Charakter {
 
     public function setIntelligenz($intelligenz) {
         $this->intelligenz = $intelligenz;
+    }
+
+    public function setFarbe($farbe) {
+        $this->farbe = $farbe;
     }
 }
 
