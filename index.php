@@ -74,7 +74,7 @@ class Charakter {
     }
 
     private function Attack ($Enemy){
-        $Enemy->setHealth() = $Enemy->getHealth() - $this->getStrength();
+        $Enemy->setHealth($Enemy->getHealth() - $this->getStrength());
     }
 }
 
