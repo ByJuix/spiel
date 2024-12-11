@@ -56,6 +56,12 @@ class Charakter {
     public function getSpeed() {
         return $this->speed;
     }
+    public function getEquippedWeapon() {
+        return $this->EquippedWeapon;
+    }
+    public function getEquippedArmor() {
+        return $this->EquippedArmor;
+    }
     // Setter-Methoden
     public function setName($name) {
         $this->name = $name;
@@ -78,7 +84,14 @@ class Charakter {
     }
 
     public function setSpeed($speed) {
-        $this->color = $speed;
+        $this->speed = $speed;
+    }
+
+    public function setEquippedArmor($item){
+        $this->EquippedArmor =  $item;
+    }
+    public function setEquippedWeapon($item){
+        $this->EquippedWeapon =  $item;
     }
 
     private function Attack ($Enemy){
