@@ -100,7 +100,6 @@ class items {
     public function getItem_type() {
         return $this->item_type;
     }
-
         // Setter-Methoden
     
     public function setItem_name($item_name) {
