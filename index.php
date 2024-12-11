@@ -78,7 +78,7 @@ class Charakter {
         $this->color = $color;
     }
 
-    public function setSpeed($color) {
+    public function setSpeed($speed) {
         $this->color = $speed;
     }
 
