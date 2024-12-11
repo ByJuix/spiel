@@ -9,16 +9,20 @@ class Charakter {
     private $color;
     private $speed;
     private $possibleNames = ["Cyanis der Schimmernde", "Kuphero der Glühende", "Rubinia Flammenklinge", "Azubios der Garagenfeger", "Ambera Goldhand", "Vermilios Stahlseele", "Bronzora die Mächtige", "Zinnox der Verschlagene", "Smargant der Weise", "Alabastea der Erhabene", "Saphiriel Sturmbrecher", "Ochros Kupferflamme", "Chalybeus der Unverwüstliche", "Verdantus Blattläufer", "Aurenix der Glanzvolle", "Carminelle Schattenruferin", "Cobalta Nachtseele", "Malach der Grüne Hüter", "Zirkon Flammensucher", "Titanora die Ewige", "Feldmannius der Göttliche"];
+    private $EquippedWeapon;
+    private $EquippedArmor;
 
     // Konstruktor
     public function __construct($name, $health, $strength, $dexterity, $intelligence, $speed) {
         $this->name = $name ?? $this->possibleNames[array_rand($this->possibleNames)];
         $this->name == "Feldmannius der Göttliche" ? $this->color = rand(100, 500) : $this->color = rand(1, 100);
+        
         $this->health = $health * ((100 + $this->color) * 0.01);
         $this->strength = round($strength * ((100 + $this->color) * 0.01), 0);
         $this->dexterity = round($dexterity * ((100 + $this->color) * 0.01), 0);
         $this->intelligence = round($intelligence * ((100 + $this->color) * 0.01), 0);
         $this->speed = round($speed * ((100+ $this->color)/100), 0);
+        $this->E
     }
 
     // Destruktor
@@ -42,11 +46,9 @@ class Charakter {
     public function getDexterity() {
         return $this->dexterity;
     }
-
     public function getIntelligence() {
         return $this->intelligence;
     }
-
     public function getColor() {
         return $this->color;
     }
@@ -57,19 +59,15 @@ class Charakter {
     public function setName($name) {
         $this->name = $name;
     }
-
     public function setHealth($health) {
         $this->health = $health;
     }
-
     public function setStrength($strength) {
         $this->strength = $strength;
     }
-
     public function setDexterity($dexterity) {
         $this->dexterity = $dexterity;
     }
-
     public function setIntelligence($intelligence) {
         $this->intelligence = $intelligence;
     }
