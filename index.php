@@ -96,6 +96,48 @@ class Charakter {
     }
 }
 
+class items {
+
+    private $item_name;
+    private $item_damage;
+    private $item_type;
+
+
+    // Getter-Methoden
+    public function getItem_name() {
+        return $this->item_name;
+    }
+    public function getItem_damage() {
+        return $this->item_damage;
+    }
+    public function getItem_type() {
+        return $this->item_type;
+    }
+        // Setter-Methoden
+    
+    public function setItem_name($item_name) {
+        $this->item_name = $item_name;
+    }
+    public function setItem_damage($item_damage) {
+        $this->item_damage = $item_damage;
+    }
+    public function setItem_type($item_type) {
+        $this->item_type = $item_type;
+    }
+
+    // Konstruktor
+    public function __construct($item_name, $item_damage, $item_type) {
+        $this->item_name = $item_name;
+        $this->item_damage = $item_damage;
+        $this->item_type = $item_type;
+    }
+
+    // Destruktor
+    public function __destruct() {
+        echo "Item {$this->item_name} wird zerstoert.<br>";
+    }
+}
+
 // Beispiel zur Nutzung der Klasse
 $charakter = new Charakter("Held", 100, 100, 20, 15, 10);
 echo "Name: " . $charakter->getName() . "<br>";
