@@ -94,7 +94,7 @@ class Charakter {
     }
 }
 
-class items {
+class item {
 
     private $item_name;
     private $item_damage;
