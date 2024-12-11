@@ -85,7 +85,7 @@ class Charakter {
     private function Attack ($Enemy){
         $Enemy->Defend($this->dexterity, $this->getStrength());
     }
-
+    
     private function Defend($EnemyDex, $Damage) {
         $DamageTaken = $EnemyDex / $this->dexterity * $Damage;
         $this->setHealth($this->getHealth() - $DamageTaken);
@@ -138,8 +138,13 @@ class items {
     }
 }
 
+
+
+
 // Beispiel zur Nutzung der Klasse
-$charakter = new Charakter(null, 100, 100, 20, 15, 10);
+$item_sword = new items("Exkalibour", 20, "Sword");
+
+$charakter = new Charakter("Held", 100, 100, 20, 15, 10);
 echo "Name: " . $charakter->getName() . "<br>";
 echo "Health: " . $charakter->getHealth() . "<br>";
 echo "Strength: " . $charakter->getStrength() . "<br>";
