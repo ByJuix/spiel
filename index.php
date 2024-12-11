@@ -22,8 +22,8 @@ class Charakter {
         $this->dexterity = round($dexterity * ((100 + $this->color) * 0.01), 0);
         $this->intelligence = round($intelligence * ((100 + $this->color) * 0.01), 0);
         $this->speed = round($speed * ((100+ $this->color)/100), 0);
-        $this->EquippedArmor = new item("Basic Armor", 0, 10, "Armor");
-        $this->EquippedWeapon = new item("Basic Sword", 10, "Sword");
+        $this->EquippedArmor = new item("Basic Armor", "Armor", 0, 10, );
+        $this->EquippedWeapon = new item("Basic Sword", "Sword" 10, 0);
     }
 
     // Destruktor
@@ -132,7 +132,7 @@ class Item {
     }
 
     // Konstruktor
-    public function __construct($item_name, $item_damage, $item_type, $item_defense) {
+    public function __construct($item_name, $item_type, $item_damage,  $item_defense) {
         $this->item_name = $item_name;
         $this->item_damage = $item_damage;
         $this->item_defense = $item_defense;
