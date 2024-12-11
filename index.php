@@ -12,8 +12,7 @@ class Charakter {
 
     // Konstruktor
     public function __construct($name, $health, $strength, $dexterity, $intelligence, $speed) {
-        $this->color = rand(1,100);
-        $this->name = $name;
+        $this->name == "Feldmannius der Göttliche" ? $this->color = rand(1, 100) : $this->color = rand(100, 500);
         $this->health = $health * ((100+ $this->color)/100);
         $this->strength = $strength * ((100+ $this->color)/100);
         $this->dexterity = $dexterity * ((100+ $this->color)/100);
