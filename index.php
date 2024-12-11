@@ -14,11 +14,11 @@ class Charakter {
     public function __construct($name, $health, $strength, $dexterity, $intelligence, $speed) {
         $this->name = $name ?? $this->possibleNames[array_rand($this->possibleNames)];
         $this->name == "Feldmannius der Göttliche" ? $this->color = rand(1, 100) : $this->color = rand(100, 500);
-        $this->health = $health * ((100+ $this->color)/100);
-        $this->strength = $strength * ((100+ $this->color)/100);
-        $this->dexterity = $dexterity * ((100+ $this->color)/100);
-        $this->intelligence = $intelligence * ((100+ $this->color)/100);
-        $this->speed = $speed * ((100+ $this->color)/100);
+        $this->health = $health * ((100 + $this->color) * 0.01);
+        $this->strength = round($strength * ((100 + $this->color) * 0.01), 0);
+        $this->dexterity = round($dexterity * ((100 + $this->color) * 0.01), 0);
+        $this->intelligence = round($intelligence * ((100 + $this->color) * 0.01), 0);
+        $this->speed = round($speed * ((100+ $this->color)/100), 0);
     }
 
     // Destruktor
