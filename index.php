@@ -23,7 +23,7 @@ class Charakter {
         $this->intelligence = round($intelligence * ((100 + $this->color) * 0.01), 0);
         $this->speed = round($speed * ((100+ $this->color)/100), 0);
         $this->EquippedArmor = new item("Basic Armor", "Armor", 0, 10, );
-        $this->EquippedWeapon = new item("Basic Sword", "Sword" 10, 0);
+        $this->EquippedWeapon = new item("Basic Sword", "Sword", 10, 0);
     }
 
     // Destruktor
