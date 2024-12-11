@@ -12,6 +12,7 @@ class Charakter {
 
     // Konstruktor
     public function __construct($name, $health, $strength, $dexterity, $intelligence, $speed) {
+        $this->name = $name ?? $this->possibleNames[array_rand($this->possibleNames)];
         $this->name == "Feldmannius der Göttliche" ? $this->color = rand(1, 100) : $this->color = rand(100, 500);
         $this->health = $health * ((100+ $this->color)/100);
         $this->strength = $strength * ((100+ $this->color)/100);
@@ -138,7 +139,7 @@ class items {
 }
 
 // Beispiel zur Nutzung der Klasse
-$charakter = new Charakter("Held", 100, 100, 20, 15, 10);
+$charakter = new Charakter(null, 100, 100, 20, 15, 10);
 echo "Name: " . $charakter->getName() . "<br>";
 echo "Health: " . $charakter->getHealth() . "<br>";
 echo "Strength: " . $charakter->getStrength() . "<br>";
