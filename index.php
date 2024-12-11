@@ -144,7 +144,7 @@ class items {
 // Beispiel zur Nutzung der Klasse
 $item_sword = new items("Exkalibour", 20, "Sword");
 
-$charakter = new Charakter(null, 100, 100, 20, 15, 10);
+$charakter = new Charakter(null, 1000, 37, 20, 15, 10);
 echo "Name: " . $charakter->getName() . "<br>";
 echo "Health: " . $charakter->getHealth() . "<br>";
 echo "Strength: " . $charakter->getStrength() . "<br>";
