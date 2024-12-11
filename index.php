@@ -35,15 +35,12 @@ class Charakter {
     public function getName() {
         return $this->name;
     }
-
     public function getHealth() {
         return $this->health;
     }
-
     public function getStrength() {
         return $this->strength;
     }
-
     public function getDexterity() {
         return $this->dexterity;
     }
@@ -78,15 +75,12 @@ class Charakter {
     public function setIntelligence($intelligence) {
         $this->intelligence = $intelligence;
     }
-
     public function setColor($color) {
         $this->color = $color;
     }
-
     public function setSpeed($speed) {
         $this->speed = $speed;
     }
-
     public function setEquippedArmor($item){
         $this->EquippedArmor =  $item;
     }
