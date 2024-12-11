@@ -15,9 +15,8 @@ class Charakter {
     // Konstruktor
     public function __construct($name, $health, $strength, $dexterity, $intelligence, $speed) {
         $this->name = $name ?? $this->possibleNames[array_rand($this->possibleNames)];
-        $this->name == "Feldmannius der Göttliche" ? $this->color = rand(1, 100) : $this->color = rand(100, 500);
-
-
+        $this->name == "Feldmannius der Göttliche" ? $this->color = rand(100, 500) : $this->color = rand(1, 100);
+        
         $this->health = $health * ((100 + $this->color) * 0.01);
         $this->strength = round($strength * ((100 + $this->color) * 0.01), 0);
         $this->dexterity = round($dexterity * ((100 + $this->color) * 0.01), 0);
@@ -84,7 +83,7 @@ class Charakter {
     private function Attack ($Enemy){
         $Enemy->Defend($this->dexterity, $this->getStrength());
     }
-
+    
     private function Defend($EnemyDex, $Damage) {
         $DamageTaken = $EnemyDex / $this->dexterity * $Damage;
         $this->setHealth($this->getHealth() - $DamageTaken);
@@ -99,6 +98,7 @@ class items {
 
     private $item_name;
     private $item_damage;
+    private$item_defense;
     private $item_type;
 
 
@@ -109,10 +109,13 @@ class items {
     public function getItem_damage() {
         return $this->item_damage;
     }
+    public function getItem_defense() {
+        return $this->item_defense;
+    }
     public function getItem_type() {
         return $this->item_type;
     }
-        // Setter-Methoden
+    // Setter-Methoden
     
     public function setItem_name($item_name) {
         $this->item_name = $item_name;
@@ -120,14 +123,18 @@ class items {
     public function setItem_damage($item_damage) {
         $this->item_damage = $item_damage;
     }
+    public function setItem_defense($item_defense) {
+        $this->item_defense = $item_defense;
+    }
     public function setItem_type($item_type) {
         $this->item_type = $item_type;
     }
 
     // Konstruktor
-    public function __construct($item_name, $item_damage, $item_type) {
+    public function __construct($item_name, $item_damage, $item_type, $item_defense) {
         $this->item_name = $item_name;
         $this->item_damage = $item_damage;
+        $this->item_defense = $item_defense;
         $this->item_type = $item_type;
     }
 
@@ -137,8 +144,13 @@ class items {
     }
 }
 
+
+
+
 // Beispiel zur Nutzung der Klasse
-$charakter = new Charakter(null, 100, 100, 20, 15, 10);
+$item_sword = new items("Exkalibour", 20, 0,"Sword");
+
+$charakter = new Charakter(null, 1000, 37, 20, 15, 10);
 echo "Name: " . $charakter->getName() . "<br>";
 echo "Health: " . $charakter->getHealth() . "<br>";
 echo "Strength: " . $charakter->getStrength() . "<br>";
