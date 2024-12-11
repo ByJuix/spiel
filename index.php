@@ -96,7 +96,7 @@ class Charakter {
     }
 }
 
-class items {
+class item {
 
     private $item_name;
     private $item_damage;
@@ -150,7 +150,7 @@ class items {
 
 
 // Beispiel zur Nutzung der Klasse
-$item_sword = new items("Exkalibour", 20, 0,"Sword");
+$item_sword = new item("Exkalibour", 20, 0,"Sword");
 
 $charakter = new Charakter(null, 1000, 37, 20, 15, 10);
 echo "Name: " . $charakter->getName() . "<br>";
