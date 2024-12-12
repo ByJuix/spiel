@@ -3,20 +3,34 @@ namespace FantasyRacism\Core;
 
 class Charakter {
     // Attribute
+    private $isAlive;
+    private $playerControlled;
     private $name;
-    private $health;
+    
+    private $baseMaxHealth;        #stats that dont change outside of constructor
+    private $baseStrength;
+    private $baseDexterity;
+    private $baseIntelligence;
+    private $baseSpeed;
+
+
+    private $maxHealth;            #stats that change with color
+    private $currentHealth;
     private $strength;
     private $dexterity;
     private $intelligence;
-    private $color;
     private $speed;
-    private $possibleNames = ["Cyanis der Schimmernde", "Kuphero der Glühende", "Rubinia Flammenklinge", "Azubios der Garagenfeger", "Ambera Goldhand", "Vermilios Stahlseele", "Bronzora die Mächtige", "Zinnox der Verschlagene", "Smargant der Weise", "Alabastea der Erhabene", "Saphiriel Sturmbrecher", "Ochros Kupferflamme", "Chalybeus der Unverwüstliche", "Verdantus Blattläufer", "Aurenix der Glanzvolle", "Carminelle Schattenruferin", "Cobalta Nachtseele", "Malach der Grüne Hüter", "Zirkon Flammensucher", "Titanora die Ewige", "Feldmannius der Göttliche"];
+    
+    private $color;
     private $EquippedWeapon;
     private $EquippedArmor;
 
     // Konstruktor
     public function __construct($name, $health, $strength, $dexterity, $intelligence, $speed) {
-        $this->name = $name ?? $this->possibleNames[array_rand($this->possibleNames)];
+
+        $possibleNames = ["Cyanis der Schimmernde", "Kuphero der Glühende", "Rubinia Flammenklinge", "Azubios der Garagenfeger", "Ambera Goldhand", "Vermilios Stahlseele", "Bronzora die Mächtige", "Zinnox der Verschlagene", "Smargant der Weise", "Alabastea der Erhabene", "Saphiriel Sturmbrecher", "Ochros Kupferflamme", "Chalybeus der Unverwüstliche", "Verdantus Blattläufer", "Aurenix der Glanzvolle", "Carminelle Schattenruferin", "Cobalta Nachtseele", "Malach der Grüne Hüter", "Zirkon Flammensucher", "Titanora die Ewige", "Feldmannius der Göttliche"];
+    
+        $this->name = $name ?? $possibleNames[array_rand($possibleNames)];
         $this->name == "Feldmannius der Göttliche" ? $this->color = rand(100, 500) : $this->color = rand(1, 100);
 
         $this->health = $health * ((100 + $this->color) * 0.01);
@@ -34,117 +48,114 @@ class Charakter {
     }
 
     // Getter-Methoden
-    public function getName() {
-        return $this->name;
-    }
 
-    public function getHealth() {
-        return $this->health;
-    }
-
-    public function getStrength() {
-        return $this->strength;
-    }
-
-    public function getDexterity() {
-        return $this->dexterity;
-    }
-    public function getIntelligence() {
-        return $this->intelligence;
-    }
-    public function getColor() {
-        return $this->color;
-    }
-    public function getSpeed() {
-        return $this->speed;
-    }
-    public function getEquippedWeapon() {
-        return $this->EquippedWeapon;
-    }
-    public function getEquippedArmor() {
-        return $this->EquippedArmor;
+    public function getStat ($statName) {
+        $color = $this->color;
+        switch (strtolower($statName)) {
+            case "name": return $this->name;
+            case "maxhealth": return round( $this->baseMaxHealth * ((100+ $color)*0.01),0 );
+            case "strength": return round( $this->baseStrength * ((100+ $color)*0.01),0 );
+            case "dexterity": return round( $this->baseDexterity * ((100+ $color)*0.01),0 );
+            case "intelligence": return round( $this->baseIntelligence * ((100+ $color)*0.01),0 );
+            case "speed": return round( $this->baseSpeed * ((100+ $color)*0.01),0 );
+            case "armor": return round($this->EquippedArmor);
+            case "weapon": return round($this->EquippedWeapon);
+            case "color": return $color;
+        }
+             
     }
     // Setter-Methoden
-    public function setName($name) {
-        $this->name = $name;
-    }
-    public function setHealth($health) {
-        $this->health = $health;
-    }
-    public function setStrength($strength) {
-        $this->strength = $strength;
-    }
-    public function setDexterity($dexterity) {
-        $this->dexterity = $dexterity;
-    }
-    public function setIntelligence($intelligence) {
-        $this->intelligence = $intelligence;
-    }
-
-    public function setColor($color) {
-        $this->color = $color;
-    }
-
-    public function setSpeed($speed) {
-        $this->speed = $speed;
-    }
-
-    public function setEquippedArmor($item){
-        $this->EquippedArmor =  $item;
-    }
-    public function setEquippedWeapon($item){
-        $this->EquippedWeapon =  $item;
-    }
-
-    private function Attack ($Enemy){
-        $Enemy->Defend($this->dexterity, $this->getStrength());
+    public function setAttribute($attribute, $value) {
+        switch ($attribute) {
+            case 'isAlive':
+                $this->isAlive = $value;
+                break;
+            case 'playerControlled':
+                $this->playerControlled = $value;
+                break;
+            case 'name':
+                $this->name = $value;
+                break;
+            case 'maxHealth':
+                $this->maxHealth = $value;
+                break;
+            case 'currentHealth':
+                $this->currentHealth = $value;
+                break;
+            case 'strength':
+                $this->strength = $value;
+                break;
+            case 'dexterity':
+                $this->dexterity = $value;
+                break;
+            case 'intelligence':
+                $this->intelligence = $value;
+                break;
+            case 'speed':
+                $this->speed = $value;
+                break;
+            case 'color':
+                $this->color = $value;
+                break;
+            case 'EquippedWeapon':
+                $this->EquippedWeapon = $value;
+                break;
+            case 'EquippedArmor':
+                $this->EquippedArmor = $value;
+                break;
+            default:
+                echo "Fehler";    
+        }
     }
     
+
+    private function physAttack ($Enemy){
+        $Enemy->Defend($this->dexterity, $this->getStat("strength"));
+    }
+    private function magAttack ($Enemy){
+        $Enemy->Defend($this->dexterity, $this->getStat("intelligence"));
+    }
+    private function TakeDMG($Damage) {
+        $this->currentHealth -= $Damage;
+    }
     private function Defend($EnemyDex, $Damage) {
         $DamageTaken = $EnemyDex / $this->dexterity * $Damage;
-        $this->setHealth($this->getHealth() - $DamageTaken);
+        $this->TakeDmg($DamageTaken);
     }
 
-    private function Fight ($Enemy) {
+    private function Fight ($Enemy): void {
 
     }
 }
 
 class Item {
 
-    private $item_name;
-    private $item_damage;
-    private$item_defense;
-    private $item_type;
+    private $name;
+    private $damage_phys;
+    private $damage_mag;
+    private $defense;
+    private $type;
 
+    public function getStat ($statName): mixed { //getter Methode
+        switch (strtolower($statName)) {
+            case "name": return $this->name;
+            case "damagephys": return $this->damage_phys;
+            case "damagemag": return $this->damage_mag;
+            case "defense": return $this->defense;
+            case "type": return $this->type;
+            default: return "Fehler bei Item Getstat";
+        }
+    }
 
-    // Getter-Methoden
-    public function getItem_name() {
-        return $this->item_name;
+    public function setItemAttributes($name, $damage_phys, $damage_mag, $defense, $type) {
+        $this->name = $name;
+        $this->damage_phys = $damage_phys;
+        $this->damage_mag = $damage_mag;
+        $this->defense = $defense;
+        $this->type = $type;
     }
-    public function getItem_damage() {
-        return $this->item_damage;
-    }
-    public function getItem_defense() {
-        return $this->item_defense;
-    }
-    public function getItem_type() {
-        return $this->item_type;
-    }
-    // Setter-Methoden
     
-    public function setItem_name($item_name) {
-        $this->item_name = $item_name;
-    }
-    public function setItem_damage($item_damage) {
-        $this->item_damage = $item_damage;
-    }
-    public function setItem_defense($item_defense) {
-        $this->item_defense = $item_defense;
-    }
-    public function setItem_type($item_type) {
-        $this->item_type = $item_type;
-    }
+    
 
     // Konstruktor
     public function __construct($item_name, $item_type, $item_damage,  $item_defense) {
