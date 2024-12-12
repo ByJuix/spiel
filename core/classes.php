@@ -33,11 +33,12 @@ class Charakter {
         $this->name = $name ?? $possibleNames[array_rand($possibleNames)];
         $this->name == "Feldmannius der Göttliche" ? $this->color = rand(100, 500) : $this->color = rand(1, 100);
 
-        $this->health = $health * ((100 + $this->color) * 0.01);
-        $this->strength = round($strength * ((100 + $this->color) * 0.01), 0);
-        $this->dexterity = round($dexterity * ((100 + $this->color) * 0.01), 0);
-        $this->intelligence = round($intelligence * ((100 + $this->color) * 0.01), 0);
-        $this->speed = round($speed * ((100+ $this->color)/100), 0);
+        $this->baseMaxHealth = $health; 
+        $this->currentHealth = $this->getStat("maxHealth");
+        $this->strength = $strength;
+        $this->baseDexterity = $dexterity;
+        $this->baseIntelligence = $intelligence;
+        $this->baseSpeed = $speed;
         $this->EquippedArmor = new item("Basic Armor", "Armor", 0, 10, );
         $this->EquippedWeapon = new item("Basic Sword", "Sword", 10, 0);
     }
@@ -169,6 +170,6 @@ class Item {
 
     // Destruktor
     public function __destruct() {
-        echo "Item {$this->item_name} wird zerstoert.<br>";
+        echo "Item {$this->getStat("name") } wird zerstoert.<br>";
     }
 }
