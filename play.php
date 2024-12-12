@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-    <script src="game.js"></script>
+    <script src="controls.js"></script>
     </head>
     <body>
         <h1>eContriver</h1>
