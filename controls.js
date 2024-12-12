@@ -37,3 +37,12 @@ function move(event) {
     context.drawImage(dotImage, dotX, dotY);
     event.preventDefault(); // prevents arrows from scrolling
 }
+
+function collisionDetection() {
+    for (let c = 0; c < brickColumnCount; c++) {
+      for (let r = 0; r < brickRowCount; r++) {
+        const b = bricks[c][r];
+        // calculations
+      }
+    }
+  }
