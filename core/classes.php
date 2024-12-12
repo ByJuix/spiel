@@ -110,10 +110,12 @@ class Charakter {
     
 
     private function physAttack ($Enemy){
-        $Enemy->Defend($this->dexterity, $this->getStat("strength"));
+        $physWeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
+        $Enemy->Defend($this->dexterity, $this->getStat("strength") + $physWeaponDamage);
     }
     private function magAttack ($Enemy){
-        $Enemy->Defend($this->dexterity, $this->getStat("intelligence"));
+        $magWeaponDamage = $this->getStat("weapon")->getStat("damagMag");
+        $Enemy->Defend($this->dexterity, $this->getStat("intelligence")+ $magWeaponDamage);
     }
     private function TakeDMG($Damage) {
         $this->currentHealth -= $Damage;
