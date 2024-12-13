@@ -39,8 +39,8 @@ class Charakter {
         $this->baseDexterity = $dexterity;
         $this->baseIntelligence = $intelligence;
         $this->baseSpeed = $speed;
-        $this->EquippedArmor = new item("Basic Armor", "Armor", 0, 10, );
-        $this->EquippedWeapon = new item("Basic Sword", "Sword", 10, 0);
+        $this->EquippedArmor = new item("Basic Armor", "Armor", 0, 0, 10);
+        $this->EquippedWeapon = new item("Basic Sword", "Sword", 10, 0, 0);
     }
 
     // Destruktor
@@ -149,22 +149,23 @@ class Item {
         }
     }
 
-    public function setItemAttributes($name, $damage_phys, $damage_mag, $defense, $type) {
+    public function setItemAttributes($name, $type, $damage_phys, $damage_mag, $defense) {
         $this->name = $name;
+        $this->type = $type;
         $this->damage_phys = $damage_phys;
         $this->damage_mag = $damage_mag;
         $this->defense = $defense;
-        $this->type = $type;
     }
     
     
 
     // Konstruktor
-    public function __construct($item_name, $item_type, $item_damage,  $item_defense) {
-        $this->item_name = $item_name;
-        $this->item_damage = $item_damage;
-        $this->item_defense = $item_defense;
-        $this->item_type = $item_type;
+    public function __construct($name, $type, $damage_phys,  $damage_mag, $defense) {
+        $this->name = $name;
+        $this->type = $type;
+        $this->damage_phys = $damage_phys;
+        $this->damage_mag = $damage_mag;
+        $this->defense = $defense;
     }
 
     // Destruktor
