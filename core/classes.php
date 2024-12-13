@@ -44,7 +44,6 @@ class Charakter {
 
     // Destruktor
     public function __destruct() {
-        echo "Charakter {$this->name} wird zerstoert.<br>";
     }
 
     // Getter-Methoden
@@ -58,8 +57,8 @@ class Charakter {
             case "dexterity": return round( $this->baseDexterity * ((100+ $color)*0.01),0 );
             case "intelligence": return round( $this->baseIntelligence * ((100+ $color)*0.01),0 );
             case "speed": return round( $this->baseSpeed * ((100+ $color)*0.01),0 );
-            case "armor": return round($this->EquippedArmor);
-            case "weapon": return round($this->EquippedWeapon);
+            case "armor": return $this->EquippedArmor;
+            case "weapon": return $this->EquippedWeapon;
             case "color": return $color;
         }
              
@@ -169,6 +168,5 @@ class Item {
 
     // Destruktor
     public function __destruct() {
-        echo "Item {$this->item_name} wird zerstoert.<br>";
     }
 }

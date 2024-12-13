@@ -50,13 +50,15 @@ include_once "core/classes.php";
         <div>
             <?php
                 $charakter = new Core\Charakter(null, 1000, 37, 20, 15, 10);
-                echo "Name: " . $charakter->getName() . "<br>";
-                echo "Health: " . $charakter->getHealth() . "<br>";
-                echo "Strength: " . $charakter->getStrength() . "<br>";
-                echo "Dexterity: " . $charakter->getDexterity() . "<br>";
-                echo "Intelligence: " . $charakter->getIntelligence() . "<br>";
-                echo "Speed: " . $charakter->getSpeed() . "<br>";
-                echo "Color: " . $charakter->getColor() . "<br>";
+                echo "Name: " . $charakter->getStat("name") . "<br>";
+                echo "Health: " . $charakter->getStat("maxhealth") . "<br>";
+                echo "Strength: " . $charakter->getStat("strength") . "<br>";
+                echo "Dexterity: " . $charakter->getStat("dexterity") . "<br>";
+                echo "Intelligence: " . $charakter->getStat("intelligence") . "<br>";
+                echo "Speed: " . $charakter->getStat("speed") . "<br>";
+                echo "Armor: " . $charakter->getStat("armor")->getStat("name") . "<br>";
+                echo "Weapon: " . $charakter->getStat("weapon")->getStat("name") . "<br>";
+                echo "Color: " . $charakter->getStat("color") . "<br>";
             ?>
         </div>
         <button>Generieren</button>
