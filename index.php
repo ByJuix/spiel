@@ -1,8 +1,6 @@
 <?php
 namespace FantasyRacism;
 include_once "core/classes.php";
-
-
 ?>
 
 <!DOCTYPE html>

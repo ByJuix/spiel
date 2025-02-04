@@ -10,16 +10,16 @@
             padding: 0;
             height: 100%;
             overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        .background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('img/bg.png') no-repeat center center fixed;
+        .map {
+            position: relative;
+            width: 1280px;
+            height: 720px;
+            background: url('img/bg.png') no-repeat center center;
             background-size: cover;
-            z-index: -1;
         }
         .content {
             position: fixed;
@@ -27,8 +27,9 @@
             width: 100%;
             text-align: center;
             color: white;
-            padding: 20px;
+            padding: 10px;
             background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
         }
         .player {
             position: absolute;
@@ -42,20 +43,23 @@
     </style>
 </head>
 <body>
-    <div class="background"></div>
     <div class="content">
-        <h1>Koordinaten</h1>
-        <div id="coordinates">(50, 50)</div>
+        <img src="/img/" alt="Fantasy Racism">
+        <p>Koordinaten</p>
+        <div id="coordinates">(X: 64 | Y: 36)</div>
     </div>
-    <div class="player" id="player"></div>
+    <div class="map">
+        <div class="player" id="player"></div>
+    </div>
     <script>
         document.addEventListener('keydown', function(event) {
             const player = document.getElementById('player');
+            const map = document.querySelector('.map');
             const step = 10;
             let top = parseInt(window.getComputedStyle(player).top);
             let left = parseInt(window.getComputedStyle(player).left);
-            const maxTop = window.innerHeight - player.offsetHeight;
-            const maxLeft = window.innerWidth - player.offsetWidth;
+            const maxTop = map.clientHeight - player.offsetHeight;
+            const maxLeft = map.clientWidth - player.offsetWidth;
 
             switch(event.key) {
                 case 'ArrowUp':
@@ -74,10 +78,17 @@
 
             // Update coordinates
             const coordinates = document.getElementById('coordinates');
-            const x = Math.round((parseInt(player.style.left) + 5) / 10);
-            const y = Math.round((parseInt(player.style.top) + 5) / 10);
-            coordinates.innerText = `Coordinates: (${x}, ${y})`;
+            const x = Math.round((parseInt(player.style.left) + 5) / 10 - 1);
+            const y = Math.round((parseInt(player.style.top) + 5) / 10 - 1);
+            coordinates.innerText = `(X: ${x} | Y: ${y})`;
         });
+
+        // Center the player initially
+        window.onload = function() {
+            const player = document.getElementById('player');
+            player.style.top = '50%';
+            player.style.left = '50%';
+        };
     </script>
 </body>
 </html>
