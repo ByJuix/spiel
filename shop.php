@@ -1,9 +1,3 @@
-<?php
-#shop
-
-
-?>
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -11,25 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kupfershop</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; }
-        .shop-item { margin: 20px; padding: 10px; border: 1px solid #000; display: inline-block; }
-        .button { padding: 10px; background-color: #c47d49; color: white; border: none; cursor: pointer; }
+        html {
+             cursor: url('img/cursor.ico'), default; 
+        }
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            background-color: #1e1e1e;
+            background-image: url('background.png'); /* Pixelart RPG-Hintergrund */
+            background-size: cover;
+            color: #fff;
+            image-rendering: pixelated;
+        }
+        .shop-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 50px;
+        }
+        .shop-item { 
+            padding: 10px; 
+            border: 3px solid #c47d49; 
+            display: inline-block; 
+            background-color: #3b2f2f;
+            width: 180px;
+            text-align: center;
+            box-shadow: 4px 4px 0px #8b5a2b;
+            border-radius: 8px;
+        }
+        .button { 
+            padding: 10px; 
+            background-color: #c47d49; 
+            color: white; 
+            border: 2px solid #8b5a2b; 
+            cursor: pointer; 
+            font-family: 'Press Start 2P', cursive;
+            border-radius: 4px;
+        }
+        .button:hover {
+            background-color: #a05a2c;
+        }
+        h1, h2, p {
+            font-family: 'Press Start 2P', cursive;
+            text-shadow: 2px 2px 0px black;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
     </style>
 </head>
 <body>
     <h1>Kupfershop</h1>
     <p>Dein Guthaben: <span id="guthaben">100</span> Mark</p>
     
-    <div class="shop-item">
-        <h2>Kupferschwert</h2>
-        <p>Preis: 30 Mark</p>
-        <button class="button" onclick="kaufen(30)">Kaufen</button>
-    </div>
-    
-    <div class="shop-item">
-        <h2>Kupferrüstung</h2>
-        <p>Preis: 50 Mark</p>
-        <button class="button" onclick="kaufen(50)">Kaufen</button>
+    <div class="shop-container">
+        <div class="shop-item">
+            <h2>Kupferschwert</h2>
+            <img src="sword.png" alt="Kupferschwert" width="64" height="64">
+            <p>Preis: 30 Mark</p>
+            <button class="button" onclick="kaufen(30)">Kaufen</button>
+        </div>
+        
+        <div class="shop-item">
+            <h2>Kupferrüstung</h2>
+            <img src="armor.png" alt="Kupferrüstung" width="64" height="64">
+            <p>Preis: 50 Mark</p>
+            <button class="button" onclick="kaufen(50)">Kaufen</button>
+        </div>
     </div>
     
     <script>

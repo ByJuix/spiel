@@ -112,10 +112,24 @@ class Charakter {
         $physWeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
         $Enemy->Defend($this->dexterity, $this->getStat("strength") + $physWeaponDamage);
     }
+    private function physAttackStrong ($Enemy){
+        if (rand(0,1)){
+            $physWeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
+            $Enemy->Defend($this->dexterity*3, $this->getStat("strength") + $physWeaponDamage);
+        }
+    }
     private function magAttack ($Enemy){
         $magWeaponDamage = $this->getStat("weapon")->getStat("damagMag");
         $Enemy->Defend($this->dexterity, $this->getStat("intelligence")+ $magWeaponDamage);
     }
+    private function magAttackStrong ($Enemy){
+        if (rand(0,1)){
+            $magWeaponDamage = $this->getStat("weapon")->getStat("damagMag");
+            $Enemy->Defend($this->dexterity*3, $this->getStat("intelligence")+ $magWeaponDamage);
+        }
+    }
+
+
     private function TakeDMG($Damage) {
         $this->currentHealth -= $Damage;
     }
@@ -183,19 +197,57 @@ class Item {
 
 class Fight {
 
-    private $Fighter1;
-    private $Fighter1CurrentHP;
+    private $player;
+    private $playerCurrentHP;
     
-    private $Fighter2;
-    private $Fighter2CurrentHP;
+    private $enemy;
+    private $enemyCurrentHP;
 
-public function __construct($Fighter1, $Fighter2) {
-if ($Fighter1) {$this->Fighter1 = $Fighter1;}
-if ($Fighter2) {$this->Fighter2 = $Fighter2;}
+    public function __construct($player, $enemy) {
+        if ($player) {$this->player = $player;}
+        if ($enemy) {$this->enemy = $enemy;}
 
-$this->$Fighter1CurrentHP = $this->Fighter1->getStat("maxhealth");
-$this->$Fighter2CurrentHP = $this->Fighter2->getStat("maxhealth");
+        $this->playerCurrentHP = $this->player->getStat("maxhealth");
+        $this->enemyCurrentHP = $this->enemy->getStat("maxhealth");
 
-}
+    }
 
-}
+    public function FightRound($playerAction){
+        if ($playerAction) {
+            switch ($playerAction) {
+                case "phys":
+                    $this->player->physAttack($this->enemy);
+                    break;
+                case "mag":
+                    $this->player->magAttack($this->enemy);
+                    break;
+                case "physStrong":
+                    $this->player->physAttackStrong($this->enemy);
+                    break;    
+                case "magStrong":
+                    $this->player->magAttackStrong($this->enemy);
+                    break;        
+                }
+        if ($this->enemyCurrentHP > 0)
+                switch(rand(0,3)){
+                    case "0":
+                        $this->enemy->physAttack($this->player);
+                        break;
+                    case "1":
+                        $this->enemy->magAttack($this->player);
+                        break;
+                    case "2":
+                        $this->enemy->physAttackStrong($this->player);
+                        break;    
+                    case "3":
+                        $this->enemy->magAttackStrong($this->player);
+                        break;        
+                    }
+                }
+
+
+
+
+
+        }
+    }
