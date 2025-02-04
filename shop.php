@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kupfershop</title>
     <style>
+        html {
+            cursor: url('img/cursor.ico'), default;
+        }
         body { 
             font-family: Arial, sans-serif; 
             text-align: center; 
             background-color: #1e1e1e;
             color: #fff;
             image-rendering: pixelated;
-	        cursor: url('cursor.ico'), default;
         }
         .shop-container {
             display: flex;
