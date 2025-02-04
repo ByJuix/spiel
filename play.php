@@ -21,7 +21,7 @@
             position: relative;
             width: 1000px;
             height: 700px;
-            background: url('img/bg.png') no-repeat center center;
+            background: url('img/BaseMap 1000x1000 grassland.png') no-repeat center center;
             background-size: cover;
         }
         .header {
