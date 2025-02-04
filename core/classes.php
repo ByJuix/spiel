@@ -34,7 +34,6 @@ class Charakter {
         $this->name == "Feldmannius der Göttliche" ? $this->color = rand(100, 500) : $this->color = rand(1, 100);
 
         $this->baseMaxHealth = $health; 
-        $this->currentHealth = $this->getStat("maxHealth");
         $this->strength = $strength;
         $this->baseDexterity = $dexterity;
         $this->baseIntelligence = $intelligence;
@@ -124,10 +123,19 @@ class Charakter {
         $DamageTaken = $EnemyDex / $this->dexterity * $Damage;
         $this->TakeDmg($DamageTaken);
     }
-
-    private function Fight ($Enemy): void {
-
+    private function getLootColour() {
+        return round($this->getStat("color") / rand(5,15),0);
     }
+    private function getLootArmor() {
+        if (rand(1,2) == 1) {
+            return $this->getStat("armor");
+        }
+        return;
+    }
+    private function getLootWeapon() {
+        if (rand(1,2) == 1) {
+            return $this->getStat("weapon");
+        }    }
 }
 
 class Item {
@@ -171,4 +179,23 @@ class Item {
     // Destruktor
     public function __destruct() {
     }
+}
+
+class Fight {
+
+    private $Fighter1;
+    private $Fighter1CurrentHP;
+    
+    private $Fighter2;
+    private $Fighter2CurrentHP;
+
+public function __construct($Fighter1, $Fighter2) {
+if ($Fighter1) {$this->Fighter1 = $Fighter1;}
+if ($Fighter2) {$this->Fighter2 = $Fighter2;}
+
+$this->$Fighter1CurrentHP = $this->Fighter1->getStat("maxhealth");
+$this->$Fighter2CurrentHP = $this->Fighter2->getStat("maxhealth");
+
+}
+
 }
