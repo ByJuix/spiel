@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TOLL</title>
+    <title>Fantasy Racism</title>
     <style>
         body, html {
             margin: 0;
@@ -14,6 +14,9 @@
             justify-content: center;
             align-items: center;
         }
+        p {
+            margin: 0;
+        }
         .map {
             position: relative;
             width: 1280px;
@@ -21,15 +24,27 @@
             background: url('img/bg.png') no-repeat center center;
             background-size: cover;
         }
-        .content {
+        .header {
             position: fixed;
             top: 0;
             width: 100%;
-            text-align: center;
             color: white;
-            padding: 10px;
             background: rgba(0, 0, 0, 0.5);
             z-index: 1;
+        }
+        .header img {
+            width: 200px;
+        }
+        .sub-header {
+            margin: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .flex-row{
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .player {
             position: absolute;
@@ -43,10 +58,14 @@
     </style>
 </head>
 <body>
-    <div class="content">
-        <img src="/img/" alt="Fantasy Racism">
-        <p>Koordinaten</p>
-        <div id="coordinates">(X: 64 | Y: 36)</div>
+    <div class="header">
+        <div class="sub-header">
+            <img src="img/fr-font-white.png" alt="Fantasy Racism">
+            <div class="flex-row">
+                <p>Koordinaten:</p>
+                <span id="coordinates">(X: 64 | Y: 36)</span>
+            </div>
+        </div>
     </div>
     <div class="map">
         <div class="player" id="player"></div>
