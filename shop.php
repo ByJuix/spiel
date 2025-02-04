@@ -11,7 +11,7 @@
             background-color: #1e1e1e;
             color: #fff;
             image-rendering: pixelated;
-	        cursor: url('some-cursor.ico'), default;
+	        cursor: url('cursor.ico'), default;
         }
         .shop-container {
             display: flex;
