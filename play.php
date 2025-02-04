@@ -19,8 +19,8 @@
         }
         .map {
             position: relative;
-            width: 1280px;
-            height: 720px;
+            width: 1000px;
+            height: 700px;
             background: url('img/bg.png') no-repeat center center;
             background-size: cover;
         }
