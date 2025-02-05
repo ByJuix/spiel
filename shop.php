@@ -12,7 +12,7 @@
             font-family: Arial, sans-serif; 
             text-align: center; 
             background-color: #1e1e1e;
-            background-image: url('background.png'); /* Pixelart RPG-Hintergrund */
+            background-image: url('img/background.png'); /* Pixelart RPG-Hintergrund */
             background-size: cover;
             color: #fff;
             image-rendering: pixelated;
