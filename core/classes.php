@@ -13,9 +13,10 @@ class Charakter {
     private $baseIntelligence;
     private $baseSpeed;
 
-
-  #  private $maxHealth;            #stats that change with color
     private $currentHealth;
+
+
+  #  private $maxHealth;            #unneccesary weil base stats im getter mit color verrechnet werden
   #  private $strength;
   #  private $dexterity;
   #  private $intelligence;
@@ -220,24 +221,30 @@ class Fight {
 
     }
 
-    public function FightRound($playerAction){
+    public function FightRound($playerAttackAction, $playerDefenseAction){
+        $enemyDefenseAction = rand(0,1); # 1 physical block, 0 magical block
+        $enemyAttackAction = rand(0,3);
         if ($playerAction) {
             switch ($playerAction) {
                 case "phys":
-                    $this->player->physAttack($this->enemy);
+                    if ($enemyDefenseAction == 1) {$this->player->physAttack($this->enemy, true);} else
+                    $this->player->physAttack($this->enemy, false);
                     break;
                 case "mag":
-                    $this->player->magAttack($this->enemy);
+                    if ($enemyDefenseAction == 0) {$this->player->magAttack($this->enemy, true);} else
+                    $this->player->magAttack($this->enemy, false)
                     break;
                 case "physStrong":
-                    $this->player->physAttackStrong($this->enemy);
+                    if ($enemyDefenseAction == 1) {$this->player->physAttackStrong($this->enemy, true);} else
+                    $this->player->physAttackStrong($this->enemy, false);
                     break;    
                 case "magStrong":
-                    $this->player->magAttackStrong($this->enemy);
+                    if ($enemyDefenseAction == 0) {$this->player->magAttackStrong($this->enemy, true);} else
+                    $this->player->magAttackStrong($this->enemy, false)
                     break;        
                 }
         if ($this->enemyCurrentHP > 0)
-                switch(rand(0,3)){
+                switch($enemyAttackAction){
                     case "0":
                         $this->enemy->physAttack($this->player);
                         break;
@@ -252,10 +259,5 @@ class Fight {
                         break;        
                     }
                 }
-
-
-
-
-
         }
     }
