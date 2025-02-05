@@ -52,28 +52,28 @@
     <div class="shop-container">
         <div class="shop-item" id="schwert-container">
             <h2>Kupferschwert (Level <span id="schwert-level">1</span>)</h2>
-            <img src="sword.png" alt="Kupferschwert" width="64" height="64">
+            <img src="img/sword.png" alt="Kupferschwert" width="64" height="64">
             <p>Preis: <span id="schwert-preis">30</span> Mark</p>
             <button class="button" onclick="kaufen('schwert')">Upgrade</button>
         </div>
-        
+
         <div class="shop-item" id="ruestung-container">
             <h2>Kupferrüstung (Level <span id="ruestung-level">1</span>)</h2>
-            <img src="armor.png" alt="Kupferrüstung" width="64" height="64">
+            <img src="img/armor.png" alt="Kupferrüstung" width="64" height="64">
             <p>Preis: <span id="ruestung-preis">50</span> Mark</p>
             <button class="button" onclick="kaufen('ruestung')">Upgrade</button>
         </div>
         
         <div class="shop-item" id="bogen-container">
             <h2>Kupferbogen (Level <span id="bogen-level">1</span>)</h2>
-            <img src="bow.png" alt="Kupferbogen" width="64" height="64">
+            <img src="img/bow.png" alt="Kupferbogen" width="64" height="64">
             <p>Preis: <span id="bogen-preis">40</span> Mark</p>
             <button class="button" onclick="kaufen('bogen')">Upgrade</button>
         </div>
         
         <div class="shop-item" id="dolch-container">
             <h2>Kupferdolch (Level <span id="dolch-level">1</span>)</h2>
-            <img src="dagger.png" alt="Kupferdolch" width="64" height="64">
+            <img src="img/dagger.png" alt="Kupferdolch" width="64" height="64">
             <p>Preis: <span id="dolch-preis">25</span> Mark</p>
             <button class="button" onclick="kaufen('dolch')">Upgrade</button>
         </div>
