@@ -141,13 +141,13 @@ class Charakter {
         return round($this->getStat("color") / rand(5,15),0);
     }
     private function getLootArmor() {
-        if (rand(1,2) == 1) {
+        if (rand(0,1)) {
             return $this->getStat("armor");
         }
         return;
     }
     private function getLootWeapon() {
-        if (rand(1,2) == 1) {
+        if (rand(0,1)) {
             return $this->getStat("weapon");
         }    }
 }
