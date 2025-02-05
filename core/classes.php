@@ -3,7 +3,7 @@ namespace FantasyRacism\Core;
 
 class Charakter {
     // Attribute
-    private $isAlive;
+    private $isAlive; 
     private $playerControlled;
     private $name;
     
@@ -14,12 +14,12 @@ class Charakter {
     private $baseSpeed;
 
 
-    private $maxHealth;            #stats that change with color
+  #  private $maxHealth;            #stats that change with color
     private $currentHealth;
-    private $strength;
-    private $dexterity;
-    private $intelligence;
-    private $speed;
+  #  private $strength;
+  #  private $dexterity;
+  #  private $intelligence;
+  #  private $speed;
     
     private $money;
     private $color;
@@ -31,13 +31,15 @@ class Charakter {
 
         $possibleNames = ["Cyanis der Schimmernde", "Kuphero der Glühende", "Rubinia Flammenklinge", "Azubios der Garagenfeger", "Ambera Goldhand", "Vermilios Stahlseele", "Bronzora die Mächtige", "Zinnox der Verschlagene", "Smargant der Weise", "Alabastea der Erhabene", "Saphiriel Sturmbrecher", "Ochros Kupferflamme", "Chalybeus der Unverwüstliche", "Verdantus Blattläufer", "Aurenix der Glanzvolle", "Carminelle Schattenruferin", "Cobalta Nachtseele", "Malach der Grüne Hüter", "Zirkon Flammensucher", "Titanora die Ewige", "Feldmannius der Göttliche"];
     
+
+        
         $this->name = $name ?? $possibleNames[array_rand($possibleNames)];
         $this->name == "Feldmannius der Göttliche" ? $this->color = rand(100, 500) : $this->color = rand(1, 100);
         
         $this->money = round($this->color / 3, 0); 
 
-        $this->baseMaxHealth = $health; 
-        $this->strength = $strength;
+        $this->baseMaxHealth = $health;
+        $this->baseStrength = $strength;
         $this->baseDexterity = $dexterity;
         $this->baseIntelligence = $intelligence;
         $this->baseSpeed = $speed;
@@ -115,28 +117,28 @@ class Charakter {
     private function physAttack ($Enemy):bool{
         if (rand(0,9)!= 0){
             $physWeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
-            $Enemy->Defend($this->dexterity, $this->getStat("strength") + $physWeaponDamage);
+            $Enemy->Defend($this->getStat("dexterity"), $this->getStat("strength") + $physWeaponDamage);
             return true;
         } else return false;
     }
     private function physAttackStrong ($Enemy):bool{
         if (rand(0,1)){
             $physWeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
-            $Enemy->Defend($this->dexterity*3, $this->getStat("strength") + $physWeaponDamage);
+            $Enemy->Defend($this->getStat("dexterity")*3, $this->getStat("strength") + $physWeaponDamage);
             return true;
         } else return false;
     }
     private function magAttack ($Enemy):bool{
         if (rand(0,9)!= 0){
             $magWeaponDamage = $this->getStat("weapon")->getStat("damagMag");
-            $Enemy->Defend($this->dexterity, $this->getStat("intelligence")+ $magWeaponDamage);
+            $Enemy->Defend($this->getStat("dexterity"), $this->getStat("intelligence")+ $magWeaponDamage);
             return true;
         } else return false;
     }
     private function magAttackStrong ($Enemy):bool{
         if (rand(0,1)){
             $magWeaponDamage = $this->getStat("weapon")->getStat("damagMag");
-            $Enemy->Defend($this->dexterity*3, $this->getStat("intelligence")+ $magWeaponDamage);
+            $Enemy->Defend($this->getStat("dexterity")*3, $this->getStat("intelligence")+ $magWeaponDamage);
             return true;
         } else return false;
     }
@@ -146,7 +148,7 @@ class Charakter {
         $this->currentHealth -= $Damage;
     }
     private function Defend($EnemyDex, $Damage) {
-        $DamageTaken = $EnemyDex / $this->dexterity * $Damage;
+        $DamageTaken = $EnemyDex / $this->getStat("dexterity") * $Damage;
         $this->TakeDmg($DamageTaken);
     }
     private function getLootColour() {
