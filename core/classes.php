@@ -21,6 +21,7 @@ class Charakter {
     private $intelligence;
     private $speed;
     
+    private $money;
     private $color;
     private $EquippedWeapon;
     private $EquippedArmor;
@@ -32,6 +33,8 @@ class Charakter {
     
         $this->name = $name ?? $possibleNames[array_rand($possibleNames)];
         $this->name == "Feldmannius der Göttliche" ? $this->color = rand(100, 500) : $this->color = rand(1, 100);
+        
+        $this->money = $this->color / 3; 
 
         $this->baseMaxHealth = $health; 
         $this->strength = $strength;
@@ -60,6 +63,7 @@ class Charakter {
             case "armor": return $this->EquippedArmor;
             case "weapon": return $this->EquippedWeapon;
             case "color": return $color;
+            case "money" : return $this->money;
         }
              
     }
@@ -108,25 +112,33 @@ class Charakter {
     }
     
 
-    private function physAttack ($Enemy){
-        $physWeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
-        $Enemy->Defend($this->dexterity, $this->getStat("strength") + $physWeaponDamage);
+    private function physAttack ($Enemy):bool{
+        if (rand(0,9)!= 0){
+            $physWeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
+            $Enemy->Defend($this->dexterity, $this->getStat("strength") + $physWeaponDamage);
+            return true;
+        } else return false;
     }
-    private function physAttackStrong ($Enemy){
+    private function physAttackStrong ($Enemy):bool{
         if (rand(0,1)){
             $physWeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
             $Enemy->Defend($this->dexterity*3, $this->getStat("strength") + $physWeaponDamage);
-        }
+            return true;
+        } else return false;
     }
-    private function magAttack ($Enemy){
-        $magWeaponDamage = $this->getStat("weapon")->getStat("damagMag");
-        $Enemy->Defend($this->dexterity, $this->getStat("intelligence")+ $magWeaponDamage);
+    private function magAttack ($Enemy):bool{
+        if (rand(0,9)!= 0){
+            $magWeaponDamage = $this->getStat("weapon")->getStat("damagMag");
+            $Enemy->Defend($this->dexterity, $this->getStat("intelligence")+ $magWeaponDamage);
+            return true;
+        } else return false;
     }
-    private function magAttackStrong ($Enemy){
+    private function magAttackStrong ($Enemy):bool{
         if (rand(0,1)){
             $magWeaponDamage = $this->getStat("weapon")->getStat("damagMag");
             $Enemy->Defend($this->dexterity*3, $this->getStat("intelligence")+ $magWeaponDamage);
-        }
+            return true;
+        } else return false;
     }
 
 
@@ -140,16 +152,9 @@ class Charakter {
     private function getLootColour() {
         return round($this->getStat("color") / rand(5,15),0);
     }
-    private function getLootArmor() {
-        if (rand(1,2) == 1) {
-            return $this->getStat("armor");
-        }
-        return;
+    private function getLootMoney() {
+        return round($this->getStat("money") / rand(1,3),0);
     }
-    private function getLootWeapon() {
-        if (rand(1,2) == 1) {
-            return $this->getStat("weapon");
-        }    }
 }
 
 class Item {
