@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -69,6 +72,12 @@
     </div>
     <div class="map">
         <div class="player" id="player"></div>
+    </div>
+    <div>
+        
+    <?php
+    var_dump($_SESSION['charakter']);
+    ?>
     </div>
     <script>
         document.addEventListener('keydown', function(event) {

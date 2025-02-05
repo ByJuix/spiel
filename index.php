@@ -1,6 +1,8 @@
 <?php
 namespace FantasyRacism;
 include_once "core/classes.php";
+
+session_start();
 ?>
 
 <!DOCTYPE html>
@@ -14,6 +16,10 @@ include_once "core/classes.php";
             font-family: "Mountain King";
             src: url(font/MountainKing.ttf);
         }
+        html { 
+            height: 100%;
+            cursor: url('img/cursor.ico'), default;
+        }
         body {
             font-family: Arial, sans-serif;
             background-color: #000;
@@ -22,8 +28,11 @@ include_once "core/classes.php";
         h1, h2, p {
             margin: 0;
         }
-        .box {   
-            width: 80%;
+        h1 {
+            text-align: center;
+            font-size: 3rem;
+        }
+        .box {
             margin: auto;
             transform: translate(-50%, -50%);
             position: absolute;
@@ -31,25 +40,32 @@ include_once "core/classes.php";
             left: 50%;
         }
         .container {
+            width: 50%;
             background-color: #222;
             padding: 2rem;
+            font-size: 18px;
+            justify-content: center;
+            display: flex;
+            flex-direction: column;
         }
         .character {
             margin: 20px 0;
         }
-        button {
-            padding: 10px 20px;
-            margin: 5px;
+        .button {
+            padding: 1rem 2rem;
             border: none;
-            background-color: #007BFF;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
+            background-color: #333;
+            color: #fff;
+            font-size: 18px;
+            cursor: inherit;
+            text-decoration: none;
+            text-align: center;
         }
-        button:hover {
-            background-color: #0056b3;
+        .button:hover {
+            background-color: #555;
         }
         .intro {
+            width: 80%;
             text-align: center;
             font-size: 24px;
         }
@@ -67,6 +83,17 @@ include_once "core/classes.php";
         .hidden {
             display: none;
         }
+        .character {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+        }
+        .character img {
+            width: 100%;
+        }
+        .character div {
+            width: 30%;
+        }
     </style>
 </head>
 <body>
@@ -75,7 +102,7 @@ include_once "core/classes.php";
         <p><img src="img/fr-font-white.png" alt="Fantasy Racism"></p>
         <p>Fantasy Racism ist ein offline RPG-Spiel, bei dem du dich frei auf der Map bewegen kannst,</p>
         <p>deinen Charakter leveln und seine Ausruestung verbessern.</p>
-        <p>Dein Ziel ist es, so lange wie möglich zu ueberleben und eine hohe Aura zu erreichen.</p>
+        <p>Dein Ziel ist es, so lange wie moeglich zu ueberleben und eine hohe Aura zu erreichen.</p>
         <p>Zuerst generieren wir einen Charakter</p>
     </div>
     <script>
@@ -110,21 +137,28 @@ include_once "core/classes.php";
     </script>
     <div class="box container hidden" id="container">
         <h1>Dein Charakter</h1>
-        <div>
-            <?php
-                $charakter = new Core\Charakter(null, 1000, 37, 20, 15, 10);
-                echo "Name: " . $charakter->getStat("name") . "<br>";
-                echo "Health: " . $charakter->getStat("maxhealth") . "<br>";
-                echo "Strength: " . $charakter->getStat("strength") . "<br>";
-                echo "Dexterity: " . $charakter->getStat("dexterity") . "<br>";
-                echo "Intelligence: " . $charakter->getStat("intelligence") . "<br>";
-                echo "Speed: " . $charakter->getStat("speed") . "<br>";
-                echo "Armor: " . $charakter->getStat("armor")->getStat("name") . "<br>";
-                echo "Weapon: " . $charakter->getStat("weapon")->getStat("name") . "<br>";
-                echo "Color: " . $charakter->getStat("color") . "<br>";
-            ?>
+        <br>
+        <div class="character">
+            <div>
+                <?php
+                    $charakter = new Core\Charakter(null, 1000, 37, 20, 15, 10);
+                    $_SESSION["charakter"] = $charakter;
+                    echo "Name: " . $charakter->getStat("name") . "<br>";
+                ?>
+                <img src="img/map.png" alt="<?php echo $charakter->getStat("name"); ?>">
+            </div>
+            <div>
+                <p>Stats:</p>
+                <?php
+                    echo "Armor: " . $charakter->getStat("armor")->getStat("name") . "<br>";
+                    echo "Weapon: " . $charakter->getStat("weapon")->getStat("name") . "<br>";
+                    echo "XP: " . $charakter->getStat("color") . "<br>";
+                    echo "Money: " . $charakter->getStat("money") . "<br>";
+                ?>
+            </div>
         </div>
-        <button>Start</button>
+        <br>
+        <a class="button" href="play.php">Start</a>
     </div>
 </body>
 </html>
