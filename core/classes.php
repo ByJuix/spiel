@@ -30,7 +30,8 @@ class Charakter {
     public function __construct($name, $health, $strength, $dexterity, $intelligence, $speed) {
 
         $possibleNames = ["Cyanis der Schimmernde", "Kuphero der Glühende", "Rubinia Flammenklinge", "Azubios der Garagenfeger", "Ambera Goldhand", "Vermilios Stahlseele", "Bronzora die Mächtige", "Zinnox der Verschlagene", "Smargant der Weise", "Alabastea der Erhabene", "Saphiriel Sturmbrecher", "Ochros Kupferflamme", "Chalybeus der Unverwüstliche", "Verdantus Blattläufer", "Aurenix der Glanzvolle", "Carminelle Schattenruferin", "Cobalta Nachtseele", "Malach der Grüne Hüter", "Zirkon Flammensucher", "Titanora die Ewige", "Feldmannius der Göttliche"];
-    
+        $this->isAlive = true;
+        $this->playerControlled = false;
 
         
         $this->name = $name ?? $possibleNames[array_rand($possibleNames)];
