@@ -34,7 +34,7 @@ class Charakter {
         $this->name = $name ?? $possibleNames[array_rand($possibleNames)];
         $this->name == "Feldmannius der Göttliche" ? $this->color = rand(100, 500) : $this->color = rand(1, 100);
         
-        $this->money = $this->color / 3; 
+        $this->money = round($this->color / 3, 0); 
 
         $this->baseMaxHealth = $health; 
         $this->strength = $strength;
