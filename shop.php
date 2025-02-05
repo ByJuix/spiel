@@ -10,7 +10,7 @@
             font-family: Arial, sans-serif; 
             text-align: center; 
             background-color: #0f1a17;
-            background-image: url('img/background.png');
+            background-image: url('img/shop_background.png');
             background-size: cover;
             color: #d4d4d4;
             image-rendering: pixelated;

@@ -13,6 +13,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            background-image: url('img/background.png');
         }
         p {
             margin: 0;
