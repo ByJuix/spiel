@@ -232,7 +232,7 @@ class Fight {
                     break;
                 case "mag":
                     if ($enemyDefenseAction == 0) {$this->player->magAttack($this->enemy, true);} else
-                    $this->player->magAttack($this->enemy, false)
+                    $this->player->magAttack($this->enemy, false);
                     break;
                 case "physStrong":
                     if ($enemyDefenseAction == 1) {$this->player->physAttackStrong($this->enemy, true);} else
@@ -240,7 +240,7 @@ class Fight {
                     break;    
                 case "magStrong":
                     if ($enemyDefenseAction == 0) {$this->player->magAttackStrong($this->enemy, true);} else
-                    $this->player->magAttackStrong($this->enemy, false)
+                    $this->player->magAttackStrong($this->enemy, false);
                     break;        
                 }
         if ($this->enemyCurrentHP > 0)
