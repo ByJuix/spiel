@@ -31,7 +31,7 @@ $charakter = $_SESSION['charakter'];
             height: 100%;
             width: 100%;
             background-image: url('img/shop_background.png');
-            filter: blur(8px);
+            filter: blur(3px);
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
@@ -56,6 +56,7 @@ $charakter = $_SESSION['charakter'];
             margin: auto;
             top: 50%;
             transform: translate(0,-50%);
+            z-index: 1;
         }
         .header {
             position: fixed;
@@ -89,6 +90,7 @@ $charakter = $_SESSION['charakter'];
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            z-index: 2;
         }
         .stats {
             position: absolute;
@@ -106,6 +108,18 @@ $charakter = $_SESSION['charakter'];
         .character img {
             width: 100%;
             margin: auto;
+        }
+        .shop{
+            display: none;
+            position: absolute;
+            width: 1000px;
+            height: 700px;
+            background-color: rgba(0, 0, 0, 0.8);
+            margin: auto;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            z-index: 3;
         }
     </style>
 </head>
@@ -142,37 +156,95 @@ $charakter = $_SESSION['charakter'];
                 </div>
             </div>
         </div>
+        <div class="shop">
+            <button onclick="closePopup()">Close</button>
+        </div>
     </div>
     <script>
-        document.addEventListener('keydown', function(event) {
+        document.addEventListener('DOMContentLoaded', function() {
             const player = document.getElementById('player');
             const map = document.querySelector('.map');
-            const step = 10;
+            const shop = document.querySelector('.shop');
+            const step = 2; // Verringerte Schrittweite
             let top = parseInt(window.getComputedStyle(player).top) || 0;
             let left = parseInt(window.getComputedStyle(player).left) || 0;
             const maxTop = map.clientHeight - player.offsetHeight;
             const maxLeft = map.clientWidth - player.offsetWidth;
-
-            switch(event.key) {
-                case 'ArrowUp':
-                    if (top - step >= 0) player.style.top = (top - step) + 'px';
-                    break;
-                case 'ArrowDown':
-                    if (top + step <= maxTop + 1) player.style.top = (top + step) + 'px';
-                    break;
-                case 'ArrowLeft':
-                    if (left - step >= 0) player.style.left = (left - step) + 'px';
-                    break;
-                case 'ArrowRight':
-                    if (left + step <= maxLeft + 1) player.style.left = (left + step) + 'px';
-                    break;
+            let isPopupOpen = false;
+            
+            const keys = {
+                ArrowUp: false,
+                ArrowDown: false,
+                ArrowLeft: false,
+                ArrowRight: false
+            };
+            
+            document.addEventListener('keydown', function(event) {
+                if (!isPopupOpen && keys.hasOwnProperty(event.key)) {
+                    keys[event.key] = true;
+                }
+            });
+            
+            document.addEventListener('keyup', function(event) {
+                if (keys.hasOwnProperty(event.key)) {
+                    keys[event.key] = false;
+                }
+            });
+            
+            function movePlayer() {
+                if (keys.ArrowUp && top - step >= 0) top -= step;
+                if (keys.ArrowDown && top + step <= maxTop + 1) top += step;
+                if (keys.ArrowLeft && left - step >= 0) left -= step;
+                if (keys.ArrowRight && left + step <= maxLeft + 1) left += step;
+            
+                player.style.top = top + 'px';
+                player.style.left = left + 'px';
+            
+                // Update coordinates
+                const coordinates = document.getElementById('coordinates');
+                const x = Math.round((left + player.offsetWidth / 2) / 10);
+                const y = Math.round((top + player.offsetHeight / 2) / 10);
+                coordinates.innerText = `(X: ${x} | Y: ${y})`;
+            
+                // Check for popup condition
+                if (x >= 15 && x <= 18 && y >= 9 && y <= 10) {
+                    showPopup();
+                }
             }
-
-            // Update coordinates
-            const coordinates = document.getElementById('coordinates');
-            const x = Math.round((left + player.offsetWidth / 2) / 10);
-            const y = Math.round((top + player.offsetHeight / 2) / 10);
-            coordinates.innerText = `(X: ${x} | Y: ${y})`;
+            
+            function showPopup() {
+                // Display the shop
+                shop.style.display = 'block';
+                // Disable movement
+                isPopupOpen = true;
+                // Reset keys
+                for (let key in keys) {
+                    keys[key] = false;
+                }
+                // Set player position to X:14 Y:12
+                top = 12 * 10 - player.offsetHeight / 2;
+                left = 14 * 10 - player.offsetWidth / 2;
+                player.style.top = top + 'px';
+                player.style.left = left + 'px';
+                // Update coordinates
+                const coordinates = document.getElementById('coordinates');
+                coordinates.innerText = `(X: 14 | Y: 12)`;
+            }
+            
+            // closePopup als globale Funktion verfügbar machen und im selben Scope definieren
+            window.closePopup = function() {
+                // Hide the shop
+                shop.style.display = 'none';
+                // Enable movement
+                isPopupOpen = false;
+            }
+            
+            function gameLoop() {
+                movePlayer();
+                setTimeout(() => requestAnimationFrame(gameLoop), 20); // Verlangsamte Aktualisierungsrate
+            }
+            
+            gameLoop();
         });
     </script>
 </body>
