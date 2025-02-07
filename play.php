@@ -81,9 +81,9 @@ $charakter = $_SESSION['charakter'];
         }
         .player {
             position: absolute;
-            width: 20px;
-            height: 20px;
-            background-image: url(img/armor.png);
+            width: 24px;
+            height: 24px;
+            background-image: url('img/character/<?php echo $charakter->getStat("name"); ?>/front.png');
             background-size: cover;
             background-repeat: no-repeat;
             top: 50%;
