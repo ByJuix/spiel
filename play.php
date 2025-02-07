@@ -1,5 +1,9 @@
 <?php
+namespace FantasyRacism;
+include_once "core/classes.php";
+
 session_start();
+$charakter = $_SESSION['charakter'];
 ?>
 <!DOCTYPE html>
 <html lang="de">
@@ -85,6 +89,19 @@ session_start();
             left: 50%;
             transform: translate(-50%, -50%);
         }
+        .stats {
+            position: absolute;
+            width: 200px;
+            height: 700px;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            left: 0;
+            transform: translate(0, -50%);
+            top: 50%;
+        }
+        .sub-stats {
+            margin: 10px 20px;
+        }
     </style>
 </head>
 <body>
@@ -93,6 +110,11 @@ session_start();
         <div class="header">
             <div class="sub-header">
                 <img src="img/fr-font-white.png" alt="Fantasy Racism">
+                <div>
+                    <?php
+                        echo "WICHTIGER STAT HIER";
+                    ?>
+                </div>
                 <div class="flex-row">
                     <p>Koordinaten:</p>
                     <span id="coordinates">(X: 51 | Y: 36)</span>
@@ -101,6 +123,19 @@ session_start();
         </div>
         <div class="map">
             <div class="player" style="transform: translate(0px);" id="player"></div>
+        </div>
+        <div class="stats">
+            <div class="sub-stats">
+                <h2><?php echo $charakter->getStat("name"); ?></h2>
+                <div class="character">
+                    <img src="img/armor.png" alt="Armor">
+                    <div>
+                        <p>Leben: <?php echo $charakter->getStat("maxhealth"); ?></p>
+                        <p>Stärke: <?php echo $charakter->getStat("strength"); ?></p>
+                        <p>Geschwindigkeit: <?php echo $charakter->getStat("speed"); ?></p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <script>
