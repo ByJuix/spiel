@@ -145,7 +145,7 @@ session_start();
                     $_SESSION["charakter"] = $charakter;
                     echo "Name: " . $charakter->getStat("name") . "<br>";
                 ?>
-                <img src="img/map.png" alt="<?php echo $charakter->getStat("name"); ?>">
+                <img src="img/character/<?php echo $charakter->getStat("name"); ?>/front.png" alt="<?php echo $charakter->getStat("name"); ?>">
             </div>
             <div>
                 <p>Stats:</p>

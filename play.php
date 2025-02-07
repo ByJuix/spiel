@@ -17,6 +17,7 @@ $charakter = $_SESSION['charakter'];
             cursor: url('img/cursor.ico'), default;
         }
         body {
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             height: 100%;
@@ -102,6 +103,10 @@ $charakter = $_SESSION['charakter'];
         .sub-stats {
             margin: 10px 20px;
         }
+        .character img {
+            width: 100%;
+            margin: auto;
+        }
     </style>
 </head>
 <body>
@@ -128,7 +133,7 @@ $charakter = $_SESSION['charakter'];
             <div class="sub-stats">
                 <h2><?php echo $charakter->getStat("name"); ?></h2>
                 <div class="character">
-                    <img src="img/armor.png" alt="Armor">
+                    <img src="img/character/<?php echo $charakter->getStat("name"); ?>/front.png" alt="<?php echo $charakter->getStat("name"); ?>">
                     <div>
                         <p>Leben: <?php echo $charakter->getStat("maxhealth"); ?></p>
                         <p>Stärke: <?php echo $charakter->getStat("strength"); ?></p>
