@@ -44,7 +44,7 @@ $charakter = $_SESSION['charakter'];
             top: 0;
             left: 0;
         }
-        p {
+        p, h1, h2 {
             margin: 0;
         }
         .map {
@@ -114,12 +114,53 @@ $charakter = $_SESSION['charakter'];
             position: absolute;
             width: 1000px;
             height: 700px;
-            background-color: rgba(0, 0, 0, 0.8);
+            background-color: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            text-align: center;
             margin: auto;
             top: 50%;
             left: 50%;
             transform: translate(-50%,-50%);
             z-index: 3;
+        }
+        .shop > h1 {
+            margin-top: 10%;
+        }
+        .shop > button {
+            padding: 1rem 2rem;
+            border: none;
+            background-color: #333;
+            color: #fff;
+            font-size: 18px;
+            cursor: inherit;
+            text-decoration: none;
+            text-align: center;
+            width: 80%;
+            margin: 10% auto 0 auto;
+        }
+        .shop-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 10% auto 0 auto;
+            width: 80%;
+        }
+        .shop-item { 
+            padding: 10px;
+            display: inline-block; 
+            background-color: #222;
+            width: 180px;
+        }
+        .button { 
+            padding: 10px; 
+            background-color: #333; 
+            border: none;
+            color: #fff;
+            margin-top: 20px;
+            cursor: pointer; 
+        }
+        .button:hover { 
+            background-color: #555; 
         }
     </style>
 </head>
@@ -157,6 +198,33 @@ $charakter = $_SESSION['charakter'];
             </div>
         </div>
         <div class="shop">
+            <h1>Kupfershop</h1>            
+            <div class="shop-container">
+                <div class="shop-item" id="schwert-container">
+                    <h2>Kupferschwert (Level <span id="schwert-level">1</span>)</h2>
+                    <img src="img/sword.png" alt="Kupferschwert" width="64" height="64">
+                    <p>Preis: <span id="schwert-preis">30</span> Mark</p>
+                    <button class="button" onclick="kaufen('schwert')">Upgrade</button>
+                </div>
+                <div class="shop-item" id="ruestung-container">
+                    <h2>Kupferrüstung (Level <span id="ruestung-level">1</span>)</h2>
+                    <img src="img/armor.png" alt="Kupferrüstung" width="64" height="64">
+                    <p>Preis: <span id="ruestung-preis">50</span> Mark</p>
+                    <button class="button" onclick="kaufen('ruestung')">Upgrade</button>
+                </div>
+                <div class="shop-item" id="bogen-container">
+                    <h2>Kupferbogen (Level <span id="bogen-level">1</span>)</h2>
+                    <img src="img/bow.png" alt="Kupferbogen" width="64" height="64">
+                    <p>Preis: <span id="bogen-preis">40</span> Mark</p>
+                    <button class="button" onclick="kaufen('bogen')">Upgrade</button>
+                </div>
+                <div class="shop-item" id="dolch-container">
+                    <h2>Kupferdolch (Level <span id="dolch-level">1</span>)</h2>
+                    <img src="img/dagger.png" alt="Kupferdolch" width="64" height="64">
+                    <p>Preis: <span id="dolch-preis">25</span> Mark</p>
+                    <button class="button" onclick="kaufen('dolch')">Upgrade</button>
+                </div>
+            </div>
             <button onclick="closePopup()">Close</button>
         </div>
     </div>
