@@ -224,8 +224,8 @@ class Fight {
     public function FightRound($playerAttackAction, $playerDefenseAction){
         $enemyDefenseAction = rand(0,1); # 1 physical block, 0 magical block
         $enemyAttackAction = rand(0,3);
-        if ($playerAction) {
-            switch ($playerAction) {
+        if ($playerAttackAction) {
+            switch ($playerAttackAction) {
                 case "phys":
                     if ($enemyDefenseAction == 1) {$this->player->physAttack($this->enemy, true);} else
                     $this->player->physAttack($this->enemy, false);
@@ -246,15 +246,19 @@ class Fight {
         if ($this->enemyCurrentHP > 0)
                 switch($enemyAttackAction){
                     case "0":
+                        if ($playerDefenseAction == "phys") {$this->enemy->physAttack($this->player, true);} else
                         $this->enemy->physAttack($this->player);
                         break;
                     case "1":
+                        if ($playerDefenseAction == "mag") {$this->enemy->physAttack($this->player, true);} else
                         $this->enemy->magAttack($this->player);
                         break;
                     case "2":
+                        if ($playerDefenseAction == "phys") {$this->enemy->physAttack($this->player, true);} else
                         $this->enemy->physAttackStrong($this->player);
                         break;    
                     case "3":
+                        if ($playerDefenseAction == "mag") {$this->enemy->physAttack($this->player, true);} else
                         $this->enemy->magAttackStrong($this->player);
                         break;        
                     }
