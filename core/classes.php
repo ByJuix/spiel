@@ -104,6 +104,9 @@ class Charakter {
             case 'color':
                 $this->color = $value;
                 break;
+            case 'money':
+                $this->money = $value;
+                break;
             case 'EquippedWeapon':
                 $this->EquippedWeapon = $value;
                 break;
@@ -221,7 +224,7 @@ class Fight {
 
     }
 
-    public function FightRound($playerAttackAction, $playerDefenseAction){
+    public function FightRound($playerAttackAction, $playerDefenseAction):string{
         $enemyDefenseAction = rand(0,1); # 1 physical block, 0 magical block
         $enemyAttackAction = rand(0,3);
         if ($playerAttackAction) {
@@ -243,7 +246,8 @@ class Fight {
                     $this->player->magAttackStrong($this->enemy, false);
                     break;        
                 }
-        if ($this->enemyCurrentHP > 0)
+        }
+        if ($this->enemyCurrentHP > 0){
                 switch($enemyAttackAction){
                     case "0":
                         if ($playerDefenseAction == "phys") {$this->enemy->physAttack($this->player, true);} else
@@ -261,7 +265,23 @@ class Fight {
                         if ($playerDefenseAction == "mag") {$this->enemy->physAttack($this->player, true);} else
                         $this->enemy->magAttackStrong($this->player);
                         break;        
-                    }
                 }
+        } 
+
+        if ($this->enemyCurrentHP <= 0) { 
+            $this->player->setAttribute("color", $this->player->Getstat("color")+$this->enemy->getLootColour()); 
+            $this->player->setAttribute("money", $this->player->Getstat("money")+$this->enemy->getLootMoney()); 
+            return "win";    
         }
+        if ($this->playerCurrentHP <= 0) { 
+            return "loose";
+        }
+
+        if (($this->playerCurrentHP > 0 ) and ($this->enemyCurrentHP > 0)) {
+            return "again";
+        }
+
+        return "again";
+        
     }
+}
