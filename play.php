@@ -162,6 +162,44 @@ $charakter = $_SESSION['charakter'];
         .button:hover { 
             background-color: #555; 
         }
+        .enemy {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background-image: url('img/enemy.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            z-index: 2;
+        }
+        .enemy-popup {
+            display: none;
+            position: absolute;
+            width: 400px;
+            height: 200px;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            text-align: center;
+            margin: auto;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 4;
+        }
+        .enemy-popup > h1 {
+            margin-top: 10%;
+        }
+        .enemy-popup > button {
+            padding: 1rem 2rem;
+            border: none;
+            background-color: #333;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            width: 80%;
+            margin: 10% auto 0 auto;
+        }
     </style>
 </head>
 <body>
@@ -227,18 +265,26 @@ $charakter = $_SESSION['charakter'];
             </div>
             <button onclick="closePopup()">Close</button>
         </div>
+        <div class="enemy-popup" id="enemyPopup">
+            <h1>Enemy Encounter!</h1>
+            <button onclick="closeEnemyPopup()">Close</button>
+        </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const player = document.getElementById('player');
             const map = document.querySelector('.map');
             const shop = document.querySelector('.shop');
+            const enemyPopup = document.getElementById('enemyPopup');
             const step = 2; // Verringerte Schrittweite
             let top = parseInt(window.getComputedStyle(player).top) || 0;
             let left = parseInt(window.getComputedStyle(player).left) || 0;
             const maxTop = map.clientHeight - player.offsetHeight;
             const maxLeft = map.clientWidth - player.offsetWidth;
             let isPopupOpen = false;
+            let isEnemyPopupOpen = false;
+            let lastEnemy = null;
+            let lastSpawnArea = null;
             
             const keys = {
                 ArrowUp: false,
@@ -260,23 +306,26 @@ $charakter = $_SESSION['charakter'];
             });
             
             function movePlayer() {
-                if (keys.ArrowUp && top - step >= 0) top -= step;
-                if (keys.ArrowDown && top + step <= maxTop + 1) top += step;
-                if (keys.ArrowLeft && left - step >= 0) left -= step;
-                if (keys.ArrowRight && left + step <= maxLeft + 1) left += step;
-            
-                player.style.top = top + 'px';
-                player.style.left = left + 'px';
-            
-                // Update coordinates
-                const coordinates = document.getElementById('coordinates');
-                const x = Math.round((left + player.offsetWidth / 2) / 10);
-                const y = Math.round((top + player.offsetHeight / 2) / 10);
-                coordinates.innerText = `(X: ${x} | Y: ${y})`;
-            
-                // Check for popup condition
-                if (x >= 15 && x <= 18 && y >= 9 && y <= 10) {
-                    showPopup();
+                if (!isEnemyPopupOpen) {
+                    if (keys.ArrowUp && top - step >= 0) top -= step;
+                    if (keys.ArrowDown && top + step <= maxTop + 1) top += step;
+                    if (keys.ArrowLeft && left - step >= 0) left -= step;
+                    if (keys.ArrowRight && left + step <= maxLeft + 1) left += step;
+                
+                    player.style.top = top + 'px';
+                    player.style.left = left + 'px';
+                
+                    // Update coordinates
+                    const coordinates = document.getElementById('coordinates');
+                    const x = Math.round((left + player.offsetWidth / 2) / 10);
+                    const y = Math.round((top + player.offsetHeight / 2) / 10);
+                    coordinates.innerText = `(X: ${x} | Y: ${y})`;
+                
+                    // Check for popup condition
+                    if (x >= 15 && x <= 18 && y >= 9 && y <= 10) {
+                        showPopup();
+                    }
+                    checkEnemyCollision();
                 }
             }
             
@@ -306,6 +355,69 @@ $charakter = $_SESSION['charakter'];
                 // Enable movement
                 isPopupOpen = false;
             }
+            
+            const enemySpawnAreas = [
+                { x1: 40, y1: 54, x2: 50, y2: 58, playerX: 44, playerY: 49 },
+                { x1: 64, y1: 21, x2: 77, y2: 27, playerX: 71, playerY: 18 },
+                { x1: 5, y1: 21, x2: 17, y2: 27, playerX: 11, playerY: 18 }
+            ];
+            
+            function spawnEnemies() {
+                const map = document.querySelector('.map');
+                enemySpawnAreas.forEach(area => {
+                    const enemy = document.createElement('div');
+                    enemy.classList.add('enemy');
+                    const x = Math.floor(Math.random() * (area.x2 - area.x1 + 1)) + area.x1;
+                    const y = Math.floor(Math.random() * (area.y2 - area.y1 + 1)) + area.y1;
+                    enemy.style.left = (x * 10 - 12) + 'px';
+                    enemy.style.top = (y * 10 - 12) + 'px';
+                    map.appendChild(enemy);
+                });
+            }
+            
+            function checkEnemyCollision() {
+                const enemies = document.querySelectorAll('.enemy');
+                const playerRect = player.getBoundingClientRect();
+                enemies.forEach((enemy, index) => {
+                    const enemyRect = enemy.getBoundingClientRect();
+                    const isCollision = Math.abs(playerRect.left - enemyRect.left) <= 10 && Math.abs(playerRect.top - enemyRect.top) <= 10;
+                    if (isCollision) {
+                        lastEnemy = enemy;
+                        lastSpawnArea = enemySpawnAreas[index];
+                        showEnemyPopup();
+                    }
+                });
+            }
+
+            function showEnemyPopup() {
+                enemyPopup.style.display = 'block';
+                isEnemyPopupOpen = true;
+                for (let key in keys) {
+                    keys[key] = false;
+                }
+            }
+
+            window.closeEnemyPopup = function() {
+                enemyPopup.style.display = 'none';
+                isEnemyPopupOpen = false;
+                if (lastEnemy) {
+                    lastEnemy.remove();
+                    lastEnemy = null;
+                }
+                if (lastSpawnArea) {
+                    // Set player position to the specific coordinate for the spawn area
+                    top = lastSpawnArea.playerY * 10 - player.offsetHeight / 2;
+                    left = lastSpawnArea.playerX * 10 - player.offsetWidth / 2;
+                    player.style.top = top + 'px';
+                    player.style.left = left + 'px';
+                    // Update coordinates
+                    const coordinates = document.getElementById('coordinates');
+                    coordinates.innerText = `(X: ${lastSpawnArea.playerX} | Y: ${lastSpawnArea.playerY})`;
+                    lastSpawnArea = null;
+                }
+            }
+
+            spawnEnemies();
             
             function gameLoop() {
                 movePlayer();
