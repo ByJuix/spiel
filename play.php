@@ -243,6 +243,7 @@ $charakter = $_SESSION['charakter'];
                         <p>Leben: <?php echo $charakter->getStat("maxhealth"); ?></p>
                         <p>Stärke: <?php echo $charakter->getStat("strength"); ?></p>
                         <p>Geschwindigkeit: <?php echo $charakter->getStat("speed"); ?></p>
+                        <p>Geld: <?php echo $charakter->getStat("money"); ?></p>
                     </div>
                 </div>
             </div>
@@ -301,6 +302,9 @@ $charakter = $_SESSION['charakter'];
             let isEnemyPopupOpen = false;
             let lastEnemy = null;
             let lastSpawnArea = null;
+            let combatActive = false;
+            let chosenAttack = null;
+            let chosenDefense = null;
             
             const keys = {
                 ArrowUp: false,
@@ -313,6 +317,24 @@ $charakter = $_SESSION['charakter'];
                 if (!isPopupOpen && keys.hasOwnProperty(event.key)) {
                     keys[event.key] = true;
                 }
+                if (isEnemyPopupOpen) {
+                    const key = event.key;
+                    // Für die Angriffe: Tasten "1" bis "4"
+                    if ("1234".includes(key) && !chosenAttack) {
+                        chosenAttack = key;
+                        console.log("Attack selected:", chosenAttack);
+                    }
+                    // Für die Verteidigung: Tasten "9" und "0"
+                    if ("90".includes(key) && !chosenDefense) {
+                        chosenDefense = key;
+                        console.log("Defense selected:", chosenDefense);
+                    }
+                    // Wenn beide Werte vorliegen und kein Kampf-Request läuft, ausführen:
+                    if (chosenAttack && chosenDefense && !combatActive) {
+                        combatActive = true;
+                        submitCombatRound(chosenAttack, chosenDefense);
+                    }
+                }
             });
             
             document.addEventListener('keyup', function(event) {
@@ -321,6 +343,39 @@ $charakter = $_SESSION['charakter'];
                 }
             });
             
+            function submitCombatRound(attack, defense) {
+                // Sende die ausgewählten Werte per AJAX an /core/combat.php
+                fetch('core/combat.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ attack: attack, defense: defense })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // data.outcome sollte hier "win", "lose" oder "continue" sein
+                    console.log("Combat response:", data);
+                    if (data.outcome === "continue") {
+                        // Kampf geht weiter – setze Eingaben zurück und informiere den Spieler
+                        chosenAttack = null;
+                        chosenDefense = null;
+                        combatActive = false;
+                        enemyPopup.querySelector('h1').innerText = "Neue Runde: Wähle Angriff (1-4) und Verteidigung (9 oder 0)";
+                    } else if (data.outcome === "win") {
+                        enemyPopup.querySelector('h1').innerText = "Kampf gewonnen!";
+                        // Optionale weitere Aktionen (z. B. nach kurzer Zeit den Popup schließen)
+                    } else if (data.outcome === "lose") {
+                        enemyPopup.querySelector('h1').innerText = "Kampf verloren!";
+                        // Hier kannst du weitere Logik einfügen, etwa den Spieler ins Shop verweisen oder ähnliches.
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    combatActive = false;
+                    chosenAttack = null;
+                    chosenDefense = null;
+                });
+            }
+
             function movePlayer() {
                 if (!isEnemyPopupOpen) {
                     if (keys.ArrowUp && top - step >= 0) top -= step;
@@ -413,9 +468,18 @@ $charakter = $_SESSION['charakter'];
             function showEnemyPopup() {
                 enemyPopup.style.display = 'block';
                 isEnemyPopupOpen = true;
+
+                enemyPopup.style.display = 'block';
+                isEnemyPopupOpen = true;
+                // Informiere den Spieler über die Kampfrunde
+                enemyPopup.querySelector('h1').innerText = "Wähle Angriff (1-4) und Verteidigung (9 oder 0)";
                 for (let key in keys) {
                     keys[key] = false;
                 }
+                // Setze Kampfeinstellungen zurück:
+                chosenAttack = null;
+                chosenDefense = null;
+                combatActive = false;
             }
 
             window.closeEnemyPopup = function() {
