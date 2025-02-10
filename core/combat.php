@@ -9,18 +9,10 @@ if (!isset($_SESSION["enemy"])) {
     $_SESSION["enemy"] = new Core\Charakter("Goblin", 100, 10, 5, 5, 5);
 }
 
-$action = $_GET['action'] ?? NULL;
+$attack = $_GET['attack'] ?? NULL;
+$block = $_GET['block'] ?? NULL;
 
-switch ($action) {
-    case 'attack':
-        $attack->FightRound();
-        break;
-    case 'block':
+$attack->FightRound($attack, $block);
 
-        break;
-    default:
-        $attack = new Core\Fight($charakter, $_SESSION["enemy"]);
-        json_encode($_SESSION["enemy"]);
-        break;
-}
+
 ?>
