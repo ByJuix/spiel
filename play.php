@@ -174,8 +174,8 @@ $charakter = $_SESSION['charakter'];
         .enemy-popup {
             display: none;
             position: absolute;
-            width: 400px;
-            height: 200px;
+            width: 1000px;
+            height: 700px;
             background-color: rgba(0, 0, 0, 0.9);
             color: #fff;
             text-align: center;
@@ -187,6 +187,18 @@ $charakter = $_SESSION['charakter'];
         }
         .enemy-popup > h1 {
             margin-top: 10%;
+        }
+        .enemy-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10%;
+            margin: 10% auto 0 auto;
+            width: 80%;
+        }
+        .enemy-container img {
+            width: 35%;
+            height: 100%;
         }
         .enemy-popup > button {
             padding: 1rem 2rem;
@@ -266,7 +278,11 @@ $charakter = $_SESSION['charakter'];
             <button onclick="closePopup()">Close</button>
         </div>
         <div class="enemy-popup" id="enemyPopup">
-            <h1>Enemy Encounter!</h1>
+            <h1>Gegner gesichtet!</h1>
+            <div class="enemy-container">
+                <img src="img/character/<?php echo $charakter->getStat("name"); ?>/front.png" alt="<?php echo $charakter->getStat("name"); ?>">
+                <img src="img/enemy.png" alt="Gegner">
+            </div>
             <button onclick="closeEnemyPopup()">Close</button>
         </div>
     </div>
