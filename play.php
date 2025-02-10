@@ -364,9 +364,11 @@ $charakter = $_SESSION['charakter'];
             
             function spawnEnemies() {
                 const map = document.querySelector('.map');
-                enemySpawnAreas.forEach(area => {
+                enemySpawnAreas.forEach((area, index) => {
                     const enemy = document.createElement('div');
                     enemy.classList.add('enemy');
+                    // Speichere den Spawnindex als Data-Attribut
+                    enemy.dataset.spawnIndex = index;
                     const x = Math.floor(Math.random() * (area.x2 - area.x1 + 1)) + area.x1;
                     const y = Math.floor(Math.random() * (area.y2 - area.y1 + 1)) + area.y1;
                     enemy.style.left = (x * 10 - 12) + 'px';
@@ -376,14 +378,17 @@ $charakter = $_SESSION['charakter'];
             }
             
             function checkEnemyCollision() {
+                if (isEnemyPopupOpen) return; // Überschreibungen vermeiden
                 const enemies = document.querySelectorAll('.enemy');
                 const playerRect = player.getBoundingClientRect();
-                enemies.forEach((enemy, index) => {
+                enemies.forEach((enemy) => {
                     const enemyRect = enemy.getBoundingClientRect();
                     const isCollision = Math.abs(playerRect.left - enemyRect.left) <= 10 && Math.abs(playerRect.top - enemyRect.top) <= 10;
                     if (isCollision) {
+                        // Lese den gespeicherten Spawnindex aus
+                        const spawnIndex = enemy.dataset.spawnIndex;
                         lastEnemy = enemy;
-                        lastSpawnArea = enemySpawnAreas[index];
+                        lastSpawnArea = enemySpawnAreas[spawnIndex];
                         showEnemyPopup();
                     }
                 });
