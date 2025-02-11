@@ -241,7 +241,7 @@ if (!isset($_SESSION['charakter'])) {
     <div class="foreground">
         <div class="header">
             <div class="sub-header">
-                <img src="img/fr-font-white.png" alt="Fantasy Racism">
+                <img src="img/logo.png" alt="PHPIXEL">
                 <div>
                     <?php
                         echo "WICHTIGER STAT HIER";

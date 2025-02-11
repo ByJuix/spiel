@@ -99,8 +99,8 @@ session_start();
 <body>
 <div class="box intro hidden" id="intro">
         <p>Herzlich Willkommen bei</p>
-        <p><img src="img/fr-font-white.png" alt="Fantasy Racism"></p>
-        <p>Fantasy Racism ist ein offline RPG-Spiel, bei dem du dich frei auf der Map bewegen kannst,</p>
+        <p><img src="img/logo.png" alt="PHPIXEL"></p>
+        <p>PHPIXEL ist ein offline RPG-Spiel, bei dem du dich frei auf der Map bewegen kannst,</p>
         <p>deinen Charakter leveln und seine Ausruestung verbessern.</p>
         <p>Dein Ziel ist es, so lange wie moeglich zu ueberleben und eine hohe Aura zu erreichen.</p>
         <p>Zuerst generieren wir einen Charakter</p>

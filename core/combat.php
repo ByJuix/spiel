@@ -8,7 +8,7 @@ session_start();
 $charakter = $_SESSION['charakter'];
 
 if (!isset($_SESSION["enemy"])) {
-    $_SESSION["enemy"] = new Charakter(false, 100, 10, 5, 5, 5);
+    $_SESSION["enemy"] = new Charakter(false, 100, 10, 5, 5, 5); // enemy muss schon bevor der Kampf beginnt erstellt werden
 }
 if (!isset($_SESSION['fight'])) {
     $_SESSION['fight'] = new Fight($charakter, $_SESSION["enemy"]);
