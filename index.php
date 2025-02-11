@@ -119,7 +119,7 @@ session_start();
                 if (index < lines.length) {
                     lines[index].classList.remove('hidden');
                     index++;
-                    setTimeout(showNextLine, 5000); // Adjust the delay as needed
+                    setTimeout(showNextLine, 50); // Adjust the delay as needed
                 } else {
                     setTimeout(() => {
                         intro.style.display = 'none';

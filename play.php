@@ -3,7 +3,13 @@ namespace FantasyRacism;
 include_once "core/classes.php";
 
 session_start();
-$charakter = $_SESSION['charakter'];
+
+if (!isset($_SESSION['charakter'])) {
+    header("Location: index.php");
+    exit;
+} else {
+    $charakter = $_SESSION['charakter'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="de">
@@ -30,7 +36,7 @@ $charakter = $_SESSION['charakter'];
             align-items: center;
             height: 100%;
             width: 100%;
-            background-image: url('img/shop_background.png');
+            background-image: url('img/background.png');
             filter: blur(3px);
             background-position: center;
             background-repeat: no-repeat;
@@ -103,6 +109,19 @@ $charakter = $_SESSION['charakter'];
             top: 50%;
         }
         .sub-stats {
+            margin: 10px 20px;
+        }
+        .keybinds {
+            position: absolute;
+            width: 200px;
+            height: 700px;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            right: 0;
+            transform: translate(0, -50%);
+            top: 50%;
+        }
+        .sub-keybinds {
             margin: 10px 20px;
         }
         .character img {
@@ -236,16 +255,30 @@ $charakter = $_SESSION['charakter'];
         </div>
         <div class="stats">
             <div class="sub-stats">
-                <h2><?php echo $charakter->getStat("name"); ?></h2>
+                <h2><?php echo $charakter->getStat("name"); ?></h2><br><br>
                 <div class="character">
                     <img src="img/character/<?php echo $charakter->getStat("name"); ?>/front.png" alt="<?php echo $charakter->getStat("name"); ?>">
-                    <div>
-                        <p>Leben: <?php echo $charakter->getStat("maxhealth"); ?></p>
-                        <p>Stärke: <?php echo $charakter->getStat("strength"); ?></p>
-                        <p>Geschwindigkeit: <?php echo $charakter->getStat("speed"); ?></p>
-                        <p>Geld: <?php echo $charakter->getStat("money"); ?></p>
+                    <div class="player-stats"><br>
+                        
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="keybinds">
+            <div class="sub-keybinds">
+                <h2>Steuerung</h2><br><br>
+                ↑ nach Oben laufen<br>
+                → nach Rechts laufen<br>
+                ↓ nach Unten laufen<br>
+                ← nach Links laufen<br>
+                <br>
+                1 physischer Angriff<br>
+                2 magischer Angriff<br>
+                3 starker physischer Angriff<br>
+                4 starker magischer Angriff<br>
+                <br>
+                9 physische Verteidigung<br>
+                0 magische Verteidigung
             </div>
         </div>
         <div class="shop">
@@ -312,6 +345,33 @@ $charakter = $_SESSION['charakter'];
                 ArrowLeft: false,
                 ArrowRight: false
             };
+
+            function updateStats() {
+                fetch('core/stats.php', {
+                    method: 'GET'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const statsDiv = document.querySelector('.player-stats');
+                    statsDiv.innerHTML = `
+                        <p>Name: ${data.stats.name}</p>
+                        <p>Max Health: ${data.stats.maxhealth}</p>
+                        <p>Current Health: ${data.stats.currenthealth}</p>
+                        <p>Strength: ${data.stats.strength}</p>
+                        <p>Dexterity: ${data.stats.dexterity}</p>
+                        <p>Intelligence: ${data.stats.intelligence}</p>
+                        <p>Speed: ${data.stats.speed}</p>
+                        <p>Color: ${data.stats.color}</p>
+                        <p>Money: ${data.stats.money}</p>
+                    `;
+                })
+                .catch(error => {
+                    console.error("Error fetching stats:", error);
+                });
+            }
+
+            // Stats beim Laden der Seite einmalig abrufen
+            updateStats();
             
             document.addEventListener('keydown', function(event) {
                 if (!isPopupOpen && keys.hasOwnProperty(event.key)) {
@@ -334,6 +394,10 @@ $charakter = $_SESSION['charakter'];
                         combatActive = true;
                         submitCombatRound(chosenAttack, chosenDefense);
                     }
+                }
+                // Bei jeder Zahl (0-9) holen wir die aktuellen Stats per AJAX ab
+                if (/^\d$/.test(event.key)) {
+                    updateStats();
                 }
             });
             

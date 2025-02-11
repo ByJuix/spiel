@@ -6,13 +6,15 @@ include_once "classes.php";
 session_start();
 
 $charakter = $_SESSION['charakter'];
-$fight = $_SESSION['fight'];
 
 if (!isset($_SESSION["enemy"])) {
     $_SESSION["enemy"] = new Charakter("Goblin", 100, 10, 5, 5, 5);
 }
 if (!isset($_SESSION['fight'])) {
     $_SESSION['fight'] = new Fight($charakter, $_SESSION["enemy"]);
+    $fight = $_SESSION['fight'];
+} else {
+    $fight = $_SESSION['fight'];
 }
 
 // Lese die JSON-Daten ein

@@ -41,6 +41,7 @@ class Charakter {
         $this->money = round($this->color / 3, 0); 
 
         $this->baseMaxHealth = $health;
+        $this->currentHealth = $health;
         $this->baseStrength = $strength;
         $this->baseDexterity = $dexterity;
         $this->baseIntelligence = $intelligence;
@@ -60,7 +61,7 @@ class Charakter {
         switch (strtolower($statName)) {
             case "name": return $this->name;
             case "maxhealth": return round( $this->baseMaxHealth * ((100+ $color)*0.01),0 );
-            case "currenthealth": return round( $this->currentHealth,0 );
+            case "currenthealth": return round( $this->currentHealth * ((100+ $color)*0.01),0 );
             case "strength": return round( $this->baseStrength * ((100+ $color)*0.01),0 );
             case "dexterity": return round( $this->baseDexterity * ((100+ $color)*0.01),0 );
             case "intelligence": return round( $this->baseIntelligence * ((100+ $color)*0.01),0 );
@@ -136,15 +137,15 @@ class Charakter {
     }
     public function magAttack ($Enemy):bool{
         if (rand(0,9)!= 0){
-            $magWeaponDamage = $this->getStat("weapon")->getStat("damagMag");
-            $Enemy->Defend($this->getStat("dexterity"), $this->getStat("intelligence")+ $magWeaponDamage);
+            $magWeaponDamage = $this->getStat("weapon")->getStat("damageMag");
+            $Enemy->Defend($this->getStat("dexterity"), $this->getStat("intelligence") + $magWeaponDamage);
             return true;
         } else return false;
     }
     public function magAttackStrong ($Enemy):bool{
         if (rand(0,1)){
-            $magWeaponDamage = $this->getStat("weapon")->getStat("damagMag");
-            $Enemy->Defend($this->getStat("dexterity")*3, $this->getStat("intelligence")+ $magWeaponDamage);
+            $magWeaponDamage = $this->getStat("weapon")->getStat("damageMag");
+            $Enemy->Defend($this->getStat("dexterity")*3, $this->getStat("intelligence") + $magWeaponDamage);
             return true;
         } else return false;
     }
@@ -191,8 +192,6 @@ class Item {
         $this->damage_mag = $damage_mag;
         $this->defense = $defense;
     }
-    
-    
 
     // Konstruktor
     public function __construct($name, $type, $damage_phys,  $damage_mag, $defense) {
@@ -216,9 +215,6 @@ class Fight {
     public function __construct($player, $enemy) {
         if ($player) {$this->player = $player;}
         if ($enemy) {$this->enemy = $enemy;}
-
-        $this->player->setAttribute("currentHealth", $this->player->getStat("maxhealth"));
-        $this->enemy->setAttribute("currentHealth", $this->enemy->getStat("maxhealth"));
     }
 
     public function FightRound($playerAttackAction, $playerDefenseAction):string{
