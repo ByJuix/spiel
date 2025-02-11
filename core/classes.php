@@ -122,33 +122,37 @@ class Charakter {
     }
     
 
-    public function physAttack ($Enemy):bool{
+    public function physAttack ($Enemy):int{
         if (rand(0,9)!= 0){
             $physWeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
-            $Enemy->Defend($this->getStat("dexterity"), $this->getStat("strength") + $physWeaponDamage);
-            return true;
-        } else return false;
+            $damageDealt = $this->getStat("strength") + $physWeaponDamage;
+            $Enemy->Defend($this->getStat("dexterity"), $damageDealt);
+            return $damageDealt;
+        } else return 0;
     }
-    public function physAttackStrong ($Enemy):bool{
+    public function physAttackStrong ($Enemy):int{
         if (rand(0,1)){
             $physWeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
-            $Enemy->Defend($this->getStat("dexterity")*3, $this->getStat("strength") + $physWeaponDamage);
-            return true;
-        } else return false;
+            $damageDealt = ($this->getStat("strength") + $physWeaponDamage)*3;
+            $Enemy->Defend($this->getStat("dexterity")*3, $damageDealt);
+            return $damageDealt;
+        } else return 0;
     }
-    public function magAttack ($Enemy):bool{
+    public function magAttack ($Enemy):int{
         if (rand(0,9)!= 0){
             $magWeaponDamage = $this->getStat("weapon")->getStat("damageMag");
-            $Enemy->Defend($this->getStat("dexterity"), $this->getStat("intelligence") + $magWeaponDamage);
-            return true;
-        } else return false;
+            $damageDealt = $this->getStat(statName: "intelligence") + $magWeaponDamage;
+            $Enemy->Defend($this->getStat("dexterity"), $damageDealt);
+            return $damageDealt;
+        } else return 0;
     }
-    public function magAttackStrong ($Enemy):bool{
+    public function magAttackStrong ($Enemy):int{
         if (rand(0,1)){
             $magWeaponDamage = $this->getStat("weapon")->getStat("damageMag");
-            $Enemy->Defend($this->getStat("dexterity")*3, $this->getStat("intelligence") + $magWeaponDamage);
-            return true;
-        } else return false;
+            $damageDealt = ($this->getStat(statName: "intelligence") + $magWeaponDamage)*3;
+            $Enemy->Defend($this->getStat("dexterity")*3, $damageDealt);
+            return $damageDealt;
+        } else return 0;
     }
 
 
@@ -261,6 +265,7 @@ class Fight {
                         break;        
                 }
         } 
+
         if ($this->enemy->Getstat("currentHealth") < 1) { 
             $this->player->setAttribute("color", $this->player->Getstat("color")+$this->enemy->getLootColour()); 
             $this->player->setAttribute("money", $this->player->Getstat("money")+$this->enemy->getLootMoney());
