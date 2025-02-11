@@ -371,7 +371,6 @@ if (!isset($_SESSION['charakter'])) {
                         <p>Strength: ${data.stats.strength}</p>
                         <p>Dexterity: ${data.stats.dexterity}</p>
                         <p>Intelligence: ${data.stats.intelligence}</p>
-                        <p>Speed: ${data.stats.speed}</p>
                         <p>Color: ${data.stats.color}</p>
                         <p>Money: ${data.stats.money}</p>
                     `;

@@ -18,7 +18,6 @@ $enemyData = [
     'strength'      => $enemy->getStat('strength'),
     'dexterity'     => $enemy->getStat('dexterity'),
     'intelligence'  => $enemy->getStat('intelligence'),
-    'speed'         => $enemy->getStat('speed'),
     'armor'         => $enemy->getStat('armor'),
     'weapon'        => $enemy->getStat('weapon'),
     'color'         => $enemy->getStat('color'),
