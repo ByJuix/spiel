@@ -11,8 +11,7 @@ class Charakter {
     private $baseStrength;
     private $baseDexterity;
     private $baseIntelligence;
-    private $baseSpeed;
-
+    
     private $currentHealth;
 
 
@@ -20,7 +19,6 @@ class Charakter {
     private $strength;
     private $dexterity;
     private $intelligence;
-    private $speed;
     
     private $money;
     private $color;
@@ -28,7 +26,7 @@ class Charakter {
     private $EquippedArmor;
 
     // Konstruktor
-    public function __construct($name, $isPlayer, $health, $strength, $dexterity, $intelligence, $speed) {
+    public function __construct($name, $isPlayer, $health, $strength, $dexterity, $intelligence) {
 
         $playerNames = ["Cyanis der Schimmernde", "Kuphero der Glühende", "Rubinia Flammenklinge", "Azubios der Garagenfeger", "Ambera Goldhand", "Vermilios Stahlseele", "Bronzora die Mächtige", "Zinnox der Verschlagene", "Smargant der Weise", "Alabastea der Erhabene", "Saphiriel Sturmbrecher", "Ochros Kupferflamme", "Chalybeus der Unverwüstliche", "Verdantus Blattläufer", "Aurenix der Glanzvolle", "Carminelle Schattenruferin", "Cobalta Nachtseele", "Malach der Grüne Hüter", "Zirkon Flammensucher", "Titanora die Ewige", "Feldmannius der Göttliche"];
         $enemyNames = ["Das wundersame Skelett", "Das aromatische Ding", "Der wundersame Hüter", "Der Phantomsucher", "Das aromatische Monster", "Der achtsame Charmeur", "Der aromatische Charmeur", "Das gutherzige Ding", "Das Phantommonster", "Die Phantomhexe", "Feldmannius der Göttliche"];
@@ -53,7 +51,6 @@ class Charakter {
         $this->baseStrength = $strength;
         $this->baseDexterity = $dexterity;
         $this->baseIntelligence = $intelligence;
-        $this->baseSpeed = $speed;
         $this->EquippedArmor = new item("Basic Armor", "Armor", 0, 0, 10);
         $this->EquippedWeapon = new item("Basic Sword", "Sword", 10, 0, 0);
     }
@@ -73,7 +70,6 @@ class Charakter {
             case "strength": return round( $this->baseStrength * ((100+ $color)*0.01),0 );
             case "dexterity": return round( $this->baseDexterity * ((100+ $color)*0.01),0 );
             case "intelligence": return round( $this->baseIntelligence * ((100+ $color)*0.01),0 );
-            case "speed": return round( $this->baseSpeed * ((100+ $color)*0.01),0 );
             case "armor": return $this->EquippedArmor;
             case "weapon": return $this->EquippedWeapon;
             case "color": return $color;
@@ -107,9 +103,6 @@ class Charakter {
                 break;
             case 'intelligence':
                 $this->intelligence = $value;
-                break;
-            case 'speed':
-                $this->speed = $value;
                 break;
             case 'color':
                 $this->color = $value;
