@@ -14,7 +14,6 @@ $stats = [
     'strength' => $charakter->getStat('strength'),
     'dexterity' => $charakter->getStat('dexterity'),
     'intelligence' => $charakter->getStat('intelligence'),
-    'speed' => $charakter->getStat('speed'),
     'armor' => $charakter->getStat('armor'),
     'weapon' => $charakter->getStat('weapon'),
     'color' => $charakter->getStat('color'),
@@ -31,7 +30,6 @@ if (isset($_SESSION["enemy"])) {
         'strength' => $enemy->getStat('strength'),
         'dexterity' => $enemy->getStat('dexterity'),
         'intelligence' => $enemy->getStat('intelligence'),
-        'speed' => $enemy->getStat('speed'),
         'armor' => $enemy->getStat('armor'),
         'weapon' => $enemy->getStat('weapon'),
         'color' => $enemy->getStat('color'),
@@ -48,9 +46,5 @@ if (isset($enemyStats)) {
 ob_clean();
 header('Content-Type: application/json');
 echo json_encode($response);
-
-if (isset($_SESSION["enemy"]) && $_SESSION["enemy"]->getStat('currentHealth') < 1) {
-    unset($_SESSION["enemy"]);
-}
 exit;
 ?>

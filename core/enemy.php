@@ -5,8 +5,11 @@ include_once "classes.php";
 
 session_start();
 
+if ($_SESSION["enemy"]->getStat('currentHealth') < 1) {
+    unset($_SESSION["enemy"]);
+}
 if (!isset($_SESSION["enemy"])) {
-    $_SESSION["enemy"] = new Charakter(null, false, 100, 10, 5, 5, 5);
+    $_SESSION["enemy"] = new Charakter(null, false, 1000, 10, 5, 5, 5);
 }
 
 $enemy = $_SESSION["enemy"];
@@ -18,7 +21,6 @@ $enemyData = [
     'strength'      => $enemy->getStat('strength'),
     'dexterity'     => $enemy->getStat('dexterity'),
     'intelligence'  => $enemy->getStat('intelligence'),
-    'speed'         => $enemy->getStat('speed'),
     'armor'         => $enemy->getStat('armor'),
     'weapon'        => $enemy->getStat('weapon'),
     'color'         => $enemy->getStat('color'),
