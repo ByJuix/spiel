@@ -370,7 +370,13 @@ if (!isset($_SESSION['charakter'])) {
                 { x1: 66, y1: 21, x2: 70, y2: 27, playerX: 71, playerY: 18 },
                 { x1: 71, y1: 21, x2: 75, y2: 27, playerX: 71, playerY: 18 },
                 { x1: 5, y1: 20, x2: 10, y2: 25, playerX: 11, playerY: 18 },
-                { x1: 11, y1: 20, x2: 16, y2: 25, playerX: 11, playerY: 18 }
+                { x1: 11, y1: 20, x2: 16, y2: 25, playerX: 11, playerY: 18 },
+                { x1: 17, y1: 32, x2: 21, y2: 38, playerX: 33, playerY: 35 },
+                { x1: 22, y1: 32, x2: 26, y2: 38, playerX: 33, playerY: 35 },
+                { x1: 4, y1: 63, x2: 9, y2: 67, playerX: 9, playerY: 59 },
+                { x1: 10, y1: 63, x2: 14, y2: 65, playerX: 9, playerY: 59 },
+                { x1: 63, y1: 39, x2: 67, y2: 46, playerX: 65, playerY: 52 },
+                { x1: 68, y1: 39, x2: 73, y2: 46, playerX: 65, playerY: 52 }
             ];
             
             function spawnEnemies() {
