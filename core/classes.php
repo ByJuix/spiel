@@ -120,28 +120,28 @@ class Charakter {
     }
     
 
-    private function physAttack ($Enemy):bool{
+    public function physAttack ($Enemy):bool{
         if (rand(0,9)!= 0){
             $physWeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
             $Enemy->Defend($this->getStat("dexterity"), $this->getStat("strength") + $physWeaponDamage);
             return true;
         } else return false;
     }
-    private function physAttackStrong ($Enemy):bool{
+    public function physAttackStrong ($Enemy):bool{
         if (rand(0,1)){
             $physWeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
             $Enemy->Defend($this->getStat("dexterity")*3, $this->getStat("strength") + $physWeaponDamage);
             return true;
         } else return false;
     }
-    private function magAttack ($Enemy):bool{
+    public function magAttack ($Enemy):bool{
         if (rand(0,9)!= 0){
             $magWeaponDamage = $this->getStat("weapon")->getStat("damagMag");
             $Enemy->Defend($this->getStat("dexterity"), $this->getStat("intelligence")+ $magWeaponDamage);
             return true;
         } else return false;
     }
-    private function magAttackStrong ($Enemy):bool{
+    public function magAttackStrong ($Enemy):bool{
         if (rand(0,1)){
             $magWeaponDamage = $this->getStat("weapon")->getStat("damagMag");
             $Enemy->Defend($this->getStat("dexterity")*3, $this->getStat("intelligence")+ $magWeaponDamage);
@@ -150,17 +150,17 @@ class Charakter {
     }
 
 
-    private function TakeDMG($Damage) {
+    public function TakeDMG($Damage) {
         $this->currentHealth -= $Damage;
     }
-    private function Defend($EnemyDex, $Damage) {
+    public function Defend($EnemyDex, $Damage) {
         $DamageTaken = $EnemyDex / $this->getStat("dexterity") * $Damage;
         $this->TakeDmg($DamageTaken);
     }
-    private function getLootColour() {
+    public function getLootColour() {
         return round($this->getStat("color") / rand(5,15),0);
     }
-    private function getLootMoney() {
+    public function getLootMoney() {
         return round($this->getStat("money") / rand(1,3),0);
     }
 }
@@ -273,10 +273,10 @@ class Fight {
             return "loose";
         }
         if (($this->player->Getstat("currentHealth") > 0 ) and ($this->enemy->Getstat("currentHealth") > 0)) {
-            return "again";
+            return "continue";
         }
 
-        return "again";
+        return "continue";
         
     }
 }
