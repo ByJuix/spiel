@@ -99,6 +99,12 @@ if (!isset($_SESSION['charakter'])) {
                     <p>Preis: <span id="dolch-preis">25</span> Mark</p>
                     <button class="button" onclick="kaufen('dolch')">Upgrade</button>
                 </div>
+                <div class="shop-item" id="potion-container">
+                    <h2>Heilungstrank (300 HP)</h2>
+                    <img src="img/potion.png" alt="Heilungstrank" width="64" height="64">
+                    <p>Preis: <span id="dolch-preis">10</span> Mark</p>
+                    <button class="button" onclick="kaufen('dolch')">Kaufen</button>
+                </div>
             </div>
             <button onclick="closePopup()">Close</button>
         </div>
