@@ -162,7 +162,3 @@ session_start();
     </div>
 </body>
 </html>
-
-<?php
-// Zerstoerung des Objekts
-unset($charakter);

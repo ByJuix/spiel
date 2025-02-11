@@ -16,11 +16,11 @@ class Charakter {
     private $currentHealth;
 
 
-  #  private $maxHealth;            #unneccesary weil base stats im getter mit color verrechnet werden
-  #  private $strength;
-  #  private $dexterity;
-  #  private $intelligence;
-  #  private $speed;
+    private $maxHealth;            #unneccesary weil base stats im getter mit color verrechnet werden
+    private $strength;
+    private $dexterity;
+    private $intelligence;
+    private $speed;
     
     private $money;
     private $color;
@@ -211,16 +211,14 @@ class Item {
 class Fight {
 
     private $player;
-    
     private $enemy;
 
     public function __construct($player, $enemy) {
         if ($player) {$this->player = $player;}
         if ($enemy) {$this->enemy = $enemy;}
 
-        $this->player->setAttribute("currentHealth") = $this->player->getStat("maxhealth");
-        $this->enemy->setAttribute("currentHealth") = $this->enemy->getStat("maxhealth");
-
+        $this->player->setAttribute("currentHealth", $this->player->getStat("maxhealth"));
+        $this->enemy->setAttribute("currentHealth", $this->enemy->getStat("maxhealth"));
     }
 
     public function FightRound($playerAttackAction, $playerDefenseAction):string{
