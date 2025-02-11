@@ -1,5 +1,5 @@
 <?php
-namespace FantasyRacism;
+namespace PHPixel;
 include_once "core/classes.php";
 
 session_start();
@@ -10,7 +10,7 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fantasy Racism</title>
+    <title>PHPixel</title>
     <style>
         @font-face {
             font-family: "Mountain King";

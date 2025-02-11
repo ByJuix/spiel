@@ -1,5 +1,5 @@
 <?php
-namespace FantasyRacism;
+namespace PHPixel;
 include_once "core/classes.php";
 
 session_start();
@@ -16,7 +16,7 @@ if (!isset($_SESSION['charakter'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fantasy Racism</title>
+    <title>PHPixel</title>
     <style>
         html { 
             height: 100%;

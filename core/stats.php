@@ -1,5 +1,5 @@
 <?php
-namespace FantasyRacism\Core;
+namespace PHPixel\Core;
 
 include_once "classes.php";
 
