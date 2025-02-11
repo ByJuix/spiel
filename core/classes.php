@@ -28,16 +28,21 @@ class Charakter {
     private $EquippedArmor;
 
     // Konstruktor
-    public function __construct($name, $health, $strength, $dexterity, $intelligence, $speed) {
+    public function __construct($player, $health, $strength, $dexterity, $intelligence, $speed) {
 
-        $possibleNames = ["Cyanis der Schimmernde", "Kuphero der Glühende", "Rubinia Flammenklinge", "Azubios der Garagenfeger", "Ambera Goldhand", "Vermilios Stahlseele", "Bronzora die Mächtige", "Zinnox der Verschlagene", "Smargant der Weise", "Alabastea der Erhabene", "Saphiriel Sturmbrecher", "Ochros Kupferflamme", "Chalybeus der Unverwüstliche", "Verdantus Blattläufer", "Aurenix der Glanzvolle", "Carminelle Schattenruferin", "Cobalta Nachtseele", "Malach der Grüne Hüter", "Zirkon Flammensucher", "Titanora die Ewige", "Feldmannius der Göttliche"];
+        $playerNames = ["Cyanis der Schimmernde", "Kuphero der Glühende", "Rubinia Flammenklinge", "Azubios der Garagenfeger", "Ambera Goldhand", "Vermilios Stahlseele", "Bronzora die Mächtige", "Zinnox der Verschlagene", "Smargant der Weise", "Alabastea der Erhabene", "Saphiriel Sturmbrecher", "Ochros Kupferflamme", "Chalybeus der Unverwüstliche", "Verdantus Blattläufer", "Aurenix der Glanzvolle", "Carminelle Schattenruferin", "Cobalta Nachtseele", "Malach der Grüne Hüter", "Zirkon Flammensucher", "Titanora die Ewige", "Feldmannius der Göttliche"];
+        $enemyNames = ["Das wundersame Skelett", "Das aromatische Ding", "Der wundersame Hüter", "Der Phantomsucher", "Das aromatische Monster", "Der achtsame Charmeur", "Der aromatische Charmeur", "Das gutherzige Ding", "Das Phantommonster", "Die Phantomhexe"];
+
         $this->isAlive = true;
-        $this->playerControlled = false;
+        $this->playerControlled = $player ?? false; // muss bei Spielercharakter auf true gesetzt werden
 
-        
-        $this->name = $name ?? $possibleNames[array_rand($possibleNames)];
-        $this->name == "Feldmannius der Göttliche" ? $this->color = rand(100, 500) : $this->color = rand(1, 100);
-        
+        if ($player) {
+            $this->name = $playerNames[array_rand($playerNames)];
+            $this->name == "Feldmannius der Göttliche" ? $this->color = rand(100, 500) : $this->color = rand(1, 100);
+        } else {
+            $this->name = $enemyNames[array_rand($enemyNames)];
+        }
+
         $this->money = round($this->color / 3, 0); 
 
         $this->baseMaxHealth = $health;

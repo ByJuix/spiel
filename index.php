@@ -141,7 +141,7 @@ session_start();
         <div class="character">
             <div>
                 <?php
-                    $charakter = new Core\Charakter(null, 1000, 37, 20, 15, 10);
+                    $charakter = new Core\Charakter(true, 1000, 37, 20, 15, 10);
                     $_SESSION["charakter"] = $charakter;
                     echo "Name: " . $charakter->getStat("name") . "<br>";
                 ?>

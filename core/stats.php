@@ -21,9 +21,32 @@ $stats = [
     'money' => $charakter->getStat('money')
 ];
 
-// Sende ausschließlich JSON zurück
+if (isset($_SESSION["enemy"])) {
+    $enemy = $_SESSION["enemy"];
+
+    $enemyStats = [
+        'name' => $enemy->getStat('name'),
+        'maxhealth' => $enemy->getStat('maxhealth'),
+        'currentHealth' => $enemy->getStat('currentHealth'),
+        'strength' => $enemy->getStat('strength'),
+        'dexterity' => $enemy->getStat('dexterity'),
+        'intelligence' => $enemy->getStat('intelligence'),
+        'speed' => $enemy->getStat('speed'),
+        'armor' => $enemy->getStat('armor'),
+        'weapon' => $enemy->getStat('weapon'),
+        'color' => $enemy->getStat('color'),
+        'money' => $enemy->getStat('money')
+    ];
+}
+
+// JSON Ausgabe
+$response = ['stats' => $stats];
+if (isset($enemyStats)) {
+    $response['enemyStats'] = $enemyStats;
+}
+
 ob_clean();
 header('Content-Type: application/json');
-echo json_encode(['stats' => $stats]);
+echo json_encode($response);
 exit;
 ?>

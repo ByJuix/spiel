@@ -124,6 +124,9 @@ if (!isset($_SESSION['charakter'])) {
         .sub-keybinds {
             margin: 10px 20px;
         }
+        .sub-keybinds > table > tbody > tr > td:first-child {
+            font-weight: bold;
+        }
         .character img {
             width: 100%;
             margin: auto;
@@ -266,19 +269,25 @@ if (!isset($_SESSION['charakter'])) {
         </div>
         <div class="keybinds">
             <div class="sub-keybinds">
-                <h2>Steuerung</h2><br><br>
-                ↑ nach Oben laufen<br>
-                → nach Rechts laufen<br>
-                ↓ nach Unten laufen<br>
-                ← nach Links laufen<br>
-                <br>
-                1 physischer Angriff<br>
-                2 magischer Angriff<br>
-                3 starker physischer Angriff<br>
-                4 starker magischer Angriff<br>
-                <br>
-                9 physische Verteidigung<br>
-                0 magische Verteidigung
+                <h2>Steuerung</h2><br>
+                <table>
+                    <tr><td>W</td><td>nach Oben laufen</td></tr>
+                    <tr><td>A</td><td>nach Links laufen</td></tr>
+                    <tr><td>S</td><td>nach Unten laufen</td></tr>
+                    <tr><td>D</td><td>nach Rechts laufen</td></tr>
+                </table><br><br>
+                <h2>Attacken</h2><br>
+                <table>
+                    <tr><td>1</td><td>physischer Angriff</td></tr>
+                    <tr><td>2</td><td>magischer Angriff</td></tr>
+                    <tr><td>3</td><td>starker physischer Angriff</td></tr>
+                    <tr><td>4</td><td>starker magischer Angriff</td></tr>
+                </table><br><br>
+                <h2>Verteidigung</h2><br>
+                <table>
+                    <tr><td>9</td><td>physische Verteidigung</td></tr>
+                    <tr><td>0</td><td>magische Verteidigung</td></tr>
+                </table>
             </div>
         </div>
         <div class="shop">
@@ -340,10 +349,10 @@ if (!isset($_SESSION['charakter'])) {
             let chosenDefense = null;
             
             const keys = {
-                ArrowUp: false,
-                ArrowDown: false,
-                ArrowLeft: false,
-                ArrowRight: false
+                w: false,  // oben
+                a: false,  // links
+                s: false,  // unten
+                d: false   // rechts
             };
 
             function updateStats() {
@@ -352,6 +361,8 @@ if (!isset($_SESSION['charakter'])) {
                 })
                 .then(response => response.json())
                 .then(data => {
+                    console.log("Player stats:", data.stats);
+                    console.log("Enemy stats:", data.enemyStats); // Enemy-Stats in der Konsole ausgeben
                     const statsDiv = document.querySelector('.player-stats');
                     statsDiv.innerHTML = `
                         <p>Name: ${data.stats.name}</p>
@@ -442,21 +453,22 @@ if (!isset($_SESSION['charakter'])) {
 
             function movePlayer() {
                 if (!isEnemyPopupOpen) {
-                    if (keys.ArrowUp && top - step >= 0) top -= step;
-                    if (keys.ArrowDown && top + step <= maxTop + 1) top += step;
-                    if (keys.ArrowLeft && left - step >= 0) left -= step;
-                    if (keys.ArrowRight && left + step <= maxLeft + 1) left += step;
+                    // Bewegung mit den Tasten w, a, s, d
+                    if (keys.w && top - step >= 0) top -= step;
+                    if (keys.s && top + step <= maxTop + 1) top += step;
+                    if (keys.a && left - step >= 0) left -= step;
+                    if (keys.d && left + step <= maxLeft + 1) left += step;
                 
                     player.style.top = top + 'px';
                     player.style.left = left + 'px';
                 
-                    // Update coordinates
+                    // Aktualisiere die Koordinatenanzeige
                     const coordinates = document.getElementById('coordinates');
                     const x = Math.round((left + player.offsetWidth / 2) / 10);
                     const y = Math.round((top + player.offsetHeight / 2) / 10);
                     coordinates.innerText = `(X: ${x} | Y: ${y})`;
                 
-                    // Check for popup condition
+                    // Weitere Logik zur Anzeige von Popups und Kollisionserkennung...
                     if (x >= 15 && x <= 18 && y >= 9 && y <= 10) {
                         showPopup();
                     }
