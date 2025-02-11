@@ -542,20 +542,29 @@ if (!isset($_SESSION['charakter'])) {
             }
 
             function showEnemyPopup() {
-                enemyPopup.style.display = 'block';
-                isEnemyPopupOpen = true;
-
-                enemyPopup.style.display = 'block';
-                isEnemyPopupOpen = true;
-                // Informiere den Spieler über die Kampfrunde
-                enemyPopup.querySelector('h1').innerText = "Wähle Angriff (1-4) und Verteidigung (9 oder 0)";
-                for (let key in keys) {
-                    keys[key] = false;
-                }
-                // Setze Kampfeinstellungen zurück:
-                chosenAttack = null;
-                chosenDefense = null;
-                combatActive = false;
+                // Zuerst den Gegner per AJAX spawnen
+                fetch('core/enemy.php', {
+                    method: 'GET'
+                })
+                .then(response => response.json())
+                .then(enemyData => {
+                    // Danach die Statistiken aktualisieren (inkl. des Gegners)
+                    updateStats();
+                    // Anschließend den Popup anzeigen
+                    enemyPopup.style.display = 'block';
+                    isEnemyPopupOpen = true;
+                    enemyPopup.querySelector('h1').innerText = "Wähle Angriff (1-4) und Verteidigung (9 oder 0)";
+                    for (let key in keys) {
+                        keys[key] = false;
+                    }
+                    // Kampfeinstellungen zurücksetzen
+                    chosenAttack = null;
+                    chosenDefense = null;
+                    combatActive = false;
+                })
+                .catch(error => {
+                    console.error("Error spawning enemy:", error);
+                });
             }
 
             window.closeEnemyPopup = function() {

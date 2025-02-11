@@ -265,13 +265,12 @@ class Fight {
                         break;        
                 }
         } 
-        if ($this->enemy->Getstat("currentHealth") <= 0) { 
+        if ($this->enemy->Getstat("currentHealth") < 1) { 
             $this->player->setAttribute("color", $this->player->Getstat("color")+$this->enemy->getLootColour()); 
-            $this->player->setAttribute("money", $this->player->Getstat("money")+$this->enemy->getLootMoney()); 
-            unset($_SESSION["enemy"]);
-            return "win";    
+            $this->player->setAttribute("money", $this->player->Getstat("money")+$this->enemy->getLootMoney());
+            return "win";
         }
-        if ($this->player->Getstat("currentHealth") <= 0) { 
+        if ($this->player->Getstat("currentHealth") < 1) { 
             return "loose";
         }
         if (($this->player->Getstat("currentHealth") > 0 ) and ($this->enemy->Getstat("currentHealth") > 0)) {

@@ -48,5 +48,9 @@ if (isset($enemyStats)) {
 ob_clean();
 header('Content-Type: application/json');
 echo json_encode($response);
+
+if (isset($_SESSION["enemy"]) && $_SESSION["enemy"]->getStat('currentHealth') < 1) {
+    unset($_SESSION["enemy"]);
+}
 exit;
 ?>

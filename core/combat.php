@@ -6,12 +6,10 @@ include_once "classes.php";
 session_start();
 
 $charakter = $_SESSION['charakter'];
+$enemy = $_SESSION["enemy"];
 
-if (!isset($_SESSION["enemy"])) {
-    $_SESSION["enemy"] = new Charakter(false, 100, 10, 5, 5, 5); // enemy muss schon bevor der Kampf beginnt erstellt werden
-}
 if (!isset($_SESSION['fight'])) {
-    $_SESSION['fight'] = new Fight($charakter, $_SESSION["enemy"]);
+    $_SESSION['fight'] = new Fight($charakter, $enemy);
     $fight = $_SESSION['fight'];
 } else {
     $fight = $_SESSION['fight'];
