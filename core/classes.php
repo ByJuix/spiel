@@ -16,11 +16,11 @@ class Charakter {
     private $currentHealth;
 
 
-    private $maxHealth;            #unneccesary weil base stats im getter mit color verrechnet werden
-    private $strength;
-    private $dexterity;
-    private $intelligence;
-    private $speed;
+  #  private $maxHealth;            #unneccesary weil base stats im getter mit color verrechnet werden
+  #  private $strength;
+  #  private $dexterity;
+  #  private $intelligence;
+  #  private $speed;
     
     private $money;
     private $color;
@@ -121,28 +121,28 @@ class Charakter {
     }
     
 
-    public function physAttack ($Enemy):bool{
+    private function physAttack ($Enemy):bool{
         if (rand(0,9)!= 0){
             $physWeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
             $Enemy->Defend($this->getStat("dexterity"), $this->getStat("strength") + $physWeaponDamage);
             return true;
         } else return false;
     }
-    public function physAttackStrong ($Enemy):bool{
+    private function physAttackStrong ($Enemy):bool{
         if (rand(0,1)){
             $physWeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
             $Enemy->Defend($this->getStat("dexterity")*3, $this->getStat("strength") + $physWeaponDamage);
             return true;
         } else return false;
     }
-    public function magAttack ($Enemy):bool{
+    private function magAttack ($Enemy):bool{
         if (rand(0,9)!= 0){
             $magWeaponDamage = $this->getStat("weapon")->getStat("damageMag");
             $Enemy->Defend($this->getStat("dexterity"), $this->getStat("intelligence") + $magWeaponDamage);
             return true;
         } else return false;
     }
-    public function magAttackStrong ($Enemy):bool{
+    private function magAttackStrong ($Enemy):bool{
         if (rand(0,1)){
             $magWeaponDamage = $this->getStat("weapon")->getStat("damageMag");
             $Enemy->Defend($this->getStat("dexterity")*3, $this->getStat("intelligence") + $magWeaponDamage);
@@ -151,17 +151,17 @@ class Charakter {
     }
 
 
-    public function TakeDMG($Damage) {
+    private function TakeDMG($Damage) {
         $this->currentHealth -= $Damage;
     }
-    public function Defend($EnemyDex, $Damage) {
+    private function Defend($EnemyDex, $Damage) {
         $DamageTaken = $EnemyDex / $this->getStat("dexterity") * $Damage;
         $this->TakeDmg($DamageTaken);
     }
-    public function getLootColour() {
+    private function getLootColour() {
         return round($this->getStat("color") / rand(5,15),0);
     }
-    public function getLootMoney() {
+    private function getLootMoney() {
         return round($this->getStat("money") / rand(1,3),0);
     }
 }
@@ -210,11 +210,19 @@ class Item {
 class Fight {
 
     private $player;
+    
     private $enemy;
 
     public function __construct($player, $enemy) {
         if ($player) {$this->player = $player;}
         if ($enemy) {$this->enemy = $enemy;}
+<<<<<<< HEAD
+=======
+
+        $this->player->setAttribute("currentHealth" ,$this->player->getStat("maxhealth"));
+        $this->enemy->setAttribute("currentHealth", $this->enemy->getStat("maxhealth"));
+
+>>>>>>> a63e9ed57d77750471dde00f16c92e607205e11d
     }
 
     public function FightRound($playerAttackAction, $playerDefenseAction):string{
@@ -269,10 +277,10 @@ class Fight {
             return "loose";
         }
         if (($this->player->Getstat("currentHealth") > 0 ) and ($this->enemy->Getstat("currentHealth") > 0)) {
-            return "continue";
+            return "again";
         }
 
-        return "continue";
+        return "again";
         
     }
 }
