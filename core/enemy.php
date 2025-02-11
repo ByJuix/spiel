@@ -5,7 +5,7 @@ include_once "classes.php";
 
 session_start();
 
-if (isset($_SESSION["enemy"]) && $_SESSION["enemy"]->getStat('currentHealth') < 1) {
+if (isset($_SESSION["enemy"]) && $_SESSION["enemy"]->getStat('currenthealth') < 1) {
     unset($_SESSION["enemy"]);
 }
 if (!isset($_SESSION["enemy"])) {

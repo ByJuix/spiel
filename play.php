@@ -362,6 +362,7 @@ if (!isset($_SESSION['charakter'])) {
                     <img src="img/enemy.png" alt="Gegner">
                 </div>
             </div>
+            <div class="enemyAction"></div>
             <button onclick="closeEnemyPopup()">Close</button>
         </div>
     </div>
@@ -492,20 +493,37 @@ if (!isset($_SESSION['charakter'])) {
                 })
                 .then(response => response.json())
                 .then(data => {
-                    // data.outcome sollte hier "win", "lose" oder "continue" sein
+                    // Nun enthält data.outcome ein Objekt mit der Eigenschaft WinLooseContinue
+                    const outcome = data.outcome.WinLooseContinue;
                     console.log("Combat response:", data);
-                    if (data.outcome === "continue") {
+                    
+                    // Aktualisiere die Anzeige der vom Gegner ausgeführten Aktionen
+                    const enemyActionDiv = enemyPopup.querySelector('.enemyAction');
+                    if (enemyActionDiv) {
+                        let actionText = "";
+                        if (data.outcome.enemyDamageDealt !== null) {
+                            actionText += "Gegner greift an und verursacht " + data.outcome.enemyDamageDealt + " Schaden. ";
+                        }
+                        if (data.outcome.enemyBlocked) {
+                            actionText += "Gegner blockt den Angriff.";
+                        } else {
+                            actionText += "Gegner hat nicht geblockt.";
+                        }
+                        enemyActionDiv.textContent = actionText;
+                    }
+                    
+                    if (outcome === "continue") {
                         // Kampf geht weiter – setze Eingaben zurück und informiere den Spieler
                         chosenAttack = null;
                         chosenDefense = null;
                         combatActive = false;
                         enemyPopup.querySelector('h1').innerText = "Neue Runde: Wähle Angriff (1-4) und Verteidigung (9 oder 0)";
-                    } else if (data.outcome === "win") {
+                    } else if (outcome === "win") {
                         enemyPopup.querySelector('h1').innerText = "Kampf gewonnen!";
-                        // Optionale weitere Aktionen (z. B. nach kurzer Zeit den Popup schließen)
-                    } else if (data.outcome === "lose") {
+                        // Optionale weitere Aktionen (z. B. Popup schließen)
+                    } else if (outcome === "lose") {
                         enemyPopup.querySelector('h1').innerText = "Kampf verloren!";
-                        // Hier kannst du weitere Logik einfügen, etwa den Spieler ins Shop verweisen oder ähnliches.
+                        // Weitere Logik, z. B. Spieler ins Shop verweisen
                     }
                 })
                 .catch(err => {

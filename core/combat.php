@@ -39,6 +39,10 @@ switch ($defenseKey) {
 
 $outcome = $fight->FightRound($playerAttack, $playerDefense);
 
+if ($outcome->WinLooseContinue !== 'continue') {
+    unset($_SESSION['fight']);
+}
+
 // Sende ausschließlich JSON zurück
 ob_clean();
 header('Content-Type: application/json');

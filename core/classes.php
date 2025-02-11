@@ -39,8 +39,6 @@ class Charakter {
                 $this->name == "Feldmannius der Göttliche" ? $this->color = rand(100, 500) : $this->color = rand(1, 100);
             } else {
                 $this->name = $enemyNames[array_rand($enemyNames)];
-                $this->name == "Feldmannius der Göttliche" ? $this->color = rand(100, 500) : $this->color = rand(1, 100);
-
             }
         }
 
@@ -266,19 +264,19 @@ class Fight {
                 switch($enemyAttackAction){
                     case "0":
                         if ($playerDefenseAction == "phys") {$this->enemy->physAttack($this->player, true); $ReturnValue->playerBlocked = true;} else
-                        {$ReturnValue->enemyDamageDealt =  $this->enemy->physAttack($this->player); $ReturnValue->playerBlocked = false;}
+                        {$ReturnValue->enemyDamageDealt = $this->enemy->physAttack($this->player, false); $ReturnValue->playerBlocked = false;}
                         break;
                     case "1":
                         if ($playerDefenseAction == "mag") {$this->enemy->physAttack($this->player, true); $ReturnValue->playerBlocked = true;} else
-                        {$ReturnValue->enemyDamageDealt =  $this->enemy->magAttack($this->player); $ReturnValue->playerBlocked = false;}
+                        {$ReturnValue->enemyDamageDealt = $this->enemy->magAttack($this->player, false); $ReturnValue->playerBlocked = false;}
                         break;
                     case "2":
                         if ($playerDefenseAction == "phys") {$this->enemy->physAttack($this->player, true); $ReturnValue->playerBlocked = true;} else
-                        {$ReturnValue->enemyDamageDealt =  $this->enemy->physAttackStrong($this->player); $ReturnValue->playerBlocked = false;}
+                        {$ReturnValue->enemyDamageDealt = $this->enemy->physAttackStrong($this->player, false); $ReturnValue->playerBlocked = false;}
                         break;    
                     case "3":
                         if ($playerDefenseAction == "mag") {$this->enemy->physAttack($this->player, true); $ReturnValue->playerBlocked = true;} else
-                        {$ReturnValue->enemyDamageDealt =  $this->enemy->magAttackStrong($this->player); $ReturnValue->playerBlocked = false;}
+                        {$ReturnValue->enemyDamageDealt = $this->enemy->magAttackStrong($this->player, false); $ReturnValue->playerBlocked = false;}
                         break;        
                 }
         } 

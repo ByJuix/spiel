@@ -26,7 +26,7 @@ if (isset($_SESSION["enemy"])) {
     $enemyStats = [
         'name' => $enemy->getStat('name'),
         'maxhealth' => $enemy->getStat('maxhealth'),
-        'currentHealth' => $enemy->getStat('currentHealth'),
+        'currentHealth' => $enemy->getStat('currenthealth'),
         'strength' => $enemy->getStat('strength'),
         'dexterity' => $enemy->getStat('dexterity'),
         'intelligence' => $enemy->getStat('intelligence'),
