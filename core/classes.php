@@ -60,6 +60,7 @@ class Charakter {
         switch (strtolower($statName)) {
             case "name": return $this->name;
             case "maxhealth": return round( $this->baseMaxHealth * ((100+ $color)*0.01),0 );
+            case "currenthealth": return round( $this->currentHealth,0 );
             case "strength": return round( $this->baseStrength * ((100+ $color)*0.01),0 );
             case "dexterity": return round( $this->baseDexterity * ((100+ $color)*0.01),0 );
             case "intelligence": return round( $this->baseIntelligence * ((100+ $color)*0.01),0 );
@@ -73,20 +74,20 @@ class Charakter {
     }
     // Setter-Methoden
     public function setAttribute($attribute, $value) {
-        switch ($attribute) {
-            case 'isAlive':
+        switch (strtolower($attribute)) {
+            case 'isalive':
                 $this->isAlive = $value;
                 break;
-            case 'playerControlled':
+            case 'playercontrolled':
                 $this->playerControlled = $value;
                 break;
             case 'name':
                 $this->name = $value;
                 break;
-            case 'maxHealth':
+            case 'maxhealth':
                 $this->maxHealth = $value;
                 break;
-            case 'currentHealth':
+            case 'currenthealth':
                 $this->currentHealth = $value;
                 break;
             case 'strength':
@@ -107,10 +108,10 @@ class Charakter {
             case 'money':
                 $this->money = $value;
                 break;
-            case 'EquippedWeapon':
+            case 'equippedweapon':
                 $this->EquippedWeapon = $value;
                 break;
-            case 'EquippedArmor':
+            case 'equippedarmor':
                 $this->EquippedArmor = $value;
                 break;
             default:
@@ -119,28 +120,28 @@ class Charakter {
     }
     
 
-    public function physAttack ($Enemy):bool{
+    private function physAttack ($Enemy):bool{
         if (rand(0,9)!= 0){
             $physWeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
             $Enemy->Defend($this->getStat("dexterity"), $this->getStat("strength") + $physWeaponDamage);
             return true;
         } else return false;
     }
-    public function physAttackStrong ($Enemy):bool{
+    private function physAttackStrong ($Enemy):bool{
         if (rand(0,1)){
             $physWeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
             $Enemy->Defend($this->getStat("dexterity")*3, $this->getStat("strength") + $physWeaponDamage);
             return true;
         } else return false;
     }
-    public function magAttack ($Enemy):bool{
+    private function magAttack ($Enemy):bool{
         if (rand(0,9)!= 0){
             $magWeaponDamage = $this->getStat("weapon")->getStat("damagMag");
             $Enemy->Defend($this->getStat("dexterity"), $this->getStat("intelligence")+ $magWeaponDamage);
             return true;
         } else return false;
     }
-    public function magAttackStrong ($Enemy):bool{
+    private function magAttackStrong ($Enemy):bool{
         if (rand(0,1)){
             $magWeaponDamage = $this->getStat("weapon")->getStat("damagMag");
             $Enemy->Defend($this->getStat("dexterity")*3, $this->getStat("intelligence")+ $magWeaponDamage);
@@ -156,7 +157,7 @@ class Charakter {
         $DamageTaken = $EnemyDex / $this->getStat("dexterity") * $Damage;
         $this->TakeDmg($DamageTaken);
     }
-    private function getLootColor() {
+    private function getLootColour() {
         return round($this->getStat("color") / rand(5,15),0);
     }
     private function getLootMoney() {
@@ -210,23 +211,21 @@ class Item {
 class Fight {
 
     private $player;
-    private $playerCurrentHP;
     
     private $enemy;
-    private $enemyCurrentHP;
 
     public function __construct($player, $enemy) {
         if ($player) {$this->player = $player;}
         if ($enemy) {$this->enemy = $enemy;}
 
-        $this->playerCurrentHP = $this->player->getStat("maxhealth");
-        $this->enemyCurrentHP = $this->enemy->getStat("maxhealth");
+        $this->player->setAttribute("currentHealth") = $this->player->getStat("maxhealth");
+        $this->enemy->setAttribute("currentHealth") = $this->enemy->getStat("maxhealth");
 
     }
 
     public function FightRound($playerAttackAction, $playerDefenseAction):string{
         $enemyDefenseAction = rand(0,1); # 1 physical block, 0 magical block
-        $enemyAttackAction = rand(0,3);
+        $enemyAttackAction = rand(0,3); 
         if ($playerAttackAction) {
             switch ($playerAttackAction) {
                 case "phys":
@@ -247,7 +246,7 @@ class Fight {
                     break;        
                 }
         }
-        if ($this->enemyCurrentHP > 0){
+        if ($this->enemy->Getstat("currentHealth") > 0){
                 switch($enemyAttackAction){
                     case "0":
                         if ($playerDefenseAction == "phys") {$this->enemy->physAttack($this->player, true);} else
@@ -267,21 +266,19 @@ class Fight {
                         break;        
                 }
         } 
-
-        if ($this->enemyCurrentHP <= 0) { 
-            $this->player->setAttribute("color", $this->player->Getstat("color")+$this->enemy->getLootColor()); 
+        if ($this->enemy->Getstat("currentHealth") <= 0) { 
+            $this->player->setAttribute("color", $this->player->Getstat("color")+$this->enemy->getLootColour()); 
             $this->player->setAttribute("money", $this->player->Getstat("money")+$this->enemy->getLootMoney()); 
             return "win";    
         }
-        if ($this->playerCurrentHP <= 0) { 
+        if ($this->player->Getstat("currentHealth") <= 0) { 
             return "loose";
         }
-
-        if (($this->playerCurrentHP > 0 ) and ($this->enemyCurrentHP > 0)) {
-            return "continue";
+        if (($this->player->Getstat("currentHealth") > 0 ) and ($this->enemy->Getstat("currentHealth") > 0)) {
+            return "again";
         }
 
-        return "continue";
+        return "again";
         
     }
 }
