@@ -6,7 +6,7 @@ include_once "classes.php";
 session_start();
 
 if (!isset($_SESSION["enemy"])) {
-    $_SESSION["enemy"] = new Charakter(false, 100, 10, 5, 5, 5);
+    $_SESSION["enemy"] = new Charakter(null, false, 100, 10, 5, 5, 5);
 }
 
 $enemy = $_SESSION["enemy"];
