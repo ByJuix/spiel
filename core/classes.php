@@ -122,34 +122,39 @@ class Charakter {
     }
     
 
-    public function physAttack ($Enemy):int{
+    public function physAttack ($Enemy, $blocked):int{
+        if ($blocked) {$blockedMult = 0.5;} else $blockedMult = 1;
         if (rand(0,9)!= 0){
             $physWeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
-            $damageDealt = $this->getStat("strength") + $physWeaponDamage;
+            $damageDealt = ($this->getStat("strength") + $physWeaponDamage)*$blockedMult;
             $Enemy->Defend($this->getStat("dexterity"), $damageDealt);
             return $damageDealt;
         } else return 0;
     }
-    public function physAttackStrong ($Enemy):int{
+    public function physAttackStrong ($Enemy, $blocked):int{
+        if ($blocked) {$blockedMult = 0.5;} else $blockedMult = 1;
         if (rand(0,1)){
             $physWeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
-            $damageDealt = ($this->getStat("strength") + $physWeaponDamage)*3;
+            $damageDealt = ($this->getStat("strength") + $physWeaponDamage)*3*$blockedMult;
             $Enemy->Defend($this->getStat("dexterity")*3, $damageDealt);
             return $damageDealt;
         } else return 0;
     }
-    public function magAttack ($Enemy):int{
+    public function magAttack ($Enemy, $blocked):int{
+        if ($blocked) {$blockedMult = 0.5;} else $blockedMult = 1;
         if (rand(0,9)!= 0){
             $magWeaponDamage = $this->getStat("weapon")->getStat("damageMag");
-            $damageDealt = $this->getStat(statName: "intelligence") + $magWeaponDamage;
+            $damageDealt = ($this->getStat(statName: "intelligence") + $magWeaponDamage)*$blockedMult;
             $Enemy->Defend($this->getStat("dexterity"), $damageDealt);
             return $damageDealt;
         } else return 0;
     }
-    public function magAttackStrong ($Enemy):int{
+    public function magAttackStrong ($Enemy, $blocked):int{
+        if ($blocked) {$blockedMult = 0.5;} else $blockedMult = 1;
+
         if (rand(0,1)){
             $magWeaponDamage = $this->getStat("weapon")->getStat("damageMag");
-            $damageDealt = ($this->getStat(statName: "intelligence") + $magWeaponDamage)*3;
+            $damageDealt = ($this->getStat(statName: "intelligence") + $magWeaponDamage)*3*$blockedMult;
             $Enemy->Defend($this->getStat("dexterity")*3, $damageDealt);
             return $damageDealt;
         } else return 0;
@@ -212,73 +217,84 @@ class Item {
     }
 }
 
+class FightRoundReturnValue
+{
+ public $WinLooseContinue;
+ public $playerDamageDealt;
+ public $playerBlocked;
+ public $enemyDamageDealt;
+ public $enemyBlocked;
+}
 class Fight {
 
     private $player;
     private $enemy;
+
 
     public function __construct($player, $enemy) {
         if ($player) {$this->player = $player;}
         if ($enemy) {$this->enemy = $enemy;}
     }
 
-    public function FightRound($playerAttackAction, $playerDefenseAction):string{
+    public function FightRound($playerAttackAction, $playerDefenseAction):FightRoundReturnValue{
+
+        $ReturnValue = new FightRoundReturnValue();
+
         $enemyDefenseAction = rand(0,1); # 1 physical block, 0 magical block
         $enemyAttackAction = rand(0,3); 
         if ($playerAttackAction) {
             switch ($playerAttackAction) {
                 case "phys":
-                    if ($enemyDefenseAction == 1) {$this->player->physAttack($this->enemy, true);} else
-                    $this->player->physAttack($this->enemy, false);
+                    if ($enemyDefenseAction == 1) {$this->player->physAttack($this->enemy, true); $ReturnValue->enemyBlocked = true;} else
+                    {$ReturnValue->playerDamageDealt = $this->player->physAttack($this->enemy, false); $ReturnValue->enemyBlocked = false;}
                     break;
                 case "mag":
-                    if ($enemyDefenseAction == 0) {$this->player->magAttack($this->enemy, true);} else
-                    $this->player->magAttack($this->enemy, false);
+                    if ($enemyDefenseAction == 0) {$this->player->magAttack($this->enemy, true); $ReturnValue->enemyBlocked = true;} else
+                    {$ReturnValue->playerDamageDealt = $this->player->magAttack($this->enemy, false); $ReturnValue->enemyBlocked = false;}
                     break;
                 case "physStrong":
-                    if ($enemyDefenseAction == 1) {$this->player->physAttackStrong($this->enemy, true);} else
-                    $this->player->physAttackStrong($this->enemy, false);
+                    if ($enemyDefenseAction == 1) {$this->player->physAttackStrong($this->enemy, true); $ReturnValue->enemyBlocked = true;} else
+                    {$ReturnValue->playerDamageDealt = $this->player->physAttackStrong($this->enemy, false);$ReturnValue->enemyBlocked = false;}
                     break;    
                 case "magStrong":
-                    if ($enemyDefenseAction == 0) {$this->player->magAttackStrong($this->enemy, true);} else
-                    $this->player->magAttackStrong($this->enemy, false);
+                    if ($enemyDefenseAction == 0) {$this->player->magAttackStrong($this->enemy, true); $ReturnValue->enemyBlocked = true;} else
+                    {$ReturnValue->playerDamageDealt = $this->player->magAttackStrong($this->enemy, false); $ReturnValue->enemyBlocked = false;}
                     break;        
                 }
         }
         if ($this->enemy->Getstat("currentHealth") > 0){
                 switch($enemyAttackAction){
                     case "0":
-                        if ($playerDefenseAction == "phys") {$this->enemy->physAttack($this->player, true);} else
-                        $this->enemy->physAttack($this->player);
+                        if ($playerDefenseAction == "phys") {$this->enemy->physAttack($this->player, true); $ReturnValue->playerBlocked = true;} else
+                        {$ReturnValue->enemyDamageDealt =  $this->enemy->physAttack($this->player); $ReturnValue->playerBlocked = false;}
                         break;
                     case "1":
-                        if ($playerDefenseAction == "mag") {$this->enemy->physAttack($this->player, true);} else
-                        $this->enemy->magAttack($this->player);
+                        if ($playerDefenseAction == "mag") {$this->enemy->physAttack($this->player, true); $ReturnValue->playerBlocked = true;} else
+                        {$ReturnValue->enemyDamageDealt =  $this->enemy->magAttack($this->player); $ReturnValue->playerBlocked = false;}
                         break;
                     case "2":
-                        if ($playerDefenseAction == "phys") {$this->enemy->physAttack($this->player, true);} else
-                        $this->enemy->physAttackStrong($this->player);
+                        if ($playerDefenseAction == "phys") {$this->enemy->physAttack($this->player, true); $ReturnValue->playerBlocked = true;} else
+                        {$ReturnValue->enemyDamageDealt =  $this->enemy->physAttackStrong($this->player); $ReturnValue->playerBlocked = false;}
                         break;    
                     case "3":
-                        if ($playerDefenseAction == "mag") {$this->enemy->physAttack($this->player, true);} else
-                        $this->enemy->magAttackStrong($this->player);
+                        if ($playerDefenseAction == "mag") {$this->enemy->physAttack($this->player, true); $ReturnValue->playerBlocked = true;} else
+                        {$ReturnValue->enemyDamageDealt =  $this->enemy->magAttackStrong($this->player); $ReturnValue->playerBlocked = false;}
                         break;        
                 }
         } 
-
+        
         if ($this->enemy->Getstat("currentHealth") < 1) { 
             $this->player->setAttribute("color", $this->player->Getstat("color")+$this->enemy->getLootColour()); 
             $this->player->setAttribute("money", $this->player->Getstat("money")+$this->enemy->getLootMoney());
-            return "win";
-        }
+            $ReturnValue->WinLooseContinue = "win";
+        } else
         if ($this->player->Getstat("currentHealth") < 1) { 
-            return "loose";
-        }
+            $ReturnValue->WinLooseContinue = "loose";
+        } else
         if (($this->player->Getstat("currentHealth") > 0 ) and ($this->enemy->Getstat("currentHealth") > 0)) {
-            return "continue";
-        }
-
-        return "continue";
+            $ReturnValue->WinLooseContinue = "continue";
+        } else  $ReturnValue->WinLooseContinue = "continue";
         
+        return $ReturnValue;
     }
 }
