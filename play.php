@@ -17,246 +17,7 @@ if (!isset($_SESSION['charakter'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PHPixel</title>
-    <style>
-        html { 
-            height: 100%;
-            cursor: url('img/cursor.ico'), default;
-        }
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            background-color: #000;
-        }
-        .background {
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            width: 100%;
-            background-image: url('img/background.png');
-            filter: blur(3px);
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
-        .foreground {
-            z-index: 1;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-        p, h1, h2 {
-            margin: 0;
-        }
-        .map {
-            position: relative;
-            width: 1000px;
-            height: 700px;
-            background: url('img/map.png') no-repeat center center;
-            background-size: cover;
-            margin: auto;
-            top: 50%;
-            transform: translate(0,-50%);
-            z-index: 1;
-        }
-        .header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            color: white;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1;
-        }
-        .header img {
-            width: 200px;
-        }
-        .sub-header {
-            margin: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .flex-row{
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .player {
-            position: absolute;
-            width: 24px;
-            height: 24px;
-            background-image: url('img/character/<?php echo $charakter->getStat("name"); ?>/front.png');
-            background-size: cover;
-            background-repeat: no-repeat;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 2;
-        }
-        .stats {
-            position: absolute;
-            width: 200px;
-            height: 700px;
-            background: rgba(0, 0, 0, 0.5);
-            color: #fff;
-            left: 0;
-            transform: translate(0, -50%);
-            top: 50%;
-        }
-        .sub-stats {
-            margin: 10px 20px;
-        }
-        .keybinds {
-            position: absolute;
-            width: 200px;
-            height: 700px;
-            background: rgba(0, 0, 0, 0.5);
-            color: #fff;
-            right: 0;
-            transform: translate(0, -50%);
-            top: 50%;
-        }
-        .sub-keybinds {
-            margin: 10px 20px;
-        }
-        .sub-keybinds > table > tbody > tr > td:first-child {
-            font-weight: bold;
-        }
-        .character img {
-            width: 100%;
-            margin: auto;
-        }
-        .shop{
-            display: none;
-            position: absolute;
-            width: 1000px;
-            height: 700px;
-            background-color: rgba(0, 0, 0, 0.9);
-            color: #fff;
-            text-align: center;
-            margin: auto;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%,-50%);
-            z-index: 3;
-        }
-        .shop > h1 {
-            margin-top: 10%;
-        }
-        .shop > button {
-            padding: 1rem 2rem;
-            border: none;
-            background-color: #333;
-            color: #fff;
-            font-size: 18px;
-            cursor: inherit;
-            text-decoration: none;
-            text-align: center;
-            width: 80%;
-            margin: 10% auto 0 auto;
-        }
-        .shop-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 10% auto 0 auto;
-            width: 80%;
-        }
-        .shop-item { 
-            padding: 10px;
-            display: inline-block; 
-            background-color: #222;
-            width: 180px;
-        }
-        .button { 
-            padding: 10px; 
-            background-color: #333; 
-            border: none;
-            color: #fff;
-            margin-top: 20px;
-            cursor: pointer; 
-        }
-        .button:hover { 
-            background-color: #555; 
-        }
-        .enemy {
-            position: absolute;
-            width: 24px;
-            height: 24px;
-            background-image: url('img/enemy.png');
-            background-size: cover;
-            background-repeat: no-repeat;
-            z-index: 2;
-        }
-        .enemy-popup {
-            display: none;
-            position: absolute;
-            width: 1000px;
-            height: 700px;
-            background-color: rgba(0, 0, 0, 0.9);
-            color: #fff;
-            text-align: center;
-            margin: auto;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 4;
-        }
-        .enemy-popup > h1 {
-            margin-top: 10%;
-        }
-        .enemy-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10%;
-            margin: 10% auto 0 auto;
-            width: 80%;
-        }
-        .enemy-container img {
-            width: 35%;
-            height: 100%;
-        }
-        .enemy-popup > button {
-            padding: 1rem 2rem;
-            border: none;
-            background-color: #333;
-            color: #fff;
-            font-size: 18px;
-            cursor: pointer;
-            text-decoration: none;
-            text-align: center;
-            width: 80%;
-            margin: 10% auto 0 auto;
-        }
-        .health-bar-container {
-            position: relative;
-            width: 100%;
-            height: 20px;
-            background-color: #444;
-            border: 1px solid #222;
-            margin-top: 5px;
-        }
-        .health-bar-fill {
-            height: 100%;
-            background-color: red;
-            width: 0%;
-        }
-        .health-text {
-            position: absolute;
-            width: 100%;
-            top: 0;
-            left: 0;
-            text-align: center;
-            line-height: 20px;
-            color: #fff;
-        }
-    </style>
+    <link rel="stylesheet" href="css/play.css">
 </head>
 <body>
     <div class="background"></div>
@@ -264,10 +25,9 @@ if (!isset($_SESSION['charakter'])) {
         <div class="header">
             <div class="sub-header">
                 <img src="img/logo.png" alt="PHPIXEL">
-                <div>
-                    <?php
-                        echo "WICHTIGER STAT HIER";
-                    ?>
+                <div class="stat-money">
+                    <img src="img/money.png" alt="€">
+                    <p>Mark: <span class="player-money"><?php echo $charakter->getStat("money"); ?></span></p>
                 </div>
                 <div class="flex-row">
                     <p>Koordinaten:</p>
@@ -276,7 +36,7 @@ if (!isset($_SESSION['charakter'])) {
             </div>
         </div>
         <div class="map">
-            <div class="player" style="transform: translate(0px);" id="player"></div>
+            <div class="player" style="background-image: url('img/character/<?php echo $charakter->getStat("name"); ?>/front.png'); transform: translate(0px);" id="player"></div>
         </div>
         <div class="stats">
             <div class="sub-stats">
@@ -346,23 +106,24 @@ if (!isset($_SESSION['charakter'])) {
             <h1>Gegner gesichtet!</h1>
             <div class="enemy-container">
                 <div>
-                    <p><?php echo $charakter->getStat("name"); ?></p>
+                    <h3><?php echo $charakter->getStat("name"); ?></h3>
                     <div class="health-bar-container">
                         <div class="health-bar-fill"></div>
                         <div class="health-text">0 / 0</div>
                     </div>
                     <img src="img/character/<?php echo $charakter->getStat("name"); ?>/front.png" alt="<?php echo $charakter->getStat("name"); ?>">
+                    <div class="playerAction"></div>
                 </div>
                 <div>
-                    <p id="enemy-name">Gegner</p>
+                    <h3 id="enemy-name">Gegner</h3>
                     <div class="health-bar-container">
                         <div class="health-bar-fill"></div>
                         <div class="health-text">0 / 0</div>
                     </div>
                     <img src="img/enemy.png" alt="Gegner">
+                    <div class="enemyAction"></div>
                 </div>
             </div>
-            <div class="enemyAction"></div>
             <button onclick="closeEnemyPopup()">Close</button>
         </div>
     </div>
@@ -398,6 +159,8 @@ if (!isset($_SESSION['charakter'])) {
                 .then(data => {
                     console.log("Player stats:", data.stats);
                     console.log("Enemy stats:", data.enemyStats);
+                    
+                    // Update der Spieler-Stats
                     const statsDiv = document.querySelector('.player-stats');
                     statsDiv.innerHTML = `
                         <p>Name: ${data.stats.name}</p>
@@ -407,8 +170,13 @@ if (!isset($_SESSION['charakter'])) {
                         <p>Dexterity: ${data.stats.dexterity}</p>
                         <p>Intelligence: ${data.stats.intelligence}</p>
                         <p>Color: ${data.stats.color}</p>
-                        <p>Money: ${data.stats.money}</p>
                     `;
+                    
+                    // Update des Money-Stats im Header
+                    const moneyDiv = document.querySelector('.player-money');
+                    if (moneyDiv) {
+                        moneyDiv.textContent = data.stats.money;
+                    }
             
                     // Aktualisiere die Health Bar des Spielers im enemyPopup
                     const healthContainers = enemyPopup.querySelectorAll('.health-bar-container');
@@ -417,7 +185,6 @@ if (!isset($_SESSION['charakter'])) {
                         const playerHealthBar = healthContainers[0];
                         const playerHealthFill = playerHealthBar.querySelector('.health-bar-fill');
                         const playerHealthText = playerHealthBar.querySelector('.health-text');
-                        // Sicherstellen, dass currentHealth nicht negativ ist
                         const currentHealth = data.stats.currenthealth <= 0 ? 0 : data.stats.currenthealth;
                         const maxHealth = data.stats.maxhealth;
                         const healthPercentage = (currentHealth / maxHealth) * 100;
@@ -429,7 +196,6 @@ if (!isset($_SESSION['charakter'])) {
                             const enemyHealthBar = healthContainers[1];
                             const enemyHealthFill = enemyHealthBar.querySelector('.health-bar-fill');
                             const enemyHealthText = enemyHealthBar.querySelector('.health-text');
-                            // Achte auf Groß-/Kleinschreibung, currentHealth auf 0 setzen wenn ≤ 0
                             const enemyCurrentHealth = data.enemyStats.currentHealth <= 0 ? 0 : data.enemyStats.currentHealth;
                             const enemyMaxHealth = data.enemyStats.maxhealth;
                             const enemyHealthPercentage = (enemyCurrentHealth / enemyMaxHealth) * 100;
@@ -502,7 +268,7 @@ if (!isset($_SESSION['charakter'])) {
                     if (enemyActionDiv) {
                         let actionText = "";
                         if (data.outcome.enemyDamageDealt !== null) {
-                            actionText += "Gegner greift an und verursacht " + data.outcome.enemyDamageDealt + " Schaden. ";
+                            actionText += "Gegner verursacht " + data.outcome.enemyDamageDealt + " Schaden. ";
                         }
                         if (data.outcome.enemyBlocked) {
                             actionText += "Gegner blockt den Angriff.";
@@ -510,6 +276,19 @@ if (!isset($_SESSION['charakter'])) {
                             actionText += "Gegner hat nicht geblockt.";
                         }
                         enemyActionDiv.textContent = actionText;
+                    }
+                    const playerActionDiv = enemyPopup.querySelector('.playerAction');
+                    if (playerActionDiv) {
+                        let playerActionText = "";
+                        if (data.outcome.playerDamageDealt !== null) {
+                            playerActionText += "Du verursachst " + data.outcome.playerDamageDealt + " Schaden. ";
+                        }
+                        if (data.outcome.playerBlocked) {
+                            playerActionText += "Du blockst den Angriff.";
+                        } else {
+                            playerActionText += "Du hast nicht geblockt.";
+                        }
+                        playerActionDiv.textContent = playerActionText;
                     }
                     
                     if (outcome === "continue") {
@@ -587,9 +366,11 @@ if (!isset($_SESSION['charakter'])) {
             }
             
             const enemySpawnAreas = [
-                { x1: 40, y1: 54, x2: 50, y2: 58, playerX: 44, playerY: 49 },
-                { x1: 64, y1: 21, x2: 77, y2: 27, playerX: 71, playerY: 18 },
-                { x1: 5, y1: 21, x2: 17, y2: 27, playerX: 11, playerY: 18 }
+                { x1: 41, y1: 53, x2: 49, y2: 56, playerX: 43, playerY: 46 },
+                { x1: 66, y1: 21, x2: 70, y2: 27, playerX: 71, playerY: 18 },
+                { x1: 71, y1: 21, x2: 75, y2: 27, playerX: 71, playerY: 18 },
+                { x1: 5, y1: 20, x2: 10, y2: 25, playerX: 11, playerY: 18 },
+                { x1: 11, y1: 20, x2: 16, y2: 25, playerX: 11, playerY: 18 }
             ];
             
             function spawnEnemies() {
