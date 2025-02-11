@@ -234,6 +234,28 @@ if (!isset($_SESSION['charakter'])) {
             width: 80%;
             margin: 10% auto 0 auto;
         }
+        .health-bar-container {
+            position: relative;
+            width: 100%;
+            height: 20px;
+            background-color: #444;
+            border: 1px solid #222;
+            margin-top: 5px;
+        }
+        .health-bar-fill {
+            height: 100%;
+            background-color: red;
+            width: 0%;
+        }
+        .health-text {
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0;
+            text-align: center;
+            line-height: 20px;
+            color: #fff;
+        }
     </style>
 </head>
 <body>
@@ -323,8 +345,22 @@ if (!isset($_SESSION['charakter'])) {
         <div class="enemy-popup" id="enemyPopup">
             <h1>Gegner gesichtet!</h1>
             <div class="enemy-container">
-                <img src="img/character/<?php echo $charakter->getStat("name"); ?>/front.png" alt="<?php echo $charakter->getStat("name"); ?>">
-                <img src="img/enemy.png" alt="Gegner">
+                <div>
+                    <p><?php echo $charakter->getStat("name"); ?></p>
+                    <div class="health-bar-container">
+                        <div class="health-bar-fill"></div>
+                        <div class="health-text">0 / 0</div>
+                    </div>
+                    <img src="img/character/<?php echo $charakter->getStat("name"); ?>/front.png" alt="<?php echo $charakter->getStat("name"); ?>">
+                </div>
+                <div>
+                    <p id="enemy-name">Gegner</p>
+                    <div class="health-bar-container">
+                        <div class="health-bar-fill"></div>
+                        <div class="health-text">0 / 0</div>
+                    </div>
+                    <img src="img/enemy.png" alt="Gegner">
+                </div>
             </div>
             <button onclick="closeEnemyPopup()">Close</button>
         </div>
@@ -356,13 +392,11 @@ if (!isset($_SESSION['charakter'])) {
             };
 
             function updateStats() {
-                fetch('core/stats.php', {
-                    method: 'GET'
-                })
+                fetch('core/stats.php', { method: 'GET' })
                 .then(response => response.json())
                 .then(data => {
                     console.log("Player stats:", data.stats);
-                    console.log("Enemy stats:", data.enemyStats); // Enemy-Stats in der Konsole ausgeben
+                    console.log("Enemy stats:", data.enemyStats);
                     const statsDiv = document.querySelector('.player-stats');
                     statsDiv.innerHTML = `
                         <p>Name: ${data.stats.name}</p>
@@ -374,6 +408,38 @@ if (!isset($_SESSION['charakter'])) {
                         <p>Color: ${data.stats.color}</p>
                         <p>Money: ${data.stats.money}</p>
                     `;
+            
+                    // Aktualisiere die Health Bar des Spielers im enemyPopup
+                    const healthContainers = enemyPopup.querySelectorAll('.health-bar-container');
+                    if (healthContainers.length >= 2) {
+                        // Erster Container: Spieler
+                        const playerHealthBar = healthContainers[0];
+                        const playerHealthFill = playerHealthBar.querySelector('.health-bar-fill');
+                        const playerHealthText = playerHealthBar.querySelector('.health-text');
+                        // Sicherstellen, dass currentHealth nicht negativ ist
+                        const currentHealth = data.stats.currenthealth <= 0 ? 0 : data.stats.currenthealth;
+                        const maxHealth = data.stats.maxhealth;
+                        const healthPercentage = (currentHealth / maxHealth) * 100;
+                        playerHealthFill.style.width = `${healthPercentage}%`;
+                        playerHealthText.textContent = `${currentHealth} / ${maxHealth}`;
+                        
+                        // Zweiter Container: Gegner (falls vorhanden)
+                        if (data.enemyStats) {
+                            const enemyHealthBar = healthContainers[1];
+                            const enemyHealthFill = enemyHealthBar.querySelector('.health-bar-fill');
+                            const enemyHealthText = enemyHealthBar.querySelector('.health-text');
+                            // Achte auf Groß-/Kleinschreibung, currentHealth auf 0 setzen wenn ≤ 0
+                            const enemyCurrentHealth = data.enemyStats.currentHealth <= 0 ? 0 : data.enemyStats.currentHealth;
+                            const enemyMaxHealth = data.enemyStats.maxhealth;
+                            const enemyHealthPercentage = (enemyCurrentHealth / enemyMaxHealth) * 100;
+                            enemyHealthFill.style.width = `${enemyHealthPercentage}%`;
+                            enemyHealthText.textContent = `${enemyCurrentHealth} / ${enemyMaxHealth}`;
+                            
+                            // Setze auch den Namen des Gegners
+                            const enemyNameP = enemyPopup.querySelector('#enemy-name');
+                            enemyNameP.textContent = data.enemyStats.name;
+                        }
+                    }
                 })
                 .catch(error => {
                     console.error("Error fetching stats:", error);
@@ -552,7 +618,7 @@ if (!isset($_SESSION['charakter'])) {
                     // Anschließend den Popup anzeigen
                     enemyPopup.style.display = 'block';
                     isEnemyPopupOpen = true;
-                    enemyPopup.querySelector('h1').innerText = "Wähle Angriff (1-4) und Verteidigung (9 oder 0)";
+                    enemyPopup.querySelector('h1').innerText = "Wähle deinen Angriff und deine Verteidigung";
                     for (let key in keys) {
                         keys[key] = false;
                     }
