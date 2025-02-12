@@ -38,10 +38,10 @@ class Charakter {
         if (!$name){                                        //if no name set select name from playerNames/enemyNames list, set XP values
             if ($isPlayer) {
                 $this->name = $playerNames[array_rand($playerNames)];
-                $this->name == "Feldmannius der Göttliche" ? $this->XP = rand(100, 500) : $this->XP = rand(1, 100);
+                $this->name == "Feldmannius der Göttliche" ? $this->XP = rand(100, 500) : $this->XP = rand(50, 150);
             } else {
                 $this->name = $enemyNames[array_rand($enemyNames)];
-                $this->name == "Feldmannius der Göttliche" ? $this->XP = rand(100, 500) : $this->XP = rand(50, 200);
+                $this->name == "Feldmannius der Göttliche" ? $this->XP = rand(100, 500) : $this->XP = rand(1, 100);
             }
         }
 
