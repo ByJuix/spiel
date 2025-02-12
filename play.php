@@ -530,7 +530,7 @@ if (!isset($_SESSION['charakter'])) {
                 { x1: 78, y1: 8,  x2: 87, y2: 15, playerX: 80, playerY: 17, boss: true  },
                 { x1: 35, y1: 22, x2: 41, y2: 26, playerX: 38, playerY: 29, boss: true  }
             ];
-            
+
             function spawnEnemies() {
                 const map = document.querySelector('.map');
                 enemySpawnAreas.forEach((area, index) => {
@@ -542,8 +542,62 @@ if (!isset($_SESSION['charakter'])) {
                     const y = Math.floor(Math.random() * (area.y2 - area.y1 + 1)) + area.y1;
                     enemy.style.left = (x * 10 - 12) + 'px';
                     enemy.style.top = (y * 10 - 12) + 'px';
+                    
+                    // Erstelle ein <img>-Element für den Gegner
+                    const enemyImg = document.createElement('img');
+                    enemyImg.alt = "Gegner";
+                    if (area.boss) {
+                        const bossImage = Math.floor(Math.random() * 4) + 1;
+                        enemyImg.src = `img/boss/${bossImage}.png`;
+                        // Speichere den genutzten Boss-Bildindex
+                        enemy.dataset.bossImage = bossImage;
+                    } else {
+                        enemyImg.src = 'img/enemy.png';
+                    }
+                    enemy.appendChild(enemyImg);
+                    
                     map.appendChild(enemy);
                 });
+            }
+            
+            function showEnemyPopup() {
+                // Ermittelt die URL inkl. Boss-Parameter, wenn lastSpawnArea.boss true ist
+                let url = 'core/enemy.php';
+                if (lastSpawnArea && lastSpawnArea.boss) {
+                    url += '?boss=true';
+                    playMusic('castle');
+                } else {
+                    playMusic('fight');
+                }
+                
+                // Zuerst den Gegner per AJAX spawnen
+                fetch(url, { method: 'GET' })
+                    .then(response => response.json())
+                    .then(enemyData => {
+                        const enemyImg = enemyPopup.querySelector('img[alt="Gegner"]');
+                        if (lastSpawnArea && lastSpawnArea.boss && enemyImg) {
+                            // Übernehme den beim Spawn generierten Bildindex
+                            const bossImage = lastEnemy.dataset.bossImage || (Math.floor(Math.random() * 4) + 1);
+                            enemyImg.src = `img/boss/${bossImage}.png`;
+                        } else if (enemyImg) {
+                            enemyImg.src = 'img/enemy.png';
+                        }
+                        
+                        // Danach Statistiken aktualisieren
+                        updateStats();
+                        enemyPopup.style.display = 'block';
+                        isEnemyPopupOpen = true;
+                        enemyPopup.querySelector('h1').innerText = "Wähle deinen Angriff und deine Verteidigung";
+                        for (let key in keys) {
+                            keys[key] = false;
+                        }
+                        chosenAttack = null;
+                        chosenDefense = null;
+                        combatActive = false;
+                    })
+                    .catch(error => {
+                        console.error("Error spawning enemy:", error);
+                    });
             }
             
             function checkEnemyCollision() {
@@ -560,43 +614,6 @@ if (!isset($_SESSION['charakter'])) {
                         lastSpawnArea = enemySpawnAreas[spawnIndex];
                         showEnemyPopup();
                     }
-                });
-            }
-
-            function showEnemyPopup() {
-                // Ermittelt die URL inkl. Boss-Parameter, wenn lastSpawnArea.boss true ist
-                let url = 'core/enemy.php';
-                if (lastSpawnArea && lastSpawnArea.boss) {
-                    url += '?boss=true';
-                    // Musik ändern
-                    playMusic('castle');
-                } else {
-                    // Musik ändern
-                    playMusic('fight');
-                }
-                
-                // Zuerst den Gegner per AJAX spawnen
-                fetch(url, {
-                    method: 'GET'
-                })
-                .then(response => response.json())
-                .then(enemyData => {
-                    // Danach die Statistiken aktualisieren (inkl. des Gegners)
-                    updateStats();
-                    // Anschließend den Popup anzeigen
-                    enemyPopup.style.display = 'block';
-                    isEnemyPopupOpen = true;
-                    enemyPopup.querySelector('h1').innerText = "Wähle deinen Angriff und deine Verteidigung";
-                    for (let key in keys) {
-                        keys[key] = false;
-                    }
-                    // Kampfeinstellungen zurücksetzen
-                    chosenAttack = null;
-                    chosenDefense = null;
-                    combatActive = false;
-                })
-                .catch(error => {
-                    console.error("Error spawning enemy:", error);
                 });
             }
 

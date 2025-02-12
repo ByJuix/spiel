@@ -182,6 +182,10 @@ p, h1, h2 {
     background-repeat: no-repeat;
     z-index: 2;
 }
+.enemy img {
+    width: 100%;
+    height: 100%;
+}
 .enemy-popup {
     display: none;
     position: absolute;
