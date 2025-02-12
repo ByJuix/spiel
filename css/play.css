@@ -177,9 +177,6 @@ p, h1, h2 {
     position: absolute;
     width: 24px;
     height: 24px;
-    background-image: url('../img/enemy.png');
-    background-size: cover;
-    background-repeat: no-repeat;
     z-index: 2;
 }
 .enemy img {

@@ -3,30 +3,29 @@ namespace PHPixel\Core;
 include_once "classes.php";
 session_start();
 
+// charakter
 $charakter = $_SESSION['charakter'];
+$charakterMoney = $charakter->getStat('money');
 
-// Basispreise definieren
-$basePrices = [
-    'Kupferschwert' => 30,
-    'Kupferrüstung' => 50,
-    'Kupferbogen'   => 40,
-    'Kupferdolch'   => 25,
-    'Heilungstrank' => 10
-];
+// waffe
+$weapon = $_SESSION['charakter']->getStat('weapon');
+$weapon_name = $weapon->getStat('name');
+$weapon_level = $weapon->getStat('level');
+$weapon_type = $weapon->getStat('type');
+$weapon_damage_phys = $weapon->getStat('damagephys');
+$weapon_damage_mag = $weapon->getStat('damagemag');
+$weapon_defense = $weapon->getStat('defense');
 
-// Initialisiere shop_helper
-$_SESSION['shop_helper'] = [
-    'money' => $charakter->getStat('money'),
-    'items' => [
-        'Kupferschwert'  => null,
-        'Kupferrüstung'  => null,
-        'Kupferbogen'    => null,
-        'Kupferdolch'    => null,
-        'Heilungstrank'  => null // Wird hier zwar initialisiert, aber nicht als Item verarbeitet
-    ]
-];
+// rüstung
+$armor = $_SESSION['charakter']->getStat('armor');
+$armor_name = $armor->getStat('name');
+$armor_level = $armor->getStat('level');
+$armor_type = $armor->getStat('type');
+$armor_damage_phys = $armor->getStat('damagephys');
+$armor_damage_mag = $armor->getStat('damagemag');
+$armor_defense = $armor->getStat('defense');
 
-// Lese die eingehenden JSON-Daten
+// Anfrage einlesen
 $input = file_get_contents('php://input');
 $data = json_decode($input, true);
 
@@ -36,112 +35,182 @@ if (!$data || !isset($data['item'])) {
     echo json_encode(['error' => 'Ungültige Anfrage-Daten']);
     exit;
 }
-
 $item = $data['item'];
 
-// Sonderfall für Heilungstrank: Erhöhe currentHealth und ziehe Basispreis ab
+// basis preise
+$basePrices = [
+    'Kupferschwert' => 30,
+    'Kupferrüstung' => 50,
+    'Kupferdolch'   => 20,
+    'Heilungstrank' => 10
+];
+
+// item prüfen
 if ($item === 'Heilungstrank') {
-    if ($_SESSION['shop_helper']['money'] < $basePrices['Heilungstrank']) {
+    if ($charakter->getStat('money') < $basePrices['Heilungstrank']) {
         header('Content-Type: application/json');
-        echo json_encode(['error' => 'Nicht genügend Mark!' . $_SESSION['shop_helper']['money']]);
+        echo json_encode(['error' => 'Nicht genügend Mark!']);
         exit;
     }
-    $_SESSION['shop_helper']['money'] -= $basePrices['Heilungstrank'];
-    $charakter->Heal(300);
-    header('Content-Type: application/json');
-    $charakter->setAttribute('money', $_SESSION['shop_helper']['money']);
-    echo json_encode([
-        'healed'        => 300,
-        'money'         => $_SESSION['shop_helper']['money'],
-        'currenthealth' => $charakter->getStat('currenthealth')
-    ]);
-    exit;
-}
 
-// Prüfe, ob das Item existiert (außer Heilungstrank)
-if (!array_key_exists($item, $_SESSION['shop_helper']['items'])) {
+    // geld abziehen
+    $charakterMoney -= $basePrices['Heilungstrank'];
+    $charakter->setAttribute('money', $charakterMoney);
+    
+    // Charakter heilen
+    $charakter->Heal(300);
+
+    // Response
+    $response['change'] = [
+        'item'     => $item,
+        'level'    => NULL,
+        'newPrice' => $basePrices['Heilungstrank']
+    ];
+
+    $itemType = 'Heilungstrank';
+} elseif ($item === 'Kupferdolch') {
+    $itemType = 'Kupferdolch';
+} elseif ($item === 'Kupferschwert') {
+    $itemType = 'Kupferschwert';
+} elseif ($item === 'Kupferrüstung') {
+    $itemType = 'Kupferrüstung';
+} else {
     header('Content-Type: application/json');
     echo json_encode(['error' => 'Ungültiges Item']);
     exit;
 }
 
-// Nun berechnen wir den Kaufpreis serverseitig:
-// Wenn das Item noch nicht ausgerüstet ist, gilt der Basispreis; 
-// ist es bereits vorhanden, so berechnen wir den Upgradepreis = Basispreis + (10 * (neues Level))
-if ($_SESSION['shop_helper']['items'][$item] === null) {
-    $level = 1;
-    $cost = $basePrices[$item];
-    // Standardwerte je nach Item-Typ
-    if (in_array($item, ['Kupferschwert', 'Kupferbogen', 'Kupferdolch'])) {
+// aktuelles item gleich neues item
+if ($itemType == $weapon->getStat('name')) {
+    // upgrade Waffe
+
+    // typ abfragen
+    if ($itemType == 'Kupferschwert') {
         $default_damage_phys = 10;
         $default_damage_mag  = 0;
         $default_defense     = 0;
-    } elseif ($item == 'Kupferrüstung') {
+    } elseif ($itemType == 'Kupferdolch') {
         $default_damage_phys = 0;
-        $default_damage_mag  = 0;
-        $default_defense     = 10;
-    } else {
-        $default_damage_phys = 0;
-        $default_damage_mag  = 0;
+        $default_damage_mag  = 10;
         $default_defense     = 0;
     }
-} else {
-    $currentItem = $charakter->getStat('$item');
-    $level = $currentItem->getStat('level') + 1;
-    // Upgradepreis berechnet sich als Basispreis + 10 * neues Level
+
+    $level = $weapon->getStat('level') + 1;
     $cost = $basePrices[$item] + (10 * $level);
-}
 
-// Prüfe, ob der Spieler genügend Geld hat
-if ($_SESSION['shop_helper']['money'] < $cost) {
-    header('Content-Type: application/json');
-    echo json_encode(['error' => 'Nicht genügend Mark!'. $_SESSION['shop_helper']['money']]);
-    exit;
-}
-
-// Ziehe den Preis vom Spieler-Geld ab
-$_SESSION['shop_helper']['money'] -= $cost;
-$charakter->setAttribute('money', $_SESSION['shop_helper']['money']);
-
-// Für Waffen: Falls ein neues Waffen-Item gekauft wird,
-// werden alle anderen Waffen entfernt, sodass nur eins ausgerüstet ist.
-if (in_array($item, ['Kupferschwert', 'Kupferbogen', 'Kupferdolch'])) {
-    foreach (['Kupferschwert', 'Kupferbogen', 'Kupferdolch'] as $weapon) {
-        if ($weapon !== $item) {
-            $_SESSION['shop_helper']['items'][$weapon] = null;
-        }
+    // prüfung ob genug geld
+    if ($charakter->getStat('money') < $cost) {
+        header('Content-Type: application/json');
+        echo json_encode(['error' => 'Nicht genügend Mark!']);
+        exit;
     }
+
+    // ziehe geld ab
+    $charakterMoney -= $cost;
+    $charakter->setAttribute('money', $charakterMoney);
+
+    // neue werte setzen
+    $weapon->setItemAttributes($weapon_name, $weapon_level + 1, $weapon_type, $weapon_damage_phys + $default_damage_phys, $weapon_damage_mag + $default_damage_mag, $weapon_defense + $default_defense);
+
+    // Response
+    $response['change'] = [
+        'item'     => $item,
+        'level'    => $level,
+        'newPrice' => $cost + 10
+    ];
+} elseif ($itemType == $armor->getStat('name')) {
+    // upgrade Rüstung
+
+    $default_damage_phys = 0;
+    $default_damage_mag  = 0;
+    $default_defense     = 10;
+
+    $level = $armor->getStat('level') + 1;
+    $cost = $basePrices[$item] + (10 * $level);
+
+    // prüfung ob genug geld
+    if ($charakter->getStat('money') < $cost) {
+        header('Content-Type: application/json');
+        echo json_encode(['error' => 'Nicht genügend Mark!']);
+        exit;
+    }
+
+    // ziehe geld ab
+    $charakterMoney -= $cost;
+    $charakter->setAttribute('money', $charakterMoney);
+
+    // neue werte setzen
+    $armor->setItemAttributes($armor_name, $armor_level + 1, $armor_type, $armor_damage_phys + $default_damage_phys, $armor_damage_mag + $default_damage_mag, $armor_defense + $default_defense);
+
+    // Response
+    $response['change'] = [
+        'item'     => $item,
+        'level'    => $level,
+        'newPrice' => $cost + 10
+    ];
+} elseif ($itemType != 'Heilungstrank') {
+    // item bisher nicht ausgerüstet
+    $charakter->setAttribute('weapon', null);
+
+    if ($itemType == 'Kupferschwert') {
+        $default_damage_phys = 10;
+        $default_damage_mag  = 0;
+        $default_defense     = 0;
+    } elseif ($itemType == 'Kupferdolch') {
+        $default_damage_phys = 0;
+        $default_damage_mag  = 10;
+        $default_defense     = 0;
+    }
+
+    $level = 1;
+    $cost = $basePrices[$item];
+
+    // prüfung ob genug geld
+    if ($charakter->getStat('money') < $cost) {
+        header('Content-Type: application/json');
+        echo json_encode(['error' => 'Nicht genügend Mark!']);
+        exit;
+    }
+
+    // ziehe geld ab
+    $charakterMoney -= $cost;
+    $charakter->setAttribute('money', $charakterMoney);
+
+    // neue werte setzen
+    $_SESSION['charakter']->setAttribute('weapon', new Item(ucfirst($item), $level, $item, $default_damage_phys, $default_damage_mag, $default_defense));
+
+    // Response
+    $response['change'] = [
+        'item'     => $item,
+        'level'    => $level,
+        'newPrice' => $cost + 10
+    ];
 }
 
-// Aktualisiere bzw. rüste das Item mithilfe der Item-Klasse
-if ($_SESSION['shop_helper']['items'][$item] === null) {
-    // Item noch nicht ausgerüstet
-    $_SESSION['shop_helper']['items'][$item] = new Item(ucfirst($item), $level, $item, $default_damage_phys, $default_damage_mag, $default_defense);
-} else {
-    // Item vorhanden – führe ein Upgrade durch
-    $currentItem = $charakter->getStat('$item');
-    $name  = $currentItem->getStat('name');
-    $type  = $currentItem->getStat('type');
-    // Erhöhe beispielhaft die Attribute
-    $damage_phys = $currentItem->getStat('damagephys') + 5;
-    $damage_mag  = $currentItem->getStat('damagemag'); // bleibt unverändert
-    $defense     = $currentItem->getStat('defense') + 2;
-    $currentItem->setItemAttributes($name, $level, $type, $damage_phys, $damage_mag, $defense);
-    $_SESSION['shop_helper']['items'][$item] = $currentItem;
-}
+// Waffenlevel, falls nicht ausgerüstet
+$dolchLevel   = ($weapon->getStat('name') === 'Kupferdolch')   ? $weapon->getStat('level') : 0;
+$schwertLevel = ($weapon->getStat('name') === 'Kupferschwert') ? $weapon->getStat('level') : 0;
 
-// Berechne den neuen Preis für das nächste Upgrade 
-// (optional: an den Client zurückliefern, sodass der Shop aktuell bleibt)
-$newPrice = $basePrices[$item] + (in_array($item, ['Kupferschwert', 'Kupferbogen', 'Kupferdolch']) ? (10 * ($level + 1)) : (10 * $level));
-
-// Erstelle die Response für das geupgradete Item
-$response = [
-    'level'    => $level,
-    'newPrice' => $newPrice,
-    'money'    => $_SESSION['shop_helper']['money']
+// shop infos
+$response['info'] = [
+    'Kupferdolch' => [
+        'level' => $dolchLevel,
+        'price' => $basePrices['Kupferdolch'] + (10 * $weapon->getStat('level'))
+    ],
+    'Kupferschwert' => [
+        'level' => $schwertLevel,
+        'price' => $basePrices['Kupferschwert'] + (10 * $weapon->getStat('level'))
+    ],
+    'Kupferrüstung' => [
+        'level' => $armor->getStat('level'),
+        'price' => $basePrices['Kupferrüstung'] + (10 * $armor->getStat('level'))
+    ],
+    'Heilungstrank' => [
+        'price' => $basePrices['Heilungstrank']
+    ]
 ];
-$charakter->setAttribute('money', $_SESSION['shop_helper']['money']);
 
+// Response
 header('Content-Type: application/json');
-echo json_encode($response);
+echo json_encode(['change' => $response['change'], 'info' => $response['info']]);
 exit;

@@ -83,23 +83,17 @@ if (!isset($_SESSION['charakter'])) {
                     <p>Preis: <span id="dolch-preis">25</span> Mark</p>
                     <button class="button" onclick="kaufen('Kupferdolch')">Upgrade</button>
                 </div>
-                <div class="shop-item" id="ruestung-container">
-                    <h2>Kupferrüstung (Level <span id="ruestung-level">1</span>)</h2>
-                    <img src="img/armor.png" alt="Kupferrüstung" width="64" height="64">
-                    <p>Preis: <span id="ruestung-preis">50</span> Mark</p>
-                    <button class="button" onclick="kaufen('Kupferrüstung')">Upgrade</button>
-                </div>
                 <div class="shop-item" id="schwert-container">
                     <h2>Kupferschwert (Level <span id="schwert-level">1</span>)</h2>
                     <img src="img/sword.png" alt="Kupferschwert" width="64" height="64">
                     <p>Preis: <span id="schwert-preis">40</span> Mark</p>
                     <button class="button" onclick="kaufen('Kupferschwert')">Upgrade</button>
                 </div>
-                <div class="shop-item" id="bogen-container">
-                    <h2>Kupferbogen (Level <span id="bogen-level">1</span>)</h2>
-                    <img src="img/bow.png" alt="Kupferbogen" width="64" height="64">
-                    <p>Preis: <span id="bogen-preis">40</span> Mark</p>
-                    <button class="button" onclick="kaufen('Kupferbogen')">Upgrade</button>
+                <div class="shop-item" id="ruestung-container">
+                    <h2>Kupferrüstung (Level <span id="ruestung-level">1</span>)</h2>
+                    <img src="img/armor.png" alt="Kupferrüstung" width="64" height="64">
+                    <p>Preis: <span id="ruestung-preis">50</span> Mark</p>
+                    <button class="button" onclick="kaufen('Kupferrüstung')">Upgrade</button>
                 </div>
                 <div class="shop-item" id="potion-container">
                     <h2>Heilungstrank (300 HP)</h2>
@@ -169,9 +163,6 @@ if (!isset($_SESSION['charakter'])) {
                         break;
                     case "Kupferrüstung":
                         containerId = "ruestung-container";
-                        break;
-                    case "Kupferbogen":
-                        containerId = "bogen-container";
                         break;
                     case "Kupferdolch":
                         containerId = "dolch-container";
@@ -439,12 +430,15 @@ if (!isset($_SESSION['charakter'])) {
                 }
             }
             function updateShop() {
-                fetch('core/shopstatus.php', { method: 'GET' })
+                fetch('core/shop.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'info' })
+                })
                 .then(response => response.json())
                 .then(data => {
-                    // Erwartet: data.items enthält ein Objekt wie:
-                    // { "Kupferschwert": { level: 2, price: 40 }, "Kupferrüstung": { level: 1, price: 50 }, ... }
-                    const shopItems = data.items;
+                    // data.info enthält jetzt alle Item-Daten
+                    const shopItems = data.info;
                     for (let item in shopItems) {
                         let containerId;
                         switch(item) {
@@ -453,9 +447,6 @@ if (!isset($_SESSION['charakter'])) {
                                 break;
                             case "Kupferrüstung":
                                 containerId = "ruestung-container";
-                                break;
-                            case "Kupferbogen":
-                                containerId = "bogen-container";
                                 break;
                             case "Kupferdolch":
                                 containerId = "dolch-container";
@@ -468,11 +459,12 @@ if (!isset($_SESSION['charakter'])) {
                         }
                         const container = document.getElementById(containerId);
                         if (container) {
-                            // Falls ein Level-Element vorhanden ist, updaten wir es (z. B. bei Waffen/Rüstung)
+                            // Level (für Waffen/Rüstung) aktualisieren
                             const levelSpan = container.querySelector('span[id$="-level"]');
-                            if (levelSpan) {
+                            if (levelSpan && shopItems[item].level !== undefined) {
                                 levelSpan.innerText = shopItems[item].level;
                             }
+                            // Preis aktualisieren
                             const priceSpan = container.querySelector('span[id$="-preis"]');
                             if (priceSpan) {
                                 priceSpan.innerText = shopItems[item].price;
