@@ -196,9 +196,12 @@ class Charakter {
         $this->currentHealth -= $Damage;
         if ($this->currentHealth > 0 ) {$this->setAttribute("isAlive", false);}
     }
-    public function Heal($heal) {                  //basically setter function, for readability
+    public function Heal($heal) {
         $this->currentHealth += $heal;
-        if ($this->currentHealth > $this->Getstat("maxhealth")) {$this->setAttribute("currenthealth", $this->Getstat("maxhealth")) ; }
+        if ($this->currentHealth > $this->getStat("maxhealth")) {
+            $this->currentHealth = $this->getStat("maxhealth");
+        }
+        $this->setAttribute("currenthealth", $this->currentHealth);
     }
     public function Defend($EnemyDex, $Damage):int {        //damage depends on dexterity stat of attacker and defender
         $DamageTaken = $EnemyDex / $this->getStat("dexterity") * $Damage;
