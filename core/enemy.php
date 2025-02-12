@@ -20,7 +20,9 @@ if (!isset($_SESSION["enemy"])) {
     if ($get) {
         $_SESSION["enemy"] = new Charakter(null, false, 3000, 50, 5, 5);
     } else {
-        $_SESSION["enemy"] = new Charakter(null, false, 1000, 10, 5, 5);
+        $strength=rand(0,40);
+        $intelligence=40- $strength;
+        $_SESSION["enemy"] = new Charakter(null, false, 1000, $strength, rand(15,25), $intelligence);
     }
 }
 
@@ -35,7 +37,7 @@ $enemyData = [
     'intelligence'  => $enemy->getStat('intelligence'),
     'armor'         => $enemy->getStat('armor'),
     'weapon'        => $enemy->getStat('weapon'),
-    'color'         => $enemy->getStat('color'),
+    'XP'         => $enemy->getStat('XP'),
     'money'         => $enemy->getStat('money')
 ];
 
