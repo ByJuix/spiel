@@ -29,7 +29,7 @@ class Charakter {
     public function __construct($name, $isPlayer, $health, $strength, $dexterity, $intelligence) {
 
         $playerNames = ["Cyanis der Schimmernde", "Kuphero der Glühende", "Rubinia Flammenklinge", "Azubios der Garagenfeger", "Ambera Goldhand", "Vermilios Stahlseele", "Bronzora die Mächtige", "Zinnox der Verschlagene", "Smargant der Weise", "Alabastea der Erhabene", "Saphiriel Sturmbrecher", "Ochros Kupferflamme", "Chalybeus der Unverwüstliche", "Verdantus Blattläufer", "Aurenix der Glanzvolle", "Carminelle Schattenruferin", "Cobalta Nachtseele", "Malach der Grüne Hüter", "Zirkon Flammensucher", "Titanora die Ewige", "Feldmannius der Göttliche"];
-        $enemyNames = ["Das wundersame Skelett", "Das aromatische Ding", "Der wundersame Hüter", "Der Phantomsucher", "Das aromatische Monster", "Der achtsame Charmeur", "Der aromatische Charmeur", "Das gutherzige Ding", "Das Phantommonster", "Die Phantomhexe", "Feldmannius der Göttliche"];
+        $enemyNames = ["Das wundersame Skelett", "Das aromatische Ding", "Der wundersame Hüter", "Der Phantomsucher", "Das aromatische Monster", "Der achtsame Charmeur", "Der aromatische Charmeur", "Das gutherzige Ding", "Das Phantommonster", "Die Phantomhexe" /*, "Feldmannius der Göttliche"*/];
 
         $this->isAlive = true;
         $this->playerControlled = $player ?? false; // muss bei Spielercharakter auf true gesetzt werden
@@ -39,7 +39,7 @@ class Charakter {
                 $this->name == "Feldmannius der Göttliche" ? $this->color = rand(100, 500) : $this->color = rand(1, 100);
             } else {
                 $this->name = $enemyNames[array_rand($enemyNames)];
-                $this->name == "Feldmannius der Göttliche" ? $this->color = rand(100, 500) : $this->color = rand(1, 100);
+                $this->name == "Feldmannius der Göttliche" ? $this->color = rand(100, 500) : $this->color = rand(50, 200);
             }
         }
 
