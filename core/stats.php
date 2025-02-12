@@ -21,21 +21,23 @@ $stats = [
 ];
 
 $weapon = [
-    'name' => $charakter->getStat('weapon')->getStat('name'),
-    'level' => $charakter->getStat('weapon')->getStat('level'),
-    'damagephys' => $charakter->getStat('weapon')->getStat('damage_phys'),
-    'damagemag' => $charakter->getStat('weapon')->getStat('damage_mag'),
-    'defense' => $charakter->getStat('weapon')->getStat('defense'),
-    'type' => $charakter->getStat('weapon')->getStat('type')
+    $weaponStat = $charakter->getStat('weapon'),
+    'name' => $weaponStat->getStat('name'),
+    'level' => $weaponStat->getStat('level'),
+    'type' => $weaponStat->getStat('type'),
+    'damagephys' => $weaponStat->getStat('damagephys'),
+    'damagemag' => $weaponStat->getStat('damagemag'),
+    'defense' => $weaponStat->getStat('defense')
 ];
 
 $armor = [
-    'name' => $charakter->getStat('armor')->getStat('name'),
-    'level' => $charakter->getStat('armor')->getStat('level'),
-    'defensephys' => $charakter->getStat('armor')->getStat('defense_phys'),
-    'defensemag' => $charakter->getStat('armor')->getStat('defense_mag'),
-    'damage' => $charakter->getStat('armor')->getStat('damage'),
-    'type' => $charakter->getStat('armor')->getStat('type')
+    $armorStat = $charakter->getStat('armor'),
+    'name' => $armorStat->getStat('name'),
+    'level' => $armorStat->getStat('level'),
+    'type' => $armorStat->getStat('type'),
+    'defensephys' => $armorStat->getStat('damagephys'),
+    'defensemag' => $armorStat->getStat('damagemag'),
+    'defense' => $armorStat->getStat('defense')
 ];
 
 if (isset($_SESSION["enemy"])) {
