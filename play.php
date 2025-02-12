@@ -75,10 +75,10 @@ if (!isset($_SESSION['charakter'])) {
             <h1>Kupfershop</h1>            
             <div class="shop-container">
                 <div class="shop-item" id="dolch-container">
-                    <h2>Kupferdolch (Level <span id="dolch-level">1</span>)</h2>
-                    <img src="img/dagger.png" alt="Kupferdolch" width="64" height="64">
+                    <h2>Kupferstab (Level <span id="dolch-level">1</span>)</h2>
+                    <img src="img/wand.png" alt="Kupferstab" width="64" height="64">
                     <p>Preis: <span id="dolch-preis">20</span> Mark</p>
-                    <button class="button" onclick="updateShop('Kupferdolch')">Upgrade</button>
+                    <button class="button" onclick="updateShop('Kupferstab')">Upgrade</button>
                 </div>
                 <div class="shop-item" id="schwert-container">
                     <h2>Kupferschwert (Level <span id="schwert-level">1</span>)</h2>
@@ -164,13 +164,37 @@ if (!isset($_SESSION['charakter'])) {
                     // Update der Spieler-Stats
                     const statsDiv = document.querySelector('.player-stats');
                     statsDiv.innerHTML = `
-                        <p>Name: ${data.stats.name}</p>
-                        <p>Max Health: ${data.stats.maxhealth}</p>
-                        <p>Current Health: ${data.stats.currenthealth}</p>
-                        <p>Strength: ${data.stats.strength}</p>
-                        <p>Intelligence: ${data.stats.intelligence}</p>
-                        <p>Dexterity: ${data.stats.dexterity}</p>
-                        <p>XP: ${data.stats.xp}</p>
+                        <br><br><h2>Player Stats</h2><br>
+                        <table>
+                            <tr>
+                                <td>Name:</td>
+                                <td>${data.stats.name}</td>
+                            </tr>
+                            <tr>
+                                <td>Max Health:</td>
+                                <td>${data.stats.maxhealth}</td>
+                            </tr>
+                            <tr>
+                                <td>Current Health:</td>
+                                <td>${data.stats.currenthealth}</td>
+                            </tr>
+                            <tr>
+                                <td>Strength:</td>
+                                <td>${data.stats.strength}</td>
+                            </tr>
+                            <tr>
+                                <td>Intelligence:</td>
+                                <td>${data.stats.intelligence}</td>
+                            </tr>
+                            <tr>
+                                <td>Dexterity:</td>
+                                <td>${data.stats.dexterity}</td>
+                            </tr>
+                            <tr>
+                                <td>XP:</td>
+                                <td>${data.stats.xp}</td>
+                            </tr>
+                        </table>
                     `;
                     
                     // Update des Money-Stats im Header
@@ -357,11 +381,11 @@ if (!isset($_SESSION['charakter'])) {
                     .then(data => {
                         const shopData = data.shop;
                         
-                        // Kupferdolch
+                        // Kupferstab
                         const dolchLevel = document.getElementById('dolch-level');
                         const dolchPreis = document.getElementById('dolch-preis');
-                        dolchLevel.textContent = shopData.Kupferdolch.level;
-                        dolchPreis.textContent = shopData.Kupferdolch.price;
+                        dolchLevel.textContent = shopData.Kupferstab.level;
+                        dolchPreis.textContent = shopData.Kupferstab.price;
                         
                         // Kupferschwert
                         const schwertLevel = document.getElementById('schwert-level');

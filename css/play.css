@@ -89,7 +89,7 @@ p, h1, h2 {
 }
 .stats {
     position: absolute;
-    width: 200px;
+    width: 250px;
     height: 700px;
     background: rgba(0, 0, 0, 0.5);
     color: #fff;
@@ -102,7 +102,7 @@ p, h1, h2 {
 }
 .keybinds {
     position: absolute;
-    width: 200px;
+    width: 250px;
     height: 700px;
     background: rgba(0, 0, 0, 0.5);
     color: #fff;
@@ -113,7 +113,7 @@ p, h1, h2 {
 .sub-keybinds {
     margin: 10px 20px;
 }
-.sub-keybinds > table > tbody > tr > td:first-child {
+.sub-keybinds, .player-stats > table > tbody > tr > td:first-child {
     font-weight: bold;
 }
 .character img {

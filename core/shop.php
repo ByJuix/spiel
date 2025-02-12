@@ -36,7 +36,7 @@ if (isset($_GET['item'])) {
 $basePrices = [
     'Kupferschwert' => 30,
     'Kupferrüstung' => 50,
-    'Kupferdolch'   => 20,
+    'Kupferstab'   => 20,
     'Heilungstrank' => 10
 ];
 
@@ -56,8 +56,8 @@ if ($item === 'Heilungstrank') {
     $charakter->Heal(300);
 
     $itemType = 'Heilungstrank';
-} elseif ($item === 'Kupferdolch') {
-    $itemType = 'Kupferdolch';
+} elseif ($item === 'Kupferstab') {
+    $itemType = 'Kupferstab';
 } elseif ($item === 'Kupferschwert') {
     $itemType = 'Kupferschwert';
 } elseif ($item === 'Kupferrüstung') {
@@ -75,7 +75,7 @@ if ($itemType == $weapon->getStat('name')) {
         $default_damage_phys = 10;
         $default_damage_mag  = 0;
         $default_defense     = 0;
-    } elseif ($itemType == 'Kupferdolch') {
+    } elseif ($itemType == 'Kupferstab') {
         $default_damage_phys = 0;
         $default_damage_mag  = 10;
         $default_defense     = 0;
@@ -128,7 +128,7 @@ if ($itemType == $weapon->getStat('name')) {
         $default_damage_phys = 10;
         $default_damage_mag  = 0;
         $default_defense     = 0;
-    } elseif ($itemType == 'Kupferdolch') {
+    } elseif ($itemType == 'Kupferstab') {
         $default_damage_phys = 0;
         $default_damage_mag  = 10;
         $default_defense     = 0;
@@ -155,14 +155,14 @@ if ($itemType == $weapon->getStat('name')) {
 }
 
 // Waffenlevel und Preis, falls nicht ausgerüstet
-$dolchLevel   = ($weapon->getStat('name') === 'Kupferdolch')   ? $weapon->getStat('level') : 0;
+$dolchLevel   = ($weapon->getStat('name') === 'Kupferstab')   ? $weapon->getStat('level') : 0;
 $schwertLevel = ($weapon->getStat('name') === 'Kupferschwert') ? $weapon->getStat('level') : 0;
 
 // shop infos
 $response['info'] = [
-    'Kupferdolch' => [
+    'Kupferstab' => [
         'level' => $dolchLevel,
-        'price' => $basePrices['Kupferdolch'] + (10 * $dolchLevel)
+        'price' => $basePrices['Kupferstab'] + (10 * $dolchLevel)
     ],
     'Kupferschwert' => [
         'level' => $schwertLevel,

@@ -57,7 +57,7 @@ window.onload = function() {
             }
 
             index++;
-            setTimeout(showNextLine, 4000); // Kürzere Verzögerung für schnelleren Ablauf
+            setTimeout(showNextLine, 40); // Kürzere Verzögerung für schnelleren Ablauf
         } else {
             setTimeout(() => {
                 intro.style.display = 'none'; // Intro ausblenden
