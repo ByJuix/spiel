@@ -254,8 +254,8 @@ if (!isset($_SESSION['charakter'])) {
                         <p>Max Health: ${data.stats.maxhealth}</p>
                         <p>Current Health: ${data.stats.currenthealth}</p>
                         <p>Strength: ${data.stats.strength}</p>
-                        <p>Dexterity: ${data.stats.dexterity}</p>
                         <p>Intelligence: ${data.stats.intelligence}</p>
+                        <p>Dexterity: ${data.stats.dexterity}</p>
                         <p>XP: ${data.stats.XP}</p>
                     `;
                     
