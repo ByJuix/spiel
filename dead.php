@@ -2,6 +2,7 @@
 namespace PHPixel;
 include_once "core/classes.php";
 
+session_start();
 session_destroy();
 session_start();
 ?>

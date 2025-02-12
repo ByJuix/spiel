@@ -405,8 +405,7 @@ if (!isset($_SESSION['charakter'])) {
                     })
                     .catch(error => {
                         console.error('Error updating shop:', error);
-                    });
-                updateStats();
+                    }).then(() => updateStats());
             }
             function showPopup() {
                 // Shop anzeigen
