@@ -343,13 +343,12 @@ class Fight {
                 }
         } 
         
-        if (!$this->enemy->Getstat("isAlive")) {  //on win get the loot, return a win
-            echo "<script type='text/javascript'>alert('dead enemy');</script>";
+        if (!($this->enemy->Getstat("isAlive"))) {  //on win get the loot, return a win
             $this->player->setAttribute("XP", $this->player->Getstat("XP")+$this->enemy->getLootXP()); 
             $this->player->setAttribute("money", $this->player->Getstat("money")+$this->enemy->getLootMoney());
             $ReturnValue->WinLooseContinue = "win";
         } else
-        if (!$this->player->Getstat("isAlive")) { //when player is dead return loose
+        if (!($this->player->Getstat("isAlive"))) { //when player is dead return loose
             $ReturnValue->WinLooseContinue = "loose";
         } else
         if ($this->player->Getstat("isAlive") and $this->enemy->Getstat("isAlive")) { // again if both still are alive
