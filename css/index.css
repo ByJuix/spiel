@@ -1,0 +1,131 @@
+@font-face {
+    font-family: "Mountain King";
+    src: url(../font/MountainKing.ttf);
+}
+html { 
+    height: 100%;
+    cursor: url('../img/cursor.ico'), default;
+}
+body {
+    font-family: Arial, sans-serif;
+    background-color: #000;
+    color: #fff;
+}
+h1, h2, p {
+    margin: 0;
+}
+h1 {
+    text-align: center;
+    font-size: 3rem;
+}
+.box {
+    margin: auto;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+.container {
+    width: 50%;
+    background-color: #222;
+    padding: 2rem;
+    font-size: 18px;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+}
+.character {
+    margin: 20px 0;
+}
+.button {
+    padding: 1rem 2rem;
+    border: none;
+    background-color: #333;
+    color: #fff;
+    cursor: inherit;
+    text-decoration: none;
+    text-align: center;
+}
+.button:hover {
+    background-color: #555;
+}
+
+.intro {
+text-align: center;
+justify-content: center;
+font-size: 4rem;
+text-transform: uppercase;
+position: relative;
+height: 100%;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+color: white;
+margin-top: 30%;
+}
+
+.intro-header {
+position: relative;
+width: 70%;
+height: 300px;
+display: flex;
+align-items: center;
+justify-content: center;
+font-family: "Mountain King", serif;
+font-size: 4rem;
+color: white;
+}
+
+.intro-header p {
+font-size: 4rem;
+font-family: "Mountain King", serif;
+text-align: center;
+margin: 0;
+color: white;
+position: relative;
+z-index: 2; /* Über dem Schild */
+margin-bottom: 10%;
+background: none !important; /* Kein grüner Hintergrund für PHPIXEL */
+font-size: 20rem;
+}
+
+.intro-header.show-sign {
+background: url('../img/sign.png') no-repeat center;
+background-size: contain;
+padding: 10%;
+}
+
+.intro p {
+font-size: 4rem;
+font-family: "Mountain King", serif;
+text-align: center;
+z-index: 1;
+position: relative;
+padding: 2%;
+}
+
+.intro .intro-header {
+background: url('../img/sign.png') no-repeat center !important; 
+background-size: contain; /* Stelle sicher, dass das Bild sichtbar ist */
+}
+
+.hidden {
+    display: none;
+}
+.character {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+}
+.character img {
+    width: 100%;
+}
+.character div {
+    width: 30%;
+}
+.phpixel-header-text p {
+
+    font-size: 12rem;
+
+}
