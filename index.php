@@ -141,7 +141,9 @@ session_start();
         <div class="character">
             <div>
                 <?php
-                    $charakter = new Core\Charakter(null, true, 1000, 37, 20, 15);
+                    $strength=rand(0,40);
+                    $intelligence=40- $strength;
+                    $charakter = new Core\Charakter(null, true, 1000, $strength, 20, $intelligence);
                     $_SESSION["charakter"] = $charakter;
                     echo "Name: " . $charakter->getStat("name") . "<br>";
                 ?>
