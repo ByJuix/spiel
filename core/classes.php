@@ -49,8 +49,8 @@ class Charakter {
         $this->baseStrength = $strength;
         $this->baseDexterity = $dexterity;
         $this->baseIntelligence = $intelligence;
-        $this->EquippedArmor = new item("Basic Armor", "Armor", 0, 0, 10);
-        $this->EquippedWeapon = new item("Basic Sword", "Sword", 10, 0, 0);
+        $this->EquippedArmor = new item("Kupferrüstung", 1, "Armor", 0, 0, 10);
+        $this->EquippedWeapon = new item("Kupferdolch", 1, "Sword", 10, 0, 0);
     }
 
     // Destruktor
@@ -177,6 +177,7 @@ class Charakter {
 class Item {
 
     private $name;
+    private $level;
     private $damage_phys;
     private $damage_mag;
     private $defense;
@@ -185,6 +186,7 @@ class Item {
     public function getStat ($statName): mixed { //getter Methode
         switch (strtolower($statName)) {
             case "name": return $this->name;
+            case "level": return $this->level;
             case "damagephys": return $this->damage_phys;
             case "damagemag": return $this->damage_mag;
             case "defense": return $this->defense;
@@ -193,8 +195,9 @@ class Item {
         }
     }
 
-    public function setItemAttributes($name, $type, $damage_phys, $damage_mag, $defense) {
+    public function setItemAttributes($name, $level, $type, $damage_phys, $damage_mag, $defense) {
         $this->name = $name;
+        $this->level = $level;
         $this->type = $type;
         $this->damage_phys = $damage_phys;
         $this->damage_mag = $damage_mag;
@@ -202,8 +205,9 @@ class Item {
     }
 
     // Konstruktor
-    public function __construct($name, $type, $damage_phys,  $damage_mag, $defense) {
+    public function __construct($name, $level, $type, $damage_phys,  $damage_mag, $defense) {
         $this->name = $name;
+        $this->level = $level ?? 1;
         $this->type = $type;
         $this->damage_phys = $damage_phys;
         $this->damage_mag = $damage_mag;
