@@ -230,6 +230,17 @@ class Item {
             default: return "Fehler bei Item Getstat";
         }
     }
+    
+    public function EquipItem($player){
+        $player->setAttribute("equippedweapon", $this);
+    }
+
+    public function LevelUp(){
+        $level +=1;
+        if ($this->damage_phys > 0) {$this->damage_phys += 1;}
+        if ($this->damage_mag > 0) {$this->damage_mag += 1;}
+        if ($this->defense > 0) {$this->defense += 1;}
+    }
 
     public function setItemAttributes($name, $level, $type, $damage_phys, $damage_mag, $defense) { //setter
         $this->name = $name;
