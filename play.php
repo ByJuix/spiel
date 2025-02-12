@@ -44,8 +44,9 @@ if (!isset($_SESSION['charakter'])) {
                 <h2><?php echo $charakter->getStat("name"); ?></h2><br><br>
                 <div class="character">
                     <img src="img/character/<?php echo $charakter->getStat("name"); ?>/front.png" alt="<?php echo $charakter->getStat("name"); ?>">
-                    <div class="player-stats"><br>
-                        
+                    <div class="player-stats"><br></div>
+                    <div>
+                        <?php echo $charakter->getStat("weapon")->getStat("name"); ?> (Level <?php echo $charakter->getStat("weapon")->getStat("level"); ?>)<br>
                     </div>
                 </div>
             </div>
@@ -76,11 +77,11 @@ if (!isset($_SESSION['charakter'])) {
         <div class="shop">
             <h1>Kupfershop</h1>            
             <div class="shop-container">
-                <div class="shop-item" id="schwert-container">
-                    <h2>Kupferschwert (Level <span id="schwert-level">1</span>)</h2>
-                    <img src="img/sword.png" alt="Kupferschwert" width="64" height="64">
-                    <p>Preis: <span id="schwert-preis">30</span> Mark</p>
-                    <button class="button" onclick="kaufen('Kupferschwert')">Upgrade</button>
+                <div class="shop-item" id="dolch-container">
+                    <h2>Kupferdolch (Level <span id="dolch-level">1</span>)</h2>
+                    <img src="img/dagger.png" alt="Kupferdolch" width="64" height="64">
+                    <p>Preis: <span id="dolch-preis">25</span> Mark</p>
+                    <button class="button" onclick="kaufen('Kupferdolch')">Upgrade</button>
                 </div>
                 <div class="shop-item" id="ruestung-container">
                     <h2>Kupferrüstung (Level <span id="ruestung-level">1</span>)</h2>
@@ -88,22 +89,22 @@ if (!isset($_SESSION['charakter'])) {
                     <p>Preis: <span id="ruestung-preis">50</span> Mark</p>
                     <button class="button" onclick="kaufen('Kupferrüstung')">Upgrade</button>
                 </div>
+                <div class="shop-item" id="schwert-container">
+                    <h2>Kupferschwert (Level <span id="schwert-level">1</span>)</h2>
+                    <img src="img/sword.png" alt="Kupferschwert" width="64" height="64">
+                    <p>Preis: <span id="schwert-preis">40</span> Mark</p>
+                    <button class="button" onclick="kaufen('Kupferschwert')">Upgrade</button>
+                </div>
                 <div class="shop-item" id="bogen-container">
                     <h2>Kupferbogen (Level <span id="bogen-level">1</span>)</h2>
                     <img src="img/bow.png" alt="Kupferbogen" width="64" height="64">
                     <p>Preis: <span id="bogen-preis">40</span> Mark</p>
                     <button class="button" onclick="kaufen('Kupferbogen')">Upgrade</button>
                 </div>
-                <div class="shop-item" id="dolch-container">
-                    <h2>Kupferdolch (Level <span id="dolch-level">1</span>)</h2>
-                    <img src="img/dagger.png" alt="Kupferdolch" width="64" height="64">
-                    <p>Preis: <span id="dolch-preis">25</span> Mark</p>
-                    <button class="button" onclick="kaufen('Kupferdolch')">Upgrade</button>
-                </div>
                 <div class="shop-item" id="potion-container">
                     <h2>Heilungstrank (300 HP)</h2>
                     <img src="img/potion.png" alt="Heilungstrank" width="64" height="64">
-                    <p>Preis: <span id="dolch-preis">10</span> Mark</p>
+                    <p>Preis: <span id="potion-preis">10</span> Mark</p>
                     <button class="button" onclick="kaufen('Heilungstrank')">Kaufen</button>
                 </div>
             </div>
@@ -135,80 +136,6 @@ if (!isset($_SESSION['charakter'])) {
         </div>
     </div>
     <script>
-        window.kaufen = function(item) {
-            let containerId;
-            switch(item) {
-                case "Kupferschwert":
-                    containerId = "schwert-container";
-                    break;
-                case "Kupferrüstung":
-                    containerId = "ruestung-container";
-                    break;
-                case "Kupferbogen":
-                    containerId = "bogen-container";
-                    break;
-                case "Kupferdolch":
-                    containerId = "dolch-container";
-                    break;
-                case "Heilungstrank":
-                    containerId = "potion-container";
-                    break;
-                default:
-                    console.error("Unbekanntes Item:", item);
-                    return;
-            }
-            
-            const container = document.getElementById(containerId);
-            if (!container) {
-                console.error("Container nicht gefunden:", containerId);
-                return;
-            }
-            
-            // Hole derzeit angezeigten Preis und Geld des Spielers
-            const priceSpan = container.querySelector('span[id$="-preis"]');
-            const currentPrice = parseInt(priceSpan.textContent);
-            const moneySpan = document.querySelector('.player-money');
-            const currentMoney = parseInt(moneySpan.textContent);
-            
-            if (currentMoney < currentPrice) {
-                alert("Nicht genügend Mark!");
-                return;
-            }
-            
-            // Erstelle das Objekt für den Kauf-Request.
-            const requestData = {
-                item: item,
-                price: currentPrice
-            };
-            
-            fetch('core/shop.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(requestData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert(data.error);
-                    return;
-                }
-                // Erwarteter Response enthält:
-                // data.level: aktuelles Level des Items (Level 0 bedeutet nicht ausgerüstet),
-                // data.newPrice: neuen Preis für den nächsten Upgrade,
-                // data.money: aktuelles Geld des Spielers.
-                let levelSpan = container.querySelector('span[id$="-level"]');
-                levelSpan.innerText = data.level;
-                priceSpan.innerText = data.newPrice;
-                moneySpan.innerText = data.money;
-                
-                // Button-Text anpassen: Ist das Item noch nicht ausgerüstet (Level 0), soll 'ausrüsten' stehen.
-                const button = container.querySelector('button');
-                button.innerText = (data.level === 0 ? 'ausrüsten' : 'Upgrade');
-            })
-            .catch(err => {
-                console.error("Error in kaufen:", err);
-            });
-        };
         document.addEventListener('DOMContentLoaded', function() {
             const player = document.getElementById('player');
             const map = document.querySelector('.map');
@@ -232,6 +159,92 @@ if (!isset($_SESSION['charakter'])) {
                 a: false,  // links
                 s: false,  // unten
                 d: false   // rechts
+            };
+
+            window.kaufen = function(item) {
+                let containerId;
+                switch(item) {
+                    case "Kupferschwert":
+                        containerId = "schwert-container";
+                        break;
+                    case "Kupferrüstung":
+                        containerId = "ruestung-container";
+                        break;
+                    case "Kupferbogen":
+                        containerId = "bogen-container";
+                        break;
+                    case "Kupferdolch":
+                        containerId = "dolch-container";
+                        break;
+                    case "Heilungstrank":
+                        containerId = "potion-container";
+                        break;
+                    default:
+                        console.error("Unbekanntes Item:", item);
+                        return;
+                }
+                
+                const container = document.getElementById(containerId);
+                if (!container) {
+                    console.error("Container nicht gefunden:", containerId);
+                    return;
+                }
+                
+                // Hole den derzeit angezeigten Preis und das Geld des Spielers
+                const priceSpan = container.querySelector('span[id$="-preis"]');
+                const currentPrice = parseInt(priceSpan.textContent);
+                const moneySpan = document.querySelector('.player-money');
+                const currentMoney = parseInt(moneySpan.textContent);
+                
+                if (currentMoney < currentPrice) {
+                    alert("Nicht genügend Mark!");
+                    return;
+                }
+                
+                // Erstelle das Objekt für den Kauf-Request
+                const requestData = {
+                    item: item,
+                    price: currentPrice
+                };
+                
+                fetch('core/shop.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    }
+                    
+                    // Aktualisiere Level und Preis im Shop
+                    const levelSpan = container.querySelector('span[id$="-level"]');
+                    if (levelSpan) {
+                        levelSpan.innerText = data.level;
+                    }
+                    if (priceSpan) {
+                        priceSpan.innerText = data.newPrice;
+                    }
+                    
+                    // Ändere den Button-Text: Ist das Item (noch) nicht ausgerüstet (Level 0), dann "ausrüsten"
+                    const button = container.querySelector('button');
+                    if (data.level === 0) {
+                        button.innerText = 'ausrüsten';
+                    } else {
+                        button.innerText = 'Upgrade';
+                    }
+                    
+                    // Aktualisiere das Geld
+                    moneySpan.innerText = data.money;
+                    
+                    // Stats aktualisieren
+                    updateStats();
+                })
+                .catch(err => {
+                    console.error("Error in kaufen:", err);
+                });
             };
 
             function updateStats() {
@@ -294,6 +307,8 @@ if (!isset($_SESSION['charakter'])) {
                 .catch(error => {
                     console.error("Error fetching stats:", error);
                 });
+                // UpdateStats im globalen Scope verfügbar machen:
+                window.updateStats = updateStats;
             }
 
             // Stats beim Laden der Seite einmalig abrufen
@@ -423,26 +438,69 @@ if (!isset($_SESSION['charakter'])) {
                     checkEnemyCollision();
                 }
             }
-            
+            function updateShop() {
+                fetch('core/shopstatus.php', { method: 'GET' })
+                .then(response => response.json())
+                .then(data => {
+                    // Erwartet: data.items enthält ein Objekt wie:
+                    // { "Kupferschwert": { level: 2, price: 40 }, "Kupferrüstung": { level: 1, price: 50 }, ... }
+                    const shopItems = data.items;
+                    for (let item in shopItems) {
+                        let containerId;
+                        switch(item) {
+                            case "Kupferschwert":
+                                containerId = "schwert-container";
+                                break;
+                            case "Kupferrüstung":
+                                containerId = "ruestung-container";
+                                break;
+                            case "Kupferbogen":
+                                containerId = "bogen-container";
+                                break;
+                            case "Kupferdolch":
+                                containerId = "dolch-container";
+                                break;
+                            case "Heilungstrank":
+                                containerId = "potion-container";
+                                break;
+                            default:
+                                continue;
+                        }
+                        const container = document.getElementById(containerId);
+                        if (container) {
+                            // Falls ein Level-Element vorhanden ist, updaten wir es (z. B. bei Waffen/Rüstung)
+                            const levelSpan = container.querySelector('span[id$="-level"]');
+                            if (levelSpan) {
+                                levelSpan.innerText = shopItems[item].level;
+                            }
+                            const priceSpan = container.querySelector('span[id$="-preis"]');
+                            if (priceSpan) {
+                                priceSpan.innerText = shopItems[item].price;
+                            }
+                        }
+                    }
+                })
+                .catch(err => console.error("Error updating shop:", err));
+            }
             function showPopup() {
-                // Display the shop
+                // Shop anzeigen
                 shop.style.display = 'block';
-                // Disable movement
                 isPopupOpen = true;
-                // Reset keys
+                // Keys zurücksetzen etc.
                 for (let key in keys) {
                     keys[key] = false;
                 }
-                // Musik ändern
+                // Musik wechseln, Position setzen etc.
                 playMusic('shop');
-                // Set player position to X:14 Y:12
                 top = 12 * 10 - player.offsetHeight / 2;
                 left = 14 * 10 - player.offsetWidth / 2;
                 player.style.top = top + 'px';
                 player.style.left = left + 'px';
-                // Update coordinates
                 const coordinates = document.getElementById('coordinates');
                 coordinates.innerText = `(X: 14 | Y: 12)`;
+                
+                // Rufe hier updateShop() auf, um die aktuellen Werte anzuzeigen.
+                updateShop();
             }
             
             // closePopup als globale Funktion verfügbar machen und im selben Scope definieren
