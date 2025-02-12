@@ -67,7 +67,7 @@ class Charakter {
         switch (strtolower($statName)) {
             case "name": return $this->name;
             case "maxhealth": return round( $this->baseMaxHealth * ((100+ $color)*0.01),0 );
-            case "currenthealth": return round( $this->currentHealth * ((100+ $color)*0.01),0 );
+            case "currenthealth": return round( $this->currentHealth );
             case "strength": return round( $this->baseStrength * ((100+ $color)*0.01),0 );
             case "dexterity": return round( $this->baseDexterity * ((100+ $color)*0.01),0 );
             case "intelligence": return round( $this->baseIntelligence * ((100+ $color)*0.01),0 );
@@ -125,7 +125,6 @@ class Charakter {
 
     public function Attack ($type, $Enemy, $blocked):int{ //the fact if it was blocked or not is given to the attack
         if ($blocked) {$blockedMult = 0.5;} else $blockedMult = 1;
-        
                                // 10%chance to miss
             switch ($type):             //get corresponding weapon damage and player stat to the attack type
                 case "phys": 
@@ -141,7 +140,6 @@ class Charakter {
                 case "physstrong":
                     $WeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
                     $attackStat = $this->getStat("strength");
-                    
                     $damageMult = rand(0,2);
                     break;
                 case "magstrong":
@@ -155,7 +153,8 @@ class Charakter {
             $damageDealt = $Enemy->Defend($this->getStat("dexterity"), $dealDMG);
             return $damageDealt;
         
-    } /*
+    } 
+    /*          entfernt, da alles in Attack funktion
     public function physAttackStrong ($Enemy, $blocked):int{ //the fact if it was blocked or not is given to the attack 
         if ($blocked) {$blockedMult = 0.5;} else $blockedMult = 1;
         if (rand(0,1)){                             //50/50 to hit/miss
