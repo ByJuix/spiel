@@ -18,6 +18,7 @@ if (!isset($_SESSION['charakter'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PHPixel</title>
     <link rel="stylesheet" href="css/play.css">
+    <script src="js/music.js"></script>
 </head>
 <body>
     <div class="background"></div>
@@ -223,6 +224,9 @@ if (!isset($_SESSION['charakter'])) {
 
             // Stats beim Laden der Seite einmalig abrufen
             updateStats();
+
+            // Musik starten
+            playMusic('overworld');
             
             document.addEventListener('keydown', function(event) {
                 if (!isPopupOpen && keys.hasOwnProperty(event.key)) {
@@ -355,6 +359,8 @@ if (!isset($_SESSION['charakter'])) {
                 for (let key in keys) {
                     keys[key] = false;
                 }
+                // Musik ändern
+                playMusic('shop');
                 // Set player position to X:14 Y:12
                 top = 12 * 10 - player.offsetHeight / 2;
                 left = 14 * 10 - player.offsetWidth / 2;
@@ -371,6 +377,8 @@ if (!isset($_SESSION['charakter'])) {
                 shop.style.display = 'none';
                 // Enable movement
                 isPopupOpen = false;
+                // Musik ändern
+                playMusic('overworld');
             }
 
             const enemySpawnAreas = [
@@ -391,43 +399,48 @@ if (!isset($_SESSION['charakter'])) {
                 { x1: 35, y1: 22, x2: 41, y2: 26, playerX: 38, playerY: 29, boss: true  }
             ];
             
-                function spawnEnemies() {
-                    const map = document.querySelector('.map');
-                    enemySpawnAreas.forEach((area, index) => {
-                        const enemy = document.createElement('div');
-                        enemy.classList.add('enemy');
-                        // Speichere den Spawnindex als Data-Attribut
-                        enemy.dataset.spawnIndex = index;
-                        const x = Math.floor(Math.random() * (area.x2 - area.x1 + 1)) + area.x1;
-                        const y = Math.floor(Math.random() * (area.y2 - area.y1 + 1)) + area.y1;
-                        enemy.style.left = (x * 10 - 12) + 'px';
-                        enemy.style.top = (y * 10 - 12) + 'px';
-                        map.appendChild(enemy);
-                    });
-                }
-                
-                function checkEnemyCollision() {
-                    if (isEnemyPopupOpen) return; // Überschreibungen vermeiden
-                    const enemies = document.querySelectorAll('.enemy');
-                    const playerRect = player.getBoundingClientRect();
-                    enemies.forEach((enemy) => {
-                        const enemyRect = enemy.getBoundingClientRect();
-                        const isCollision = Math.abs(playerRect.left - enemyRect.left) <= 10 && Math.abs(playerRect.top - enemyRect.top) <= 10;
-                        if (isCollision) {
-                            // Lese den gespeicherten Spawnindex aus
-                            const spawnIndex = enemy.dataset.spawnIndex;
-                            lastEnemy = enemy;
-                            lastSpawnArea = enemySpawnAreas[spawnIndex];
-                            showEnemyPopup();
-                        }
-                    });
-                }
+            function spawnEnemies() {
+                const map = document.querySelector('.map');
+                enemySpawnAreas.forEach((area, index) => {
+                    const enemy = document.createElement('div');
+                    enemy.classList.add('enemy');
+                    // Speichere den Spawnindex als Data-Attribut
+                    enemy.dataset.spawnIndex = index;
+                    const x = Math.floor(Math.random() * (area.x2 - area.x1 + 1)) + area.x1;
+                    const y = Math.floor(Math.random() * (area.y2 - area.y1 + 1)) + area.y1;
+                    enemy.style.left = (x * 10 - 12) + 'px';
+                    enemy.style.top = (y * 10 - 12) + 'px';
+                    map.appendChild(enemy);
+                });
+            }
+            
+            function checkEnemyCollision() {
+                if (isEnemyPopupOpen) return; // Überschreibungen vermeiden
+                const enemies = document.querySelectorAll('.enemy');
+                const playerRect = player.getBoundingClientRect();
+                enemies.forEach((enemy) => {
+                    const enemyRect = enemy.getBoundingClientRect();
+                    const isCollision = Math.abs(playerRect.left - enemyRect.left) <= 10 && Math.abs(playerRect.top - enemyRect.top) <= 10;
+                    if (isCollision) {
+                        // Lese den gespeicherten Spawnindex aus
+                        const spawnIndex = enemy.dataset.spawnIndex;
+                        lastEnemy = enemy;
+                        lastSpawnArea = enemySpawnAreas[spawnIndex];
+                        showEnemyPopup();
+                    }
+                });
+            }
 
             function showEnemyPopup() {
                 // Ermittelt die URL inkl. Boss-Parameter, wenn lastSpawnArea.boss true ist
                 let url = 'core/enemy.php';
                 if (lastSpawnArea && lastSpawnArea.boss) {
                     url += '?boss=true';
+                    // Musik ändern
+                    playMusic('castle');
+                } else {
+                    // Musik ändern
+                    playMusic('fight');
                 }
                 
                 // Zuerst den Gegner per AJAX spawnen
@@ -473,6 +486,9 @@ if (!isset($_SESSION['charakter'])) {
                     coordinates.innerText = `(X: ${lastSpawnArea.playerX} | Y: ${lastSpawnArea.playerY})`;
                     lastSpawnArea = null;
                 }
+                
+                // Musik ändern
+                playMusic('overworld');
                 
                 // Wenn keine Gegner mehr auf der Map vorhanden sind, erneutes Spawnen
                 if (document.querySelectorAll('.enemy').length === 0) {
