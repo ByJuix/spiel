@@ -39,6 +39,7 @@ class Charakter {
                 $this->name == "Feldmannius der Göttliche" ? $this->color = rand(100, 500) : $this->color = rand(1, 100);
             } else {
                 $this->name = $enemyNames[array_rand($enemyNames)];
+                $this->name == "Feldmannius der Göttliche" ? $this->color = rand(100, 500) : $this->color = rand(1, 100);
             }
         }
 
