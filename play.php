@@ -165,6 +165,8 @@ if (!isset($_SESSION['charakter'])) {
                 .then(data => {
                     console.log("Player stats:", data.stats);
                     console.log("Enemy stats:", data.enemyStats);
+                    console.log("Weapon stats:", data.weapon);
+                    console.log("Armor stats:", data.armor);
                     
                     // Update der Spieler-Stats
                     const statsDiv = document.querySelector('.player-stats');
