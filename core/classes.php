@@ -76,7 +76,7 @@ class Charakter {
             case "intelligence":    return round( $this->baseIntelligence * ((100+ $XP)*0.01),0 );
             case "armor":           return $this->EquippedArmor;
             case "weapon":          return $this->EquippedWeapon;
-            case "XP":              return $XP;
+            case "xp":              return $XP;
             case "money" :          return $this->money;
             default:                return "Error in Getstat";
         }
@@ -339,6 +339,7 @@ class Fight {
         } 
         
         if (!$this->enemy->Getstat("isAlive")) {  //on win get the loot, return a win
+            echo "<script type='text/javascript'>alert('dead enemy');</script>";
             $this->player->setAttribute("XP", $this->player->Getstat("XP")+$this->enemy->getLootXP()); 
             $this->player->setAttribute("money", $this->player->Getstat("money")+$this->enemy->getLootMoney());
             $ReturnValue->WinLooseContinue = "win";
