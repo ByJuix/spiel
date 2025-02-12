@@ -5,11 +5,23 @@ include_once "classes.php";
 
 session_start();
 
+$get = isset($_GET['boss']) && $_GET['boss'] == 'true' ? true : false;
+
+// Falls der boss-Parameter übergeben wird, erzwinge ein Neuspaunen
+if (isset($_GET['boss'])) {
+    unset($_SESSION["enemy"]);
+}
+
 if (isset($_SESSION["enemy"]) && $_SESSION["enemy"]->getStat('currenthealth') < 1) {
     unset($_SESSION["enemy"]);
 }
+
 if (!isset($_SESSION["enemy"])) {
-    $_SESSION["enemy"] = new Charakter(null, false, 1000, 10, 5, 5, 5);
+    if ($get) {
+        $_SESSION["enemy"] = new Charakter(null, false, 3000, 50, 5, 5);
+    } else {
+        $_SESSION["enemy"] = new Charakter(null, false, 1000, 10, 5, 5);
+    }
 }
 
 $enemy = $_SESSION["enemy"];
