@@ -124,36 +124,38 @@ class Charakter {
     
 
     public function Attack ($type, $Enemy, $blocked):int{ //the fact if it was blocked or not is given to the attack
-        if ($blocked) {$blockedMult = 0.5;} else $blockedMult = 1;
-                               // 10%chance to miss
-            switch ($type):             //get corresponding weapon damage and player stat to the attack type
-                case "phys": 
-                    $WeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
-                    $attackStat = $this->getStat("strength");
-                    $damageMult = 1;
-                    break;
-                case "mag": 
-                    $WeaponDamage = $this->getStat("weapon")->getStat("damageMag");
-                    $attackStat = $this->getStat("intelligence");
-                    $damageMult = 1;
-                    break;
-                case "physstrong":
-                    $WeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
-                    $attackStat = $this->getStat("strength");
-                    $damageMult = rand(0,2);
-                    break;
-                case "magstrong":
-                    $WeaponDamage = $this->getStat("weapon")->getStat("damageMag");
-                    $attackStat = $this->getStat("intelligence");
-                    $damageMult = rand(0,2);
-                    break;
-                default: break;
+        if ($blocked) {$blockedMult = 0.5;} else {$blockedMult = 1;}
 
-            $dealDMG = ($attackStat + $WeaponDamage)*$blockedMult*$damageMult; //total dmg depends on the attack stat, weapon attack stat, and if its blocked or not, and possible multiplier if its strong attack. 
-            $damageDealt = $Enemy->Defend($this->getStat("dexterity"), $dealDMG);
-            return $damageDealt;
+        switch ($type) {            //get corresponding weapon damage and player stat to the attack type
+            case "phys": 
+                $WeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
+                $attackStat = $this->getStat("strength");
+                $damageMult = 1;
+                break;
+            case "mag": 
+                $WeaponDamage = $this->getStat("weapon")->getStat("damageMag");
+                $attackStat = $this->getStat("intelligence");
+                $damageMult = 1;
+                break;
+            case "physstrong":
+                $WeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
+                $attackStat = $this->getStat("strength");
+                $damageMult = rand(0,2);
+                break;
+            case "magstrong":
+                $WeaponDamage = $this->getStat("weapon")->getStat("damageMag");
+                $attackStat = $this->getStat("intelligence");
+                $damageMult = rand(0,2);
+                break;
+            default: 
+                break;
+        }
+        $dealDMG = ($attackStat + $WeaponDamage)*$blockedMult*$damageMult; //total dmg depends on the attack stat, weapon attack stat, and if its blocked or not, and possible multiplier if its strong attack. 
+        $damageDealt = $Enemy->Defend($this->getStat("dexterity"), $dealDMG);
+        return $damageDealt;
         
-    } 
+    }
+
     /*          entfernt, da alles in Attack funktion
     public function physAttackStrong ($Enemy, $blocked):int{ //the fact if it was blocked or not is given to the attack 
         if ($blocked) {$blockedMult = 0.5;} else $blockedMult = 1;
@@ -188,7 +190,7 @@ class Charakter {
         $this->currentHealth -= $Damage;
     }
     public function Heal($heal) {                  //basically setter function, for readability
-        $this->currentHealth += $Damage;
+        $this->currentHealth += $heal;
         if ($this->currentHealth > $this->Getstat("maxhealth")) {$this->setAttribute("currenthealth", $this->Getstat("maxhealth")) ; }
     }
     public function Defend($EnemyDex, $Damage):int {        //damage depends on dexterity stat of attacker and defender
