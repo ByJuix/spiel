@@ -2,7 +2,7 @@
 namespace PHPixel\Core;
 
 class Charakter {
-    // Attribute
+    // Attribute/Stats
     private $isAlive; 
     private $playerControlled;
     private $name;
@@ -15,10 +15,10 @@ class Charakter {
     private $currentHealth;
 
 
-    private $maxHealth;            #unneccesary weil base stats im getter mit color verrechnet werden
-    private $strength;
-    private $dexterity;
-    private $intelligence;
+   # private $maxHealth;            #unneccesary weil base stats im getter mit color verrechnet werden
+   # private $strength;
+   # private $dexterity;
+   # private $intelligence;
     
     private $money;
     private $color;
@@ -30,10 +30,12 @@ class Charakter {
 
         $playerNames = ["Cyanis der Schimmernde", "Kuphero der Glühende", "Rubinia Flammenklinge", "Azubios der Garagenfeger", "Ambera Goldhand", "Vermilios Stahlseele", "Bronzora die Mächtige", "Zinnox der Verschlagene", "Smargant der Weise", "Alabastea der Erhabene", "Saphiriel Sturmbrecher", "Ochros Kupferflamme", "Chalybeus der Unverwüstliche", "Verdantus Blattläufer", "Aurenix der Glanzvolle", "Carminelle Schattenruferin", "Cobalta Nachtseele", "Malach der Grüne Hüter", "Zirkon Flammensucher", "Titanora die Ewige", "Feldmannius der Göttliche"];
         $enemyNames = ["Das wundersame Skelett", "Das aromatische Ding", "Der wundersame Hüter", "Der Phantomsucher", "Das aromatische Monster", "Der achtsame Charmeur", "Der aromatische Charmeur", "Das gutherzige Ding", "Das Phantommonster", "Die Phantomhexe" /*, "Feldmannius der Göttliche"*/];
+        
+
 
         $this->isAlive = true;
-        $this->playerControlled = $player ?? false; // muss bei Spielercharakter auf true gesetzt werden
-        if (!$name){
+        $this->playerControlled = $isPlayer ?? false;     // muss bei Spielercharakter auf true gesetzt werden
+        if (!$name){                                        //if no name set select name from playerNames/enemyNames list, set XP values
             if ($isPlayer) {
                 $this->name = $playerNames[array_rand($playerNames)];
                 $this->name == "Feldmannius der Göttliche" ? $this->color = rand(100, 500) : $this->color = rand(1, 100);
@@ -45,12 +47,12 @@ class Charakter {
 
         $this->money = round($this->color / 3, 0); 
 
-        $this->baseMaxHealth = $health;
+        $this->baseMaxHealth = $health;         //verwertung der eingegebenen werte
         $this->currentHealth = $health;
         $this->baseStrength = $strength;
         $this->baseDexterity = $dexterity;
         $this->baseIntelligence = $intelligence;
-        $this->EquippedArmor = new item("Kupferrüstung", 1, "Armor", 0, 0, 10);
+        $this->EquippedArmor = new item("Kupferrüstung", 1, "Armor", 0, 0, 10); //standardausruestung
         $this->EquippedWeapon = new item("Kupferdolch", 1, "Weapon", 10, 0, 0);
     }
 
@@ -58,7 +60,7 @@ class Charakter {
     public function __destruct() {
     }
 
-    // Getter-Methoden
+    // Getter-Methode
 
     public function getStat ($statName) {
         $color = $this->color;
@@ -121,57 +123,57 @@ class Charakter {
     }
     
 
-    public function physAttack ($Enemy, $blocked):int{
+    public function physAttack ($Enemy, $blocked):int{ //the fact if it was blocked or not is given to the attack
         if ($blocked) {$blockedMult = 0.5;} else $blockedMult = 1;
-        if (rand(0,9)!= 0){
+        if (rand(0,9)!= 0){                         // 10%chance to miss
             $physWeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
-            $dealDMG = ($this->getStat("strength") + $physWeaponDamage)*$blockedMult;
+            $dealDMG = ($this->getStat("strength") + $physWeaponDamage)*$blockedMult; //total dmg depends on strength, weapon attack stat, and if its blocked or not. 
             $damageDealt = $Enemy->Defend($this->getStat("dexterity"), $dealDMG);
             return $damageDealt;
         } else return 0;
     }
-    public function physAttackStrong ($Enemy, $blocked):int{
+    public function physAttackStrong ($Enemy, $blocked):int{ //the fact if it was blocked or not is given to the attack 
         if ($blocked) {$blockedMult = 0.5;} else $blockedMult = 1;
-        if (rand(0,1)){
+        if (rand(0,1)){                             //50/50 to hit/miss
             $physWeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
-            $dealDMG = ($this->getStat("strength") + $physWeaponDamage)*3*$blockedMult;
+            $dealDMG = ($this->getStat("strength") + $physWeaponDamage)*3*$blockedMult;  //total dmg depends on strength, weapon attack stat, and if its blocked or not. factor 3 bc strong attack
             $damageDealt = $Enemy->Defend($this->getStat("dexterity")*3, $dealDMG);
             return $damageDealt;
         } else return 0;
     }
-    public function magAttack ($Enemy, $blocked):int{
+    public function magAttack ($Enemy, $blocked):int{ //the fact if it was blocked or not is given to the attack
         if ($blocked) {$blockedMult = 0.5;} else $blockedMult = 1;
-        if (rand(0,9)!= 0){
+        if (rand(0,9)!= 0){                         // 10%chance to miss
             $magWeaponDamage = $this->getStat("weapon")->getStat("damageMag");
-            $dealDMG = ($this->getStat(statName: "intelligence") + $magWeaponDamage)*$blockedMult;
+            $dealDMG = ($this->getStat(statName: "intelligence") + $magWeaponDamage)*$blockedMult; //total dmg depends on intelligence, weapon attack stat, and if its blocked or not
             $damageDealt = $Enemy->Defend($this->getStat("dexterity"), $dealDMG);
             return $damageDealt;
         } else return 0;
     }
-    public function magAttackStrong ($Enemy, $blocked):int{
+    public function magAttackStrong ($Enemy, $blocked):int{ //the fact if it was blocked or not is given to the attack
         if ($blocked) {$blockedMult = 0.5;} else $blockedMult = 1;
-
-        if (rand(0,1)){
+        if (rand(0,1)){                             // 50/50 chance to miss/hit
             $magWeaponDamage = $this->getStat("weapon")->getStat("damageMag");
-            $dealDMG = ($this->getStat(statName: "intelligence") + $magWeaponDamage)*3*$blockedMult;
+            $dealDMG = ($this->getStat(statName: "intelligence") + $magWeaponDamage)*3*$blockedMult; //total dmg depends on intelligence, weapon attack stat, and if its blocked or not. factor 3 bc strong attack
             $damageDealt = $Enemy->Defend($this->getStat("dexterity")*3, $dealDMG);
             return $damageDealt;
         } else return 0;
     }
 
 
-    public function TakeDMG($Damage) {
+    public function TakeDMG($Damage) {                  //basically setter function, for readability
         $this->currentHealth -= $Damage;
     }
-    public function Defend($EnemyDex, $Damage):int {
+
+    public function Defend($EnemyDex, $Damage):int {        //damage depends on dexterity stat of attacker and defender
         $DamageTaken = $EnemyDex / $this->getStat("dexterity") * $Damage;
         $this->TakeDmg($DamageTaken);
         return $DamageTaken;
     }
-    public function getLootColour() {
+    public function getLootColour() {                //basically getter function, for readability. u gain varying piece of XP from enemy on killing it
         return round($this->getStat("color") / rand(5,15),0);
     }
-    public function getLootMoney() {
+    public function getLootMoney() {                 //basically getter function, for readability. u gain varying piece of cash from enemy on killing it
         return round($this->getStat("money") / rand(1,3),0);
     }
 }
@@ -197,7 +199,7 @@ class Item {
         }
     }
 
-    public function setItemAttributes($name, $level, $type, $damage_phys, $damage_mag, $defense) {
+    public function setItemAttributes($name, $level, $type, $damage_phys, $damage_mag, $defense) { //setter
         $this->name = $name;
         $this->level = $level;
         $this->type = $type;
@@ -208,6 +210,9 @@ class Item {
 
     // Konstruktor
     public function __construct($name, $level, $type, $damage_phys,  $damage_mag, $defense) {
+
+        //verwerten der eingegebenen werte
+
         $this->name = $name;
         $this->level = $level ?? 1;
         $this->type = $type;
@@ -222,7 +227,7 @@ class Item {
 }
 
 class FightRoundReturnValue
-{
+{ //class to create return obeject as fightrounds need to return alot of information
  public $WinLooseContinue;
  public $playerDamageDealt;
  public $playerBlocked;
@@ -240,12 +245,12 @@ class Fight {
         if ($enemy) {$this->enemy = $enemy;}
     }
 
-    public function FightRound($playerAttackAction, $playerDefenseAction):FightRoundReturnValue{
+    public function FightRound($playerAttackAction, $playerDefenseAction):FightRoundReturnValue{ //input is the way player attacks (mag, phys, magstrong, physstrong) and the way player defends (mag, phys)
 
         $ReturnValue = new FightRoundReturnValue();
 
         $enemyDefenseAction = rand(0,1); # 1 physical block, 0 magical block
-        $enemyAttackAction = rand(0,3); 
+        $enemyAttackAction = rand(0,3); #0 phys, 1 mag, 2 physstrong, 3 magstrong
         if ($playerAttackAction) {
             switch ($playerAttackAction) {
                 case "phys":
@@ -287,16 +292,16 @@ class Fight {
                 }
         } 
         
-        if ($this->enemy->Getstat("currentHealth") < 1) { 
+        if ($this->enemy->Getstat("currentHealth") < 1) {  //on win get the loot, return a win
             $this->player->setAttribute("color", $this->player->Getstat("color")+$this->enemy->getLootColour()); 
             $this->player->setAttribute("money", $this->player->Getstat("money")+$this->enemy->getLootMoney());
             $ReturnValue->WinLooseContinue = "win";
         } else
-        if ($this->player->Getstat("currentHealth") < 1) { 
+        if ($this->player->Getstat("currentHealth") < 1) { //on loose get fucked
             $ReturnValue->WinLooseContinue = "loose";
         } else
-        if (($this->player->Getstat("currentHealth") > 0 ) and ($this->enemy->Getstat("currentHealth") > 0)) {
-            $ReturnValue->WinLooseContinue = "continue";
+        if (($this->player->Getstat("currentHealth") > 0 ) and ($this->enemy->Getstat("currentHealth") > 0)) { // again if both still have hp
+            $ReturnValue->WinLooseContinue = "continue"; 
         } else  $ReturnValue->WinLooseContinue = "continue";
         
         return $ReturnValue;
