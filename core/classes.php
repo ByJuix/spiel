@@ -124,8 +124,8 @@ class Charakter {
         if ($blocked) {$blockedMult = 0.5;} else $blockedMult = 1;
         if (rand(0,9)!= 0){
             $physWeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
-            $damageDealt = ($this->getStat("strength") + $physWeaponDamage)*$blockedMult;
-            $Enemy->Defend($this->getStat("dexterity"), $damageDealt);
+            $dealDMG = ($this->getStat("strength") + $physWeaponDamage)*$blockedMult;
+            $damageDealt = $Enemy->Defend($this->getStat("dexterity"), $dealDMG);
             return $damageDealt;
         } else return 0;
     }
@@ -133,8 +133,8 @@ class Charakter {
         if ($blocked) {$blockedMult = 0.5;} else $blockedMult = 1;
         if (rand(0,1)){
             $physWeaponDamage = $this->getStat("weapon")->getStat("damagePhys");
-            $damageDealt = ($this->getStat("strength") + $physWeaponDamage)*3*$blockedMult;
-            $Enemy->Defend($this->getStat("dexterity")*3, $damageDealt);
+            $dealDMG = ($this->getStat("strength") + $physWeaponDamage)*3*$blockedMult;
+            $damageDealt = $Enemy->Defend($this->getStat("dexterity")*3, $dealDMG);
             return $damageDealt;
         } else return 0;
     }
@@ -142,8 +142,8 @@ class Charakter {
         if ($blocked) {$blockedMult = 0.5;} else $blockedMult = 1;
         if (rand(0,9)!= 0){
             $magWeaponDamage = $this->getStat("weapon")->getStat("damageMag");
-            $damageDealt = ($this->getStat(statName: "intelligence") + $magWeaponDamage)*$blockedMult;
-            $Enemy->Defend($this->getStat("dexterity"), $damageDealt);
+            $dealDMG = ($this->getStat(statName: "intelligence") + $magWeaponDamage)*$blockedMult;
+            $damageDealt = $Enemy->Defend($this->getStat("dexterity"), $dealDMG);
             return $damageDealt;
         } else return 0;
     }
@@ -152,8 +152,8 @@ class Charakter {
 
         if (rand(0,1)){
             $magWeaponDamage = $this->getStat("weapon")->getStat("damageMag");
-            $damageDealt = ($this->getStat(statName: "intelligence") + $magWeaponDamage)*3*$blockedMult;
-            $Enemy->Defend($this->getStat("dexterity")*3, $damageDealt);
+            $dealDMG = ($this->getStat(statName: "intelligence") + $magWeaponDamage)*3*$blockedMult;
+            $damageDealt = $Enemy->Defend($this->getStat("dexterity")*3, $dealDMG);
             return $damageDealt;
         } else return 0;
     }
@@ -162,9 +162,10 @@ class Charakter {
     public function TakeDMG($Damage) {
         $this->currentHealth -= $Damage;
     }
-    public function Defend($EnemyDex, $Damage) {
+    public function Defend($EnemyDex, $Damage):int {
         $DamageTaken = $EnemyDex / $this->getStat("dexterity") * $Damage;
         $this->TakeDmg($DamageTaken);
+        return $DamageTaken;
     }
     public function getLootColour() {
         return round($this->getStat("color") / rand(5,15),0);
