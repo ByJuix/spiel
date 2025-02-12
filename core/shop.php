@@ -1,6 +1,7 @@
 <?php
-session_start();
+namespace PHPixel\Core;
 include_once "classes.php";
+session_start();
 
 // Initialisiere den Spieler, falls noch nicht vorhanden (Beispielwert)
 if (!isset($_SESSION['player'])) {
@@ -11,12 +12,15 @@ if (!isset($_SESSION['player'])) {
             'Kupferrüstung'  => null,
             'Kupferbogen'    => null,
             'Kupferdolch'    => null,
-            'Heilungstrank'  => null // Wird hier zwar initialisiert, aber nicht als Item verabeitet
-        ],
-        // Für den Charakter (Beispielwerte)
-        'currenthealth' => 1000,  // Beispiel: aktueller HP-Wert
-        'maxhealth'     => 1000
+            'Heilungstrank'  => null // Wird hier zwar initialisiert, aber nicht als Item verarbeitet
+        ]
     ];
+}
+
+// Stelle sicher, dass der Charakter verfügbar ist
+if (!isset($_SESSION['charakter'])) {
+    // Beispielcharakter (Passe die Werte an deine Logik an)
+    $_SESSION['charakter'] = new Charakter("Spieler", true, 1000, 10, 10, 10);
 }
 
 // Lese die eingehenden JSON-Daten
@@ -51,22 +55,21 @@ if ($_SESSION['player']['money'] < $price) {
 $_SESSION['player']['money'] -= $price;
 
 // Sonderfall: Heilungstrank soll nicht als Item verarbeitet werden,
-// sondern die currentHealth des Charakters um 300 erhöhen.
+// sondern über die Charakter-Klasse die currentHealth um 300 erhöhen.
 if ($item === 'Heilungstrank') {
-    // Setze currenthealth, falls noch nicht vorhanden
-    if (!isset($_SESSION['player']['currenthealth'])) {
-        $_SESSION['player']['currenthealth'] = $_SESSION['player']['maxhealth'];
+    $charakter = $_SESSION['charakter'];
+    $currentHealth = $charakter->getStat('currenthealth');
+    $maxHealth = $charakter->getStat('maxhealth');
+    $newHealth = $currentHealth + 300;
+    if ($newHealth > $maxHealth) {
+        $newHealth = $maxHealth;
     }
-    $_SESSION['player']['currenthealth'] += 300;
-    // Optional: Begrenzung auf maxhealth
-    if ($_SESSION['player']['currenthealth'] > $_SESSION['player']['maxhealth']) {
-        $_SESSION['player']['currenthealth'] = $_SESSION['player']['maxhealth'];
-    }
+    $charakter->setAttribute('currenthealth', $newHealth);
     header('Content-Type: application/json');
     echo json_encode([
-        'healed' => 300,
-        'money'  => $_SESSION['player']['money'],
-        'currenthealth' => $_SESSION['player']['currenthealth']
+        'healed'        => 300,
+        'money'         => $_SESSION['player']['money'],
+        'currenthealth' => $charakter->getStat('currenthealth')
     ]);
     exit;
 }

@@ -15,10 +15,10 @@ class Charakter {
     private $currentHealth;
 
 
-   # private $maxHealth;            #unneccesary weil base stats im getter mit color verrechnet werden
-   # private $strength;
-   # private $dexterity;
-   # private $intelligence;
+    private $maxHealth;            #unneccesary weil base stats im getter mit color verrechnet werden
+    private $strength;
+    private $dexterity;
+    private $intelligence;
     
     private $money;
     private $color;

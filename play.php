@@ -135,6 +135,80 @@ if (!isset($_SESSION['charakter'])) {
         </div>
     </div>
     <script>
+        window.kaufen = function(item) {
+            let containerId;
+            switch(item) {
+                case "Kupferschwert":
+                    containerId = "schwert-container";
+                    break;
+                case "Kupferrüstung":
+                    containerId = "ruestung-container";
+                    break;
+                case "Kupferbogen":
+                    containerId = "bogen-container";
+                    break;
+                case "Kupferdolch":
+                    containerId = "dolch-container";
+                    break;
+                case "Heilungstrank":
+                    containerId = "potion-container";
+                    break;
+                default:
+                    console.error("Unbekanntes Item:", item);
+                    return;
+            }
+            
+            const container = document.getElementById(containerId);
+            if (!container) {
+                console.error("Container nicht gefunden:", containerId);
+                return;
+            }
+            
+            // Hole derzeit angezeigten Preis und Geld des Spielers
+            const priceSpan = container.querySelector('span[id$="-preis"]');
+            const currentPrice = parseInt(priceSpan.textContent);
+            const moneySpan = document.querySelector('.player-money');
+            const currentMoney = parseInt(moneySpan.textContent);
+            
+            if (currentMoney < currentPrice) {
+                alert("Nicht genügend Mark!");
+                return;
+            }
+            
+            // Erstelle das Objekt für den Kauf-Request.
+            const requestData = {
+                item: item,
+                price: currentPrice
+            };
+            
+            fetch('core/shop.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+                // Erwarteter Response enthält:
+                // data.level: aktuelles Level des Items (Level 0 bedeutet nicht ausgerüstet),
+                // data.newPrice: neuen Preis für den nächsten Upgrade,
+                // data.money: aktuelles Geld des Spielers.
+                let levelSpan = container.querySelector('span[id$="-level"]');
+                levelSpan.innerText = data.level;
+                priceSpan.innerText = data.newPrice;
+                moneySpan.innerText = data.money;
+                
+                // Button-Text anpassen: Ist das Item noch nicht ausgerüstet (Level 0), soll 'ausrüsten' stehen.
+                const button = container.querySelector('button');
+                button.innerText = (data.level === 0 ? 'ausrüsten' : 'Upgrade');
+            })
+            .catch(err => {
+                console.error("Error in kaufen:", err);
+            });
+        };
         document.addEventListener('DOMContentLoaded', function() {
             const player = document.getElementById('player');
             const map = document.querySelector('.map');
@@ -227,60 +301,6 @@ if (!isset($_SESSION['charakter'])) {
 
             // Musik starten
             playMusic('overworld');
-
-            function kaufen(item) {
-                // Ermittle den Container des Items
-                const container = document.getElementById(item + '-container');
-                // Hole derzeit angezeigten Preis und Geld des Spielers
-                const priceSpan = container.querySelector('span[id$="-preis"]');
-                const currentPrice = parseInt(priceSpan.textContent);
-                const moneySpan = document.querySelector('.player-money');
-                const currentMoney = parseInt(moneySpan.textContent);
-                
-                if (currentMoney < currentPrice) {
-                    alert("Nicht genügend Mark!");
-                    return;
-                }
-                
-                // Erstelle das Objekt für den Kauf-Request.
-                // Im Backend wird auch geprüft, ob beim Item (z. B. Waffe) bereits ein Item existiert.
-                const requestData = {
-                    item: item,
-                    price: currentPrice
-                };
-                
-                fetch('core/shop.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(requestData)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        alert(data.error);
-                        return;
-                    }
-                    // Erwarteter Response enthält:
-                    // data.level: aktuelles Level des Items (Level 0 bedeutet nicht ausgerüstet),
-                    // data.newPrice: neuen Preis für den nächsten Upgrade,
-                    // data.money: aktuelles Geld des Spielers.
-                    let levelSpan = container.querySelector('span[id$="-level"]');
-                    levelSpan.innerText = data.level;
-                    priceSpan.innerText = data.newPrice;
-                    moneySpan.innerText = data.money;
-                    
-                    // Button-Text anpassen: Ist das Item noch nicht ausgerüstet (Level 0), soll 'ausrüsten' stehen.
-                    const button = container.querySelector('button');
-                    if (data.level === 0) {
-                        button.innerText = 'ausrüsten';
-                    } else {
-                        button.innerText = 'Upgrade';
-                    }
-                })
-                .catch(err => {
-                    console.error("Error in kaufen:", err);
-                });
-            }
             
             document.addEventListener('keydown', function(event) {
                 if (!isPopupOpen && keys.hasOwnProperty(event.key)) {
