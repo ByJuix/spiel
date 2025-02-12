@@ -53,7 +53,7 @@ class Charakter {
         $this->baseDexterity = $dexterity;
         $this->baseIntelligence = $intelligence;
         $this->EquippedArmor = new item("Kupferrüstung", 1, "Armor", 0, 0, 10); //standardausruestung
-        $this->EquippedWeapon = new item("Kupferdolch", 1, "Weapon", 10, 0, 0);
+        $this->EquippedWeapon = new item("Kupferstab", 1, "Weapon", 10, 0, 0);
 
         $this->currentHealth = $this->getStat("maxhealth");
     }
