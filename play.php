@@ -256,7 +256,7 @@ if (!isset($_SESSION['charakter'])) {
                         <p>Strength: ${data.stats.strength}</p>
                         <p>Intelligence: ${data.stats.intelligence}</p>
                         <p>Dexterity: ${data.stats.dexterity}</p>
-                        <p>XP: ${data.stats.XP}</p>
+                        <p>XP: ${data.stats.xp}</p>
                     `;
                     
                     // Update des Money-Stats im Header
