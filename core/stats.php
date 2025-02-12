@@ -20,6 +20,24 @@ $stats = [
     'money' => $charakter->getStat('money')
 ];
 
+$weapon = [
+    'name' => $charakter->getStat('weapon')->getStat('name'),
+    'level' => $charakter->getStat('weapon')->getStat('level'),
+    'damagephys' => $charakter->getStat('weapon')->getStat('damage_phys'),
+    'damagemag' => $charakter->getStat('weapon')->getStat('damage_mag'),
+    'defense' => $charakter->getStat('weapon')->getStat('defense'),
+    'type' => $charakter->getStat('weapon')->getStat('type')
+];
+
+$armor = [
+    'name' => $charakter->getStat('armor')->getStat('name'),
+    'level' => $charakter->getStat('armor')->getStat('level'),
+    'defensephys' => $charakter->getStat('armor')->getStat('defense_phys'),
+    'defensemag' => $charakter->getStat('armor')->getStat('defense_mag'),
+    'damage' => $charakter->getStat('armor')->getStat('damage'),
+    'type' => $charakter->getStat('armor')->getStat('type')
+];
+
 if (isset($_SESSION["enemy"])) {
     $enemy = $_SESSION["enemy"];
 
@@ -38,7 +56,7 @@ if (isset($_SESSION["enemy"])) {
 }
 
 // JSON Ausgabe
-$response = ['stats' => $stats];
+$response = ['stats' => $stats, 'weapon' => $weapon, 'armor' => $armor];
 if (isset($enemyStats)) {
     $response['enemyStats'] = $enemyStats;
 }

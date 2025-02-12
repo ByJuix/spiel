@@ -50,7 +50,7 @@ class Charakter {
         $this->baseDexterity = $dexterity;
         $this->baseIntelligence = $intelligence;
         $this->EquippedArmor = new item("Kupferrüstung", 1, "Armor", 0, 0, 10);
-        $this->EquippedWeapon = new item("Kupferdolch", 1, "Sword", 10, 0, 0);
+        $this->EquippedWeapon = new item("Kupferdolch", 1, "Weapon", 10, 0, 0);
     }
 
     // Destruktor
