@@ -17,7 +17,8 @@ $stats = [
     'armor' => $charakter->getStat('armor'),
     'weapon' => $charakter->getStat('weapon'),
     'xp' => $charakter->getStat('xp'),
-    'money' => $charakter->getStat('money')
+    'money' => $charakter->getStat('money'),
+    'alive' => $charakter->getStat('isalive')
 ];
 
 $weapon = [

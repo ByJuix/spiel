@@ -179,6 +179,12 @@ if (!isset($_SESSION['charakter'])) {
                         moneyDiv.textContent = data.stats.money;
                     }
             
+                    // Redirect, falls der Spieler tot ist
+                    if (!data.stats.alive) {
+                        window.location.href = "index.php?died";
+                        return; // Weiteren Code nicht ausführen
+                    }
+                    
                     // Aktualisiere die Health Bar des Spielers im enemyPopup
                     const healthContainers = enemyPopup.querySelectorAll('.health-bar-container');
                     if (healthContainers.length >= 2) {
@@ -516,17 +522,31 @@ if (!isset($_SESSION['charakter'])) {
             window.closeEnemyPopup = function() {
                 enemyPopup.style.display = 'none';
                 isEnemyPopupOpen = false;
-                if (lastEnemy) {
+                
+                // Hole den Health-Text des Gegners aus dem enemyPopup
+                const healthContainers = enemyPopup.querySelectorAll('.health-bar-container');
+                let currentEnemyHealth = 0;
+                if (healthContainers.length >= 2) {
+                    const enemyHealthTextElem = healthContainers[1].querySelector('.health-text');
+                    if (enemyHealthTextElem) {
+                        // Erwartetes Format: "X / Y"
+                        const parts = enemyHealthTextElem.textContent.split('/');
+                        currentEnemyHealth = parseInt(parts[0].trim(), 10);
+                    }
+                }
+                
+                // Entferne den Gegner nur, wenn er tot ist (also currentEnemyHealth === 0)
+                if (lastEnemy && currentEnemyHealth === 0) {
                     lastEnemy.remove();
                     lastEnemy = null;
                 }
+                
                 if (lastSpawnArea) {
-                    // Set player position to the specific coordinate for the spawn area
+                    // Setze die Spielerposition neu
                     top = lastSpawnArea.playerY * 10 - player.offsetHeight / 2;
                     left = lastSpawnArea.playerX * 10 - player.offsetWidth / 2;
                     player.style.top = top + 'px';
                     player.style.left = left + 'px';
-                    // Update coordinates
                     const coordinates = document.getElementById('coordinates');
                     coordinates.innerText = `(X: ${lastSpawnArea.playerX} | Y: ${lastSpawnArea.playerY})`;
                     lastSpawnArea = null;
@@ -535,7 +555,7 @@ if (!isset($_SESSION['charakter'])) {
                 // Musik ändern
                 playMusic('overworld');
                 
-                // Wenn keine Gegner mehr auf der Map vorhanden sind, erneutes Spawnen
+                // Gegner respawnen, falls keiner vorhanden ist
                 if (document.querySelectorAll('.enemy').length === 0) {
                     spawnEnemies();
                 }
