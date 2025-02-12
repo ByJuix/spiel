@@ -372,56 +372,66 @@ if (!isset($_SESSION['charakter'])) {
                 // Enable movement
                 isPopupOpen = false;
             }
-            
+
             const enemySpawnAreas = [
-                { x1: 41, y1: 53, x2: 49, y2: 56, playerX: 43, playerY: 46 },
-                { x1: 66, y1: 21, x2: 70, y2: 27, playerX: 71, playerY: 18 },
-                { x1: 71, y1: 21, x2: 75, y2: 27, playerX: 71, playerY: 18 },
-                { x1: 5, y1: 20, x2: 10, y2: 25, playerX: 11, playerY: 18 },
-                { x1: 11, y1: 20, x2: 16, y2: 25, playerX: 11, playerY: 18 },
-                { x1: 17, y1: 32, x2: 21, y2: 38, playerX: 33, playerY: 35 },
-                { x1: 22, y1: 32, x2: 26, y2: 38, playerX: 33, playerY: 35 },
-                { x1: 4, y1: 63, x2: 9, y2: 67, playerX: 9, playerY: 59 },
-                { x1: 10, y1: 63, x2: 14, y2: 65, playerX: 9, playerY: 59 },
-                { x1: 63, y1: 39, x2: 67, y2: 46, playerX: 65, playerY: 52 },
-                { x1: 68, y1: 39, x2: 73, y2: 46, playerX: 65, playerY: 52 }
+                { x1: 41, y1: 53, x2: 49, y2: 56, playerX: 43, playerY: 46, boss: false },
+                { x1: 66, y1: 21, x2: 70, y2: 27, playerX: 71, playerY: 18, boss: false },
+                { x1: 71, y1: 21, x2: 75, y2: 27, playerX: 71, playerY: 18, boss: false },
+                { x1: 5,  y1: 20, x2: 10, y2: 25, playerX: 11, playerY: 18, boss: false },
+                { x1: 11, y1: 20, x2: 16, y2: 25, playerX: 11, playerY: 18, boss: false },
+                { x1: 17, y1: 32, x2: 21, y2: 38, playerX: 33, playerY: 35, boss: false },
+                { x1: 22, y1: 32, x2: 26, y2: 38, playerX: 33, playerY: 35, boss: false },
+                { x1: 4,  y1: 63, x2: 9,  y2: 67, playerX: 9,  playerY: 59, boss: false },
+                { x1: 10, y1: 63, x2: 14, y2: 65, playerX: 9,  playerY: 59, boss: false },
+                { x1: 63, y1: 39, x2: 67, y2: 46, playerX: 65, playerY: 52, boss: false },
+                { x1: 68, y1: 39, x2: 73, y2: 46, playerX: 65, playerY: 52, boss: false },
+                { x1: 6,  y1: 46, x2: 14, y2: 50, playerX: 9,  playerY: 55, boss: true  },
+                { x1: 78, y1: 56, x2: 83, y2: 60, playerX: 78, playerY: 61, boss: true  },
+                { x1: 78, y1: 8,  x2: 87, y2: 15, playerX: 80, playerY: 17, boss: true  },
+                { x1: 35, y1: 22, x2: 41, y2: 26, playerX: 38, playerY: 29, boss: true  }
             ];
             
-            function spawnEnemies() {
-                const map = document.querySelector('.map');
-                enemySpawnAreas.forEach((area, index) => {
-                    const enemy = document.createElement('div');
-                    enemy.classList.add('enemy');
-                    // Speichere den Spawnindex als Data-Attribut
-                    enemy.dataset.spawnIndex = index;
-                    const x = Math.floor(Math.random() * (area.x2 - area.x1 + 1)) + area.x1;
-                    const y = Math.floor(Math.random() * (area.y2 - area.y1 + 1)) + area.y1;
-                    enemy.style.left = (x * 10 - 12) + 'px';
-                    enemy.style.top = (y * 10 - 12) + 'px';
-                    map.appendChild(enemy);
-                });
-            }
-            
-            function checkEnemyCollision() {
-                if (isEnemyPopupOpen) return; // Überschreibungen vermeiden
-                const enemies = document.querySelectorAll('.enemy');
-                const playerRect = player.getBoundingClientRect();
-                enemies.forEach((enemy) => {
-                    const enemyRect = enemy.getBoundingClientRect();
-                    const isCollision = Math.abs(playerRect.left - enemyRect.left) <= 10 && Math.abs(playerRect.top - enemyRect.top) <= 10;
-                    if (isCollision) {
-                        // Lese den gespeicherten Spawnindex aus
-                        const spawnIndex = enemy.dataset.spawnIndex;
-                        lastEnemy = enemy;
-                        lastSpawnArea = enemySpawnAreas[spawnIndex];
-                        showEnemyPopup();
-                    }
-                });
-            }
+                function spawnEnemies() {
+                    const map = document.querySelector('.map');
+                    enemySpawnAreas.forEach((area, index) => {
+                        const enemy = document.createElement('div');
+                        enemy.classList.add('enemy');
+                        // Speichere den Spawnindex als Data-Attribut
+                        enemy.dataset.spawnIndex = index;
+                        const x = Math.floor(Math.random() * (area.x2 - area.x1 + 1)) + area.x1;
+                        const y = Math.floor(Math.random() * (area.y2 - area.y1 + 1)) + area.y1;
+                        enemy.style.left = (x * 10 - 12) + 'px';
+                        enemy.style.top = (y * 10 - 12) + 'px';
+                        map.appendChild(enemy);
+                    });
+                }
+                
+                function checkEnemyCollision() {
+                    if (isEnemyPopupOpen) return; // Überschreibungen vermeiden
+                    const enemies = document.querySelectorAll('.enemy');
+                    const playerRect = player.getBoundingClientRect();
+                    enemies.forEach((enemy) => {
+                        const enemyRect = enemy.getBoundingClientRect();
+                        const isCollision = Math.abs(playerRect.left - enemyRect.left) <= 10 && Math.abs(playerRect.top - enemyRect.top) <= 10;
+                        if (isCollision) {
+                            // Lese den gespeicherten Spawnindex aus
+                            const spawnIndex = enemy.dataset.spawnIndex;
+                            lastEnemy = enemy;
+                            lastSpawnArea = enemySpawnAreas[spawnIndex];
+                            showEnemyPopup();
+                        }
+                    });
+                }
 
             function showEnemyPopup() {
+                // Ermittelt die URL inkl. Boss-Parameter, wenn lastSpawnArea.boss true ist
+                let url = 'core/enemy.php';
+                if (lastSpawnArea && lastSpawnArea.boss) {
+                    url += '?boss=true';
+                }
+                
                 // Zuerst den Gegner per AJAX spawnen
-                fetch('core/enemy.php', {
+                fetch(url, {
                     method: 'GET'
                 })
                 .then(response => response.json())
@@ -462,6 +472,11 @@ if (!isset($_SESSION['charakter'])) {
                     const coordinates = document.getElementById('coordinates');
                     coordinates.innerText = `(X: ${lastSpawnArea.playerX} | Y: ${lastSpawnArea.playerY})`;
                     lastSpawnArea = null;
+                }
+                
+                // Wenn keine Gegner mehr auf der Map vorhanden sind, erneutes Spawnen
+                if (document.querySelectorAll('.enemy').length === 0) {
+                    spawnEnemies();
                 }
             }
 
