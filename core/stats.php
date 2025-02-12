@@ -16,7 +16,7 @@ $stats = [
     'intelligence' => $charakter->getStat('intelligence'),
     'armor' => $charakter->getStat('armor'),
     'weapon' => $charakter->getStat('weapon'),
-    'XP' => $charakter->getStat('XP'),
+    'xp' => $charakter->getStat('xp'),
     'money' => $charakter->getStat('money')
 ];
 
@@ -52,7 +52,7 @@ if (isset($_SESSION["enemy"])) {
         'intelligence' => $enemy->getStat('intelligence'),
         'armor' => $enemy->getStat('armor'),
         'weapon' => $enemy->getStat('weapon'),
-        'XP' => $enemy->getStat('XP'),
+        'xp' => $enemy->getStat('xp'),
         'money' => $enemy->getStat('money')
     ];
 }
