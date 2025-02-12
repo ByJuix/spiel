@@ -18,6 +18,7 @@ if (!isset($_SESSION['charakter'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PHPixel</title>
     <link rel="stylesheet" href="css/play.css">
+    <script src="js/music.js"></script>
 </head>
 <body>
     <div class="background"></div>
@@ -79,31 +80,31 @@ if (!isset($_SESSION['charakter'])) {
                     <h2>Kupferschwert (Level <span id="schwert-level">1</span>)</h2>
                     <img src="img/sword.png" alt="Kupferschwert" width="64" height="64">
                     <p>Preis: <span id="schwert-preis">30</span> Mark</p>
-                    <button class="button" onclick="kaufen('schwert')">Upgrade</button>
+                    <button class="button" onclick="kaufen('Kupferschwert')">Upgrade</button>
                 </div>
                 <div class="shop-item" id="ruestung-container">
                     <h2>Kupferrüstung (Level <span id="ruestung-level">1</span>)</h2>
                     <img src="img/armor.png" alt="Kupferrüstung" width="64" height="64">
                     <p>Preis: <span id="ruestung-preis">50</span> Mark</p>
-                    <button class="button" onclick="kaufen('ruestung')">Upgrade</button>
+                    <button class="button" onclick="kaufen('Kupferrüstung')">Upgrade</button>
                 </div>
                 <div class="shop-item" id="bogen-container">
                     <h2>Kupferbogen (Level <span id="bogen-level">1</span>)</h2>
                     <img src="img/bow.png" alt="Kupferbogen" width="64" height="64">
                     <p>Preis: <span id="bogen-preis">40</span> Mark</p>
-                    <button class="button" onclick="kaufen('bogen')">Upgrade</button>
+                    <button class="button" onclick="kaufen('Kupferbogen')">Upgrade</button>
                 </div>
                 <div class="shop-item" id="dolch-container">
                     <h2>Kupferdolch (Level <span id="dolch-level">1</span>)</h2>
                     <img src="img/dagger.png" alt="Kupferdolch" width="64" height="64">
                     <p>Preis: <span id="dolch-preis">25</span> Mark</p>
-                    <button class="button" onclick="kaufen('dolch')">Upgrade</button>
+                    <button class="button" onclick="kaufen('Kupferdolch')">Upgrade</button>
                 </div>
                 <div class="shop-item" id="potion-container">
                     <h2>Heilungstrank (300 HP)</h2>
                     <img src="img/potion.png" alt="Heilungstrank" width="64" height="64">
                     <p>Preis: <span id="dolch-preis">10</span> Mark</p>
-                    <button class="button" onclick="kaufen('dolch')">Kaufen</button>
+                    <button class="button" onclick="kaufen('Heilungstrank')">Kaufen</button>
                 </div>
             </div>
             <button onclick="closePopup()">Close</button>
@@ -223,6 +224,63 @@ if (!isset($_SESSION['charakter'])) {
 
             // Stats beim Laden der Seite einmalig abrufen
             updateStats();
+
+            // Musik starten
+            playMusic('overworld');
+
+            function kaufen(item) {
+                // Ermittle den Container des Items
+                const container = document.getElementById(item + '-container');
+                // Hole derzeit angezeigten Preis und Geld des Spielers
+                const priceSpan = container.querySelector('span[id$="-preis"]');
+                const currentPrice = parseInt(priceSpan.textContent);
+                const moneySpan = document.querySelector('.player-money');
+                const currentMoney = parseInt(moneySpan.textContent);
+                
+                if (currentMoney < currentPrice) {
+                    alert("Nicht genügend Mark!");
+                    return;
+                }
+                
+                // Erstelle das Objekt für den Kauf-Request.
+                // Im Backend wird auch geprüft, ob beim Item (z. B. Waffe) bereits ein Item existiert.
+                const requestData = {
+                    item: item,
+                    price: currentPrice
+                };
+                
+                fetch('core/shop.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    }
+                    // Erwarteter Response enthält:
+                    // data.level: aktuelles Level des Items (Level 0 bedeutet nicht ausgerüstet),
+                    // data.newPrice: neuen Preis für den nächsten Upgrade,
+                    // data.money: aktuelles Geld des Spielers.
+                    let levelSpan = container.querySelector('span[id$="-level"]');
+                    levelSpan.innerText = data.level;
+                    priceSpan.innerText = data.newPrice;
+                    moneySpan.innerText = data.money;
+                    
+                    // Button-Text anpassen: Ist das Item noch nicht ausgerüstet (Level 0), soll 'ausrüsten' stehen.
+                    const button = container.querySelector('button');
+                    if (data.level === 0) {
+                        button.innerText = 'ausrüsten';
+                    } else {
+                        button.innerText = 'Upgrade';
+                    }
+                })
+                .catch(err => {
+                    console.error("Error in kaufen:", err);
+                });
+            }
             
             document.addEventListener('keydown', function(event) {
                 if (!isPopupOpen && keys.hasOwnProperty(event.key)) {
@@ -355,6 +413,8 @@ if (!isset($_SESSION['charakter'])) {
                 for (let key in keys) {
                     keys[key] = false;
                 }
+                // Musik ändern
+                playMusic('shop');
                 // Set player position to X:14 Y:12
                 top = 12 * 10 - player.offsetHeight / 2;
                 left = 14 * 10 - player.offsetWidth / 2;
@@ -371,20 +431,26 @@ if (!isset($_SESSION['charakter'])) {
                 shop.style.display = 'none';
                 // Enable movement
                 isPopupOpen = false;
+                // Musik ändern
+                playMusic('overworld');
             }
-            
+
             const enemySpawnAreas = [
-                { x1: 41, y1: 53, x2: 49, y2: 56, playerX: 43, playerY: 46 },
-                { x1: 66, y1: 21, x2: 70, y2: 27, playerX: 71, playerY: 18 },
-                { x1: 71, y1: 21, x2: 75, y2: 27, playerX: 71, playerY: 18 },
-                { x1: 5, y1: 20, x2: 10, y2: 25, playerX: 11, playerY: 18 },
-                { x1: 11, y1: 20, x2: 16, y2: 25, playerX: 11, playerY: 18 },
-                { x1: 17, y1: 32, x2: 21, y2: 38, playerX: 33, playerY: 35 },
-                { x1: 22, y1: 32, x2: 26, y2: 38, playerX: 33, playerY: 35 },
-                { x1: 4, y1: 63, x2: 9, y2: 67, playerX: 9, playerY: 59 },
-                { x1: 10, y1: 63, x2: 14, y2: 65, playerX: 9, playerY: 59 },
-                { x1: 63, y1: 39, x2: 67, y2: 46, playerX: 65, playerY: 52 },
-                { x1: 68, y1: 39, x2: 73, y2: 46, playerX: 65, playerY: 52 }
+                { x1: 41, y1: 53, x2: 49, y2: 56, playerX: 43, playerY: 46, boss: false },
+                { x1: 66, y1: 21, x2: 70, y2: 27, playerX: 71, playerY: 18, boss: false },
+                { x1: 71, y1: 21, x2: 75, y2: 27, playerX: 71, playerY: 18, boss: false },
+                { x1: 5,  y1: 20, x2: 10, y2: 25, playerX: 11, playerY: 18, boss: false },
+                { x1: 11, y1: 20, x2: 16, y2: 25, playerX: 11, playerY: 18, boss: false },
+                { x1: 17, y1: 32, x2: 21, y2: 38, playerX: 33, playerY: 35, boss: false },
+                { x1: 22, y1: 32, x2: 26, y2: 38, playerX: 33, playerY: 35, boss: false },
+                { x1: 4,  y1: 63, x2: 9,  y2: 67, playerX: 9,  playerY: 59, boss: false },
+                { x1: 10, y1: 63, x2: 14, y2: 65, playerX: 9,  playerY: 59, boss: false },
+                { x1: 63, y1: 39, x2: 67, y2: 46, playerX: 65, playerY: 52, boss: false },
+                { x1: 68, y1: 39, x2: 73, y2: 46, playerX: 65, playerY: 52, boss: false },
+                { x1: 6,  y1: 46, x2: 14, y2: 50, playerX: 9,  playerY: 55, boss: true  },
+                { x1: 78, y1: 56, x2: 83, y2: 60, playerX: 78, playerY: 61, boss: true  },
+                { x1: 78, y1: 8,  x2: 87, y2: 15, playerX: 80, playerY: 17, boss: true  },
+                { x1: 35, y1: 22, x2: 41, y2: 26, playerX: 38, playerY: 29, boss: true  }
             ];
             
             function spawnEnemies() {
@@ -420,8 +486,19 @@ if (!isset($_SESSION['charakter'])) {
             }
 
             function showEnemyPopup() {
+                // Ermittelt die URL inkl. Boss-Parameter, wenn lastSpawnArea.boss true ist
+                let url = 'core/enemy.php';
+                if (lastSpawnArea && lastSpawnArea.boss) {
+                    url += '?boss=true';
+                    // Musik ändern
+                    playMusic('castle');
+                } else {
+                    // Musik ändern
+                    playMusic('fight');
+                }
+                
                 // Zuerst den Gegner per AJAX spawnen
-                fetch('core/enemy.php', {
+                fetch(url, {
                     method: 'GET'
                 })
                 .then(response => response.json())
@@ -462,6 +539,14 @@ if (!isset($_SESSION['charakter'])) {
                     const coordinates = document.getElementById('coordinates');
                     coordinates.innerText = `(X: ${lastSpawnArea.playerX} | Y: ${lastSpawnArea.playerY})`;
                     lastSpawnArea = null;
+                }
+                
+                // Musik ändern
+                playMusic('overworld');
+                
+                // Wenn keine Gegner mehr auf der Map vorhanden sind, erneutes Spawnen
+                if (document.querySelectorAll('.enemy').length === 0) {
+                    spawnEnemies();
                 }
             }
 
