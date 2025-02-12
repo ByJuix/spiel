@@ -15,13 +15,13 @@ class Charakter {
     private $currentHealth;
 
 
-    private $maxHealth;            #unneccesary weil base stats im getter mit color verrechnet werden
+    private $maxHealth;            #unneccesary weil base stats im getter mit XP verrechnet werden
     private $strength;
     private $dexterity;
     private $intelligence;
     
     private $money;
-    private $color;
+    private $XP;
     private $EquippedWeapon;
     private $EquippedArmor;
 
@@ -38,14 +38,14 @@ class Charakter {
         if (!$name){                                        //if no name set select name from playerNames/enemyNames list, set XP values
             if ($isPlayer) {
                 $this->name = $playerNames[array_rand($playerNames)];
-                $this->name == "Feldmannius der Göttliche" ? $this->color = rand(100, 500) : $this->color = rand(1, 100);
+                $this->name == "Feldmannius der Göttliche" ? $this->XP = rand(100, 500) : $this->XP = rand(1, 100);
             } else {
                 $this->name = $enemyNames[array_rand($enemyNames)];
-                $this->name == "Feldmannius der Göttliche" ? $this->color = rand(100, 500) : $this->color = rand(50, 200);
+                $this->name == "Feldmannius der Göttliche" ? $this->XP = rand(100, 500) : $this->XP = rand(50, 200);
             }
         }
 
-        $this->money = round($this->color / 3, 0); 
+        $this->money = round($this->XP / 3, 0); 
 
         $this->baseMaxHealth = $health;         //verwertung der eingegebenen werte
         $this->currentHealth = $health;
@@ -64,19 +64,21 @@ class Charakter {
 
     // Getter-Methode
 
-    public function getStat ($statName) {
-        $color = $this->color;
+    public function getStat ($statName):mixed {
+        $XP = $this->XP;
         switch (strtolower($statName)) {
-            case "name": return $this->name;
-            case "maxhealth": return round( $this->baseMaxHealth * ((100+ $color)*0.01),0 );
-            case "currenthealth": return round( $this->currentHealth );
-            case "strength": return round( $this->baseStrength * ((100+ $color)*0.01),0 );
-            case "dexterity": return round( $this->baseDexterity * ((100+ $color)*0.01),0 );
-            case "intelligence": return round( $this->baseIntelligence * ((100+ $color)*0.01),0 );
-            case "armor": return $this->EquippedArmor;
-            case "weapon": return $this->EquippedWeapon;
-            case "color": return $color;
-            case "money" : return $this->money;
+            case "isalive":         return $this->isAlive;
+            case "name":            return $this->name;
+            case "maxhealth":       return round( $this->baseMaxHealth * ((100+ $XP)*0.01),0 );
+            case "currenthealth":   return round( $this->currentHealth );
+            case "strength":        return round( $this->baseStrength * ((100+ $XP)*0.01),0 );
+            case "dexterity":       return round( $this->baseDexterity * ((100+ $XP)*0.01),0 );
+            case "intelligence":    return round( $this->baseIntelligence * ((100+ $XP)*0.01),0 );
+            case "armor":           return $this->EquippedArmor;
+            case "weapon":          return $this->EquippedWeapon;
+            case "XP":              return $XP;
+            case "money" :          return $this->money;
+            default:                return "Error in Getstat";
         }
              
     }
@@ -107,8 +109,8 @@ class Charakter {
             case 'intelligence':
                 $this->baseIntelligence = $value;
                 break;
-            case 'color':
-                $this->color = $value;
+            case 'XP':
+                $this->XP = $value;
                 break;
             case 'money':
                 $this->money = $value;
@@ -192,6 +194,7 @@ class Charakter {
 
     public function TakeDMG($Damage) {                  //basically setter function, for readability
         $this->currentHealth -= $Damage;
+        if ($this->currentHealth > 0 ) {$this->setAttribute("isAlive", false);}
     }
     public function Heal($heal) {                  //basically setter function, for readability
         $this->currentHealth += $heal;
@@ -202,8 +205,8 @@ class Charakter {
         $this->TakeDmg($DamageTaken);
         return $DamageTaken;
     }
-    public function getLootColour() {                //basically getter function, for readability. u gain varying piece of XP from enemy on killing it
-        return round($this->getStat("color") / rand(5,15),0);
+    public function getLootXP() {                //basically getter function, for readability. u gain varying piece of XP from enemy on killing it
+        return round($this->getStat("XP") / rand(5,15),0);
     }
     public function getLootMoney() {                 //basically getter function, for readability. u gain varying piece of cash from enemy on killing it
         return round($this->getStat("money") / rand(1,3),0);
@@ -236,7 +239,7 @@ class Item {
     }
 
     public function LevelUp(){
-        $level +=1;
+        $this->level +=1;
         if ($this->damage_phys > 0) {$this->damage_phys += 1;}
         if ($this->damage_mag > 0) {$this->damage_mag += 1;}
         if ($this->defense > 0) {$this->defense += 1;}
@@ -335,15 +338,15 @@ class Fight {
                 }
         } 
         
-        if ($this->enemy->Getstat("currentHealth") < 1) {  //on win get the loot, return a win
-            $this->player->setAttribute("color", $this->player->Getstat("color")+$this->enemy->getLootColour()); 
+        if (!$this->enemy->Getstat("isAlive")) {  //on win get the loot, return a win
+            $this->player->setAttribute("XP", $this->player->Getstat("XP")+$this->enemy->getLootXP()); 
             $this->player->setAttribute("money", $this->player->Getstat("money")+$this->enemy->getLootMoney());
             $ReturnValue->WinLooseContinue = "win";
         } else
-        if ($this->player->Getstat("currentHealth") < 1) { //on loose get fucked
+        if (!$this->player->Getstat("isAlive")) { //when player is dead return loose
             $ReturnValue->WinLooseContinue = "loose";
         } else
-        if (($this->player->Getstat("currentHealth") > 0 ) and ($this->enemy->Getstat("currentHealth") > 0)) { // again if both still have hp
+        if ($this->player->Getstat("isAlive") and $this->enemy->Getstat("isAlive")) { // again if both still are alive
             $ReturnValue->WinLooseContinue = "continue"; 
         } else  $ReturnValue->WinLooseContinue = "continue";
         
