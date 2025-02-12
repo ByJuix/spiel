@@ -75,7 +75,7 @@ if (!isset($_SESSION['charakter'])) {
             </div>
         </div>
         <div class="shop">
-            <h1>Kupfershop</h1>            
+            <h1>Kupfershop<?php echo 'Session: ' . $_SESSION['player']['money'] . ' - GetStat: ' . $charakter->getStat('money'); ?></h1>            
             <div class="shop-container">
                 <div class="shop-item" id="dolch-container">
                     <h2>Kupferdolch (Level <span id="dolch-level">1</span>)</h2>

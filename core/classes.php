@@ -93,7 +93,7 @@ class Charakter {
                 $this->name = $value;
                 break;
             case 'maxhealth':
-                $this->baseMaxHealthmaxHealth = $value;
+                $this->baseMaxHealth = $value;
                 break;
             case 'currenthealth':
                 $this->currentHealth = $value;
