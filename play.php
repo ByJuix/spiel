@@ -205,7 +205,7 @@ if (!isset($_SESSION['charakter'])) {
             
                     // Redirect, falls der Spieler tot ist
                     if (!data.stats.alive) {
-                        window.location.href = "index.php?died";
+                        window.location.href = "dead.php";
                         return; // Weiteren Code nicht ausführen
                     }
                     

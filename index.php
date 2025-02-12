@@ -3,11 +3,6 @@ namespace PHPixel;
 include_once "core/classes.php";
 
 session_start();
-
-if (isset($_GET['died'])) {
-    session_destroy();
-    session_start();
-}
 ?>
 
 <!DOCTYPE html>
