@@ -15,13 +15,13 @@ class Charakter {
     private $currentHealth;
 
 
-    private $maxHealth;            #unneccesary weil base stats im getter mit XP verrechnet werden
+    private $maxHealth;            #unneccesary weil base stats im getter mit xp verrechnet werden
     private $strength;
     private $dexterity;
     private $intelligence;
     
     private $money;
-    private $XP;
+    private $xp;
     private $EquippedWeapon;
     private $EquippedArmor;
 
@@ -38,14 +38,14 @@ class Charakter {
         if (!$name){                                        //if no name set select name from playerNames/enemyNames list, set XP values
             if ($isPlayer) {
                 $this->name = $playerNames[array_rand($playerNames)];
-                $this->name == "Feldmannius der Göttliche" ? $this->XP = rand(100, 500) : $this->XP = rand(50, 150);
+                $this->name == "Feldmannius der Göttliche" ? $this->xp = rand(100, 500) : $this->xp = rand(1, 100);
             } else {
                 $this->name = $enemyNames[array_rand($enemyNames)];
-                $this->name == "Feldmannius der Göttliche" ? $this->XP = rand(100, 500) : $this->XP = rand(1, 100);
+                $this->name == "Feldmannius der Göttliche" ? $this->xp = rand(100, 500) : $this->xp = rand(50, 200);
             }
         }
 
-        $this->money = round($this->XP / 3, 0); 
+        $this->money = round($this->xp / 3, 0); 
 
         $this->baseMaxHealth = $health;         //verwertung der eingegebenen werte
         $this->currentHealth = $health;
@@ -53,7 +53,7 @@ class Charakter {
         $this->baseDexterity = $dexterity;
         $this->baseIntelligence = $intelligence;
         $this->EquippedArmor = new item("Kupferrüstung", 1, "Armor", 0, 0, 10); //standardausruestung
-        $this->EquippedWeapon = new item("Kupferstab", 1, "Weapon", 10, 0, 0);
+        $this->EquippedWeapon = new item("Kupferdolch", 1, "Weapon", 10, 0, 0);
 
         $this->currentHealth = $this->getStat("maxhealth");
     }
@@ -64,21 +64,19 @@ class Charakter {
 
     // Getter-Methode
 
-    public function getStat ($statName):mixed {
-        $XP = $this->XP;
+    public function getStat ($statName) {
+        $xp = $this->xp;
         switch (strtolower($statName)) {
-            case "isalive":         return $this->isAlive;
-            case "name":            return $this->name;
-            case "maxhealth":       return round( $this->baseMaxHealth * ((100+ $XP)*0.01),0 );
-            case "currenthealth":   return round( $this->currentHealth );
-            case "strength":        return round( $this->baseStrength * ((100+ $XP)*0.01),0 );
-            case "dexterity":       return round( $this->baseDexterity * ((100+ $XP)*0.01),0 );
-            case "intelligence":    return round( $this->baseIntelligence * ((100+ $XP)*0.01),0 );
-            case "armor":           return $this->EquippedArmor;
-            case "weapon":          return $this->EquippedWeapon;
-            case "xp":              return $XP;
-            case "money" :          return $this->money;
-            default:                return "Error in Getstat";
+            case "name": return $this->name;
+            case "maxhealth": return round( $this->baseMaxHealth * ((100+ $xp)*0.01),0 );
+            case "currenthealth": return round( $this->currentHealth );
+            case "strength": return round( $this->baseStrength * ((100+ $xp)*0.01),0 );
+            case "dexterity": return round( $this->baseDexterity * ((100+ $xp)*0.01),0 );
+            case "intelligence": return round( $this->baseIntelligence * ((100+ $xp)*0.01),0 );
+            case "armor": return $this->EquippedArmor;
+            case "weapon": return $this->EquippedWeapon;
+            case "xp": return $xp;
+            case "money" : return $this->money;
         }
              
     }
@@ -109,8 +107,8 @@ class Charakter {
             case 'intelligence':
                 $this->baseIntelligence = $value;
                 break;
-            case 'XP':
-                $this->XP = $value;
+            case 'xp':
+                $this->xp = $value;
                 break;
             case 'money':
                 $this->money = $value;
@@ -192,26 +190,20 @@ class Charakter {
     }*/
 
 
-    public function TakeDMG($Damage) {                  
+    public function TakeDMG($Damage) {                  //basically setter function, for readability
         $this->currentHealth -= $Damage;
-        if ($this->currentHealth <= 0 ) {
-            $this->setAttribute("isAlive", false);
-        }
     }
-    public function Heal($heal) {
+    public function Heal($heal) {                  //basically setter function, for readability
         $this->currentHealth += $heal;
-        if ($this->currentHealth > $this->getStat("maxhealth")) {
-            $this->currentHealth = $this->getStat("maxhealth");
-        }
-        $this->setAttribute("currenthealth", $this->currentHealth);
+        if ($this->currentHealth > $this->Getstat("maxhealth")) {$this->setAttribute("currenthealth", $this->Getstat("maxhealth")) ; }
     }
     public function Defend($EnemyDex, $Damage):int {        //damage depends on dexterity stat of attacker and defender
         $DamageTaken = $EnemyDex / $this->getStat("dexterity") * $Damage;
         $this->TakeDmg($DamageTaken);
         return $DamageTaken;
     }
-    public function getLootXP() {                //basically getter function, for readability. u gain varying piece of XP from enemy on killing it
-        return round($this->getStat("XP") / rand(5,15),0);
+    public function getLootXp() {                //basically getter function, for readability. u gain varying piece of XP from enemy on killing it
+        return round($this->getStat("xp") / rand(5,15),0);
     }
     public function getLootMoney() {                 //basically getter function, for readability. u gain varying piece of cash from enemy on killing it
         return round($this->getStat("money") / rand(1,3),0);
@@ -237,17 +229,6 @@ class Item {
             case "type": return $this->type;
             default: return "Fehler bei Item Getstat";
         }
-    }
-    
-    public function EquipItem($player){
-        $player->setAttribute("equippedweapon", $this);
-    }
-
-    public function LevelUp(){
-        $this->level +=1;
-        if ($this->damage_phys > 0) {$this->damage_phys += 1;}
-        if ($this->damage_mag > 0) {$this->damage_mag += 1;}
-        if ($this->defense > 0) {$this->defense += 1;}
     }
 
     public function setItemAttributes($name, $level, $type, $damage_phys, $damage_mag, $defense) { //setter
@@ -278,7 +259,7 @@ class Item {
 }
 
 class FightRoundReturnValue
-{ //class to create return obeject as fightrounds need to return alot of information
+{ //class to create return object as fightrounds need to return alot of information
  public $WinLooseContinue;
  public $playerDamageDealt;
  public $playerBlocked;
@@ -310,7 +291,7 @@ class Fight {
                     break;
                 case "mag":
                     if ($enemyDefenseAction == 0) {$this->player->Attack($playerAttackAction, $this->enemy, true); $ReturnValue->enemyBlocked = true;} else
-                    {$ReturnValue->playerDamageDealt = $this->player->Attack($playerAttackAction, $this->enemy, false); $ReturnValue->enemyBlocked = false;}
+                    {$ReturnValue->playerDamageDealt = $this->player->magAttack($playerAttackAction, $this->enemy, false); $ReturnValue->enemyBlocked = false;}
                     break;
                 case "physStrong":
                     if ($enemyDefenseAction == 1) {$this->player->Attack($playerAttackAction, $this->enemy, true); $ReturnValue->enemyBlocked = true;} else
@@ -343,15 +324,15 @@ class Fight {
                 }
         } 
         
-        if (!($this->enemy->Getstat("isAlive"))) {  //on win get the loot, return a win
-            $this->player->setAttribute("XP", $this->player->Getstat("XP")+$this->enemy->getLootXP()); 
+        if ($this->enemy->Getstat("currentHealth") < 1) {  //on win get the loot, return a win
+            $this->player->setAttribute("xp", $this->player->Getstat("xp")+$this->enemy->getLootXp()); 
             $this->player->setAttribute("money", $this->player->Getstat("money")+$this->enemy->getLootMoney());
             $ReturnValue->WinLooseContinue = "win";
         } else
-        if (!($this->player->Getstat("isAlive"))) { //when player is dead return loose
+        if ($this->player->Getstat("currentHealth") < 1) { //on loose get fucked
             $ReturnValue->WinLooseContinue = "loose";
         } else
-        if ($this->player->Getstat("isAlive") and $this->enemy->Getstat("isAlive")) { // again if both still are alive
+        if (($this->player->Getstat("currentHealth") > 0 ) and ($this->enemy->Getstat("currentHealth") > 0)) { // again if both still have hp
             $ReturnValue->WinLooseContinue = "continue"; 
         } else  $ReturnValue->WinLooseContinue = "continue";
         
