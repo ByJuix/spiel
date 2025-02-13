@@ -67,6 +67,7 @@ class Charakter {
     public function getStat ($statName) {
         $xp = $this->xp;
         switch (strtolower($statName)) {
+            case "isalive": return $this->isAlive;
             case "name": return $this->name;
             case "maxhealth": return round( $this->baseMaxHealth * ((100+ $xp)*0.01),0 );
             case "currenthealth": return round( $this->currentHealth );
