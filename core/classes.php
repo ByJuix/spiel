@@ -310,7 +310,7 @@ class Fight {
                     break;
                 case "mag":
                     if ($enemyDefenseAction == 0) {$this->player->Attack($playerAttackAction, $this->enemy, true); $ReturnValue->enemyBlocked = true;} else
-                    {$ReturnValue->playerDamageDealt = $this->player->magAttack($playerAttackAction, $this->enemy, false); $ReturnValue->enemyBlocked = false;}
+                    {$ReturnValue->playerDamageDealt = $this->player->Attack($playerAttackAction, $this->enemy, false); $ReturnValue->enemyBlocked = false;}
                     break;
                 case "physStrong":
                     if ($enemyDefenseAction == 1) {$this->player->Attack($playerAttackAction, $this->enemy, true); $ReturnValue->enemyBlocked = true;} else
