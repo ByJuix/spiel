@@ -90,7 +90,7 @@ window.onload = function() {
                 <?php
                     echo "Armor: " . $charakter->getStat("armor")->getStat("name") . "<br>";
                     echo "Weapon: " . $charakter->getStat("weapon")->getStat("name") . "<br>";
-                    echo "XP: " . $charakter->getStat("color") . "<br>";
+                    echo "XP: " . $charakter->getStat("xp") . "<br>";
                     echo "Money: " . $charakter->getStat("money") . "<br>";
                 ?>
             </div>

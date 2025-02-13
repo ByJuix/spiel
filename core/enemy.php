@@ -17,11 +17,12 @@ if (isset($_SESSION["enemy"]) && $_SESSION["enemy"]->getStat('currenthealth') < 
 }
 
 if (!isset($_SESSION["enemy"])) {
+    $strength=rand(0,40);
+    $intelligence=40- $strength;
+
     if ($get) {
-        $_SESSION["enemy"] = new Charakter(null, false, 3000, 50, 5, 5);
+        $_SESSION["enemy"] = new Charakter(null, false, 1400, $strength * 1.1, rand(15,25), $intelligence * 1.1);
     } else {
-        $strength=rand(0,40);
-        $intelligence=40- $strength;
         $_SESSION["enemy"] = new Charakter(null, false, 1000, $strength, rand(15,25), $intelligence);
     }
 }
