@@ -193,6 +193,7 @@ class Charakter {
 
     public function TakeDMG($Damage) {                  //basically setter function, for readability
         $this->currentHealth -= $Damage;
+        if ($this->currentHealth <0) $this->setAttribute("isalive", false);
     }
     public function Heal($heal) {                  //basically setter function, for readability
         $this->currentHealth += $heal;
